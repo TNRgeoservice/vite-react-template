@@ -34,7 +34,7 @@ async function reverseLongdo(lat: number, lng: number, key: string): Promise<Geo
     const url = `https://api.longdo.com/map/services/address?lat=${lat}&lon=${lng}&noelevation=1&key=${encodeURIComponent(key)}`;
     const res = await fetch(url, { method: 'GET' });
     if (!res.ok) return EMPTY;
-    const j = await res.json();
+    const j = await res.json()as any;
     return {
       province: strip(j.province),
       amphoe:   strip(j.district),
