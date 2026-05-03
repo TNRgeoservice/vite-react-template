@@ -6,7 +6,7 @@ import type { Config } from 'tailwindcss';
  * (source of truth: design_handoff_maphub/colors_and_type.css).
  */
 const config: Config = {
-  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {

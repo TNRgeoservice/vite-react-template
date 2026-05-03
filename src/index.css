@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ── Background layers (dark GIS) ── */
+  --bg:   #0d1520;
+  --bg2:  #162030;
+  --bg3:  #1e2d42;
+
+  /* ── Text ramp ── */
+  --tx:   #dce8f5;
+  --tx2:  #7a9ab8;
+  --txd:  #3d5672;
+
+  /* ── Border ── */
+  --brd:  #213045;
+
+  /* ── Brand + entity ── */
+  --acc:  #00e676;
+  --acc2: #00c853;
+  --land: #40c4ff;
+  --road: #ffb300;
+  --poly: #b388ff;
+  --red:  #ff5252;
+
+  /* ── Type families ── */
+  --font-sans: 'Mitr', system-ui, sans-serif;
+
+  /* ── Radii ── */
+  --r-sm:   7px;
+  --r-md:   9px;
+  --r-lg:   12px;
+  --r-xl:   14px;
+  --r-2xl:  18px;
+
+  /* ── Shadows ── */
+  --sh-float: 0 4px 20px rgba(0, 0, 0, .55);
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--tx);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
