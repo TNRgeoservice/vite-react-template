@@ -1,0 +1,270 @@
+/* ════════════════════════════════════════
+   globals.css — TNR MapHub
+   Design tokens (colors / type / spacing / radii / shadows)
+   Source: design_handoff_maphub/colors_and_type.css
+   ════════════════════════════════════════ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ── Background layers (dark GIS) ── */
+  --bg:   #0d1520;
+  --bg2:  #162030;
+  --bg3:  #1e2d42;
+
+  /* ── Text ramp ── */
+  --tx:   #dce8f5;
+  --tx2:  #7a9ab8;
+  --txd:  #3d5672;
+
+  /* ── Border ── */
+  --brd:  #213045;
+
+  /* ── Brand + entity ── */
+  --acc:  #00e676;
+  --acc2: #00c853;
+  --land: #40c4ff;
+  --road: #ffb300;
+  --poly: #b388ff;
+  --red:  #ff5252;
+
+  /* ── Status (aliases) ── */
+  --status-available: #00e676;
+  --status-reserved:  #ffb300;
+  --status-sold:      #ff5252;
+
+  /* ── Print sheet (parchment) ── */
+  --print-bg:     #f1ead9;
+  --print-card:   #f7f1e3;
+  --print-ink:    #2a1f12;
+  --print-ink2:   #6b5640;
+  --print-muted:  #a89680;
+  --print-brd:    #d9ccb0;
+  --print-accent: #8b5a2b;
+  --print-price:  #ede0c4;
+
+  /* ── Type families (Mitr primary, IBM Plex Sans Thai fallback) ── */
+  --font-sans-stack: var(--font-sans), 'IBM Plex Sans Thai', 'Sarabun', system-ui, sans-serif;
+  --font-mono-stack: var(--font-mono), 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* ── Type scale ── */
+  --fs-xs:   10px;
+  --fs-sm:   11.5px;
+  --fs-body: 13px;
+  --fs-md:   14px;
+  --fs-lg:   15px;
+  --fs-xl:   17px;
+  --fs-2xl:  20px;
+
+  --lh-tight: 1.15;
+  --lh-body:  1.45;
+  --lh-thai:  1.55;
+
+  /* ── Weights (Mitr: 200/300/400/500/600/700) ── */
+  --w-extralight: 200;
+  --w-light:      300;
+  --w-regular:    400;
+  --w-medium:     500;
+  --w-semibold:   600;
+  --w-bold:       700;
+
+  /* ── Radii ── */
+  --r-xs:   5px;
+  --r-sm:   7px;
+  --r-md:   9px;
+  --r-lg:   12px;
+  --r-xl:   14px;
+  --r-2xl:  18px;
+  --r-pill: 999px;
+
+  /* ── Spacing (4/8 + mobile odds) ── */
+  --sp-1: 4px;
+  --sp-2: 6px;
+  --sp-3: 8px;
+  --sp-4: 10px;
+  --sp-5: 12px;
+  --sp-6: 16px;
+  --sp-7: 20px;
+  --sp-8: 24px;
+
+  /* ── Fixed chrome ── */
+  --top-h: 52px;
+  --bar-h: 62px;
+  --fbt:   44px;   /* floating button */
+  --tbi:   36px;   /* topbar icon tile */
+
+  /* ── Shadows (always black; no colored shadows) ── */
+  --sh-fab:   0 3px 14px rgba(0, 0, 0, .5);
+  --sh-float: 0 4px 20px rgba(0, 0, 0, .55);
+  --sh-modal: 0 -8px 40px rgba(0, 0, 0, .65);
+  --sh-popup: 0 8px 30px rgba(0, 0, 0, .65);
+
+  /* ── Motion ── */
+  --dur-fast: .15s;
+  --dur-mid:  .25s;
+  --dur-slow: .32s;
+  --ease:     cubic-bezier(.4, 0, .2, 1);
+}
+
+/* ════════════════════════════════════════
+   Mitr weight step-down policy
+   Mitr reads ~1 step heavier than IBM Plex at the same numeric weight.
+   Remap 700 → 600 globally so legacy inline `font-weight: 700` balances visually.
+   Track display copy slightly tighter for balance at large sizes.
+   ════════════════════════════════════════ */
+[style*="font-weight: 700"],
+[style*="font-weight:700"],
+b, strong {
+  font-weight: 600 !important;
+  letter-spacing: -.2px;
+}
+
+/* ════════════════════════════════════════
+   Global resets + base
+   ════════════════════════════════════════ */
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+html, body { height: 100%; background: var(--bg); }
+
+/* default: หน้าทั่วไป scroll ได้, scrollbar ซ่อนทั่วทั้ง app */
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE / Edge legacy */
+}
+body::-webkit-scrollbar { display: none; } /* Chrome / Safari / new Edge */
+
+/* หน้าแผนที่ (/) ตั้ง class นี้ที่ body เพื่อ lock viewport (map ใช้พื้นที่เต็ม) */
+body.body-fixed {
+  overflow: hidden;
+}
+body {
+  font-family: var(--font-sans-stack);
+  color: var(--tx);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+#__next, main { height: 100%; }
+
+/* Thai needs looser leading */
+:lang(th) { line-height: var(--lh-thai); }
+
+/* ════════════════════════════════════════
+   Leaflet overrides — dark theme
+   ════════════════════════════════════════ */
+.leaflet-container { font-family: var(--font-sans-stack); background: #0a1520; }
+.leaflet-container.crosshair { cursor: crosshair !important; }
+.leaflet-popup-content-wrapper {
+  background: var(--bg2) !important;
+  color: var(--tx) !important;
+  border: 1.5px solid var(--brd) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--sh-popup) !important;
+}
+.leaflet-popup-content { margin: 10px 12px; font-size: var(--fs-body); color: var(--tx); }
+.leaflet-popup-tip { background: var(--bg2) !important; border: 1.5px solid var(--brd) !important; }
+.leaflet-popup-close-button { color: var(--tx2) !important; }
+.leaflet-popup-close-button:hover { color: var(--tx) !important; }
+.leaflet-control-zoom a {
+  background: var(--bg2) !important;
+  color: var(--tx) !important;
+  border-color: var(--brd) !important;
+}
+.leaflet-control-zoom a:hover { background: var(--bg3) !important; }
+.leaflet-control-attribution {
+  background: rgba(22, 32, 48, 0.85) !important;
+  color: var(--tx2) !important;
+}
+.leaflet-control-attribution a { color: var(--acc) !important; }
+
+/* ════════════════════════════════════════
+   Popup content (port จาก legacy .pop-*)
+   ════════════════════════════════════════ */
+.tnr-pop { font-family: var(--font-sans-stack); color: var(--tx); }
+.tnr-pop-t {
+  font-weight: var(--w-semibold); font-size: var(--fs-md);
+  margin-bottom: 9px; padding-right: 18px;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  letter-spacing: -.2px;
+}
+.tnr-pop-name { flex: 0 1 auto; }
+.tnr-pop-copy {
+  margin-left: auto; padding: 2px 8px;
+  border: 1px solid var(--brd); border-radius: var(--r-pill);
+  background: var(--bg3); color: var(--tx2);
+  font-size: 11px; font-weight: var(--w-medium); font-family: inherit;
+  cursor: pointer; transition: opacity var(--dur-fast);
+}
+.tnr-pop-copy:hover  { opacity: .85; }
+.tnr-pop-copy:active { opacity: .65; }
+.tnr-pop-copy.is-copied { border-color: var(--status-available); color: var(--status-available); }
+.tnr-pop-copy.tnr-pop-line { border-color: #06c755; color: #06c755; font-weight: var(--w-semibold); }
+.tnr-pop-r {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; margin-bottom: 4px; gap: 8px;
+}
+.tnr-pop-k    { color: var(--tx2); flex-shrink: 0; }
+.tnr-pop-v    { color: var(--tx); font-weight: var(--w-medium); text-align: right; word-break: break-word; white-space: pre-line; }
+.tnr-pop-hl   { font-size: var(--fs-body); font-weight: var(--w-semibold); color: var(--acc); }
+.tnr-pop-phone{ font-size: var(--fs-body); font-weight: var(--w-semibold); color: var(--land); text-decoration: none; }
+.tnr-pop-area { font-size: 12px; font-weight: var(--w-semibold); color: var(--road); }
+.tnr-pop-img  {
+  width: 100%; border-radius: var(--r-sm); margin-top: 9px;
+  max-height: 130px; object-fit: cover; display: block;
+}
+.tnr-pop-meta { font-size: var(--fs-xs); color: var(--txd); font-family: var(--font-mono-stack); margin-top: 7px; }
+.tnr-pop-note { font-size: 11px; color: var(--tx2); margin-top: 5px; }
+
+/* ── Status tag recipe: rgba(.15)/rgba(.3)/COLOR ── */
+.tnr-st-tag       { display: inline-block; padding: 2px 8px; border-radius: var(--r-pill); font-size: var(--fs-xs); font-weight: var(--w-semibold); }
+.tnr-st-available { background: rgba(0, 230, 118, .15); color: var(--status-available); border: 1px solid rgba(0, 230, 118, .3); }
+.tnr-st-reserved  { background: rgba(255, 179, 0, .15); color: var(--status-reserved);  border: 1px solid rgba(255, 179, 0, .3); }
+.tnr-st-sold      { background: rgba(255, 82, 82, .15); color: var(--status-sold);      border: 1px solid rgba(255, 82, 82, .3); }
+
+.tnr-pop-actions  { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+.tnr-pop-actions2 { display: flex; gap: 5px; margin-top: 5px; }
+.tnr-pop-btn {
+  flex: 1; min-width: 60px; padding: 6px 4px;
+  border-radius: var(--r-sm); font-size: 11px; cursor: pointer;
+  font-family: inherit; border: 1.5px solid var(--brd);
+  background: var(--bg3); color: var(--tx2);
+  text-align: center; text-decoration: none;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity var(--dur-fast);
+}
+.tnr-pop-btn:active  { opacity: .7; }
+.tnr-pop-btn.tnr-pop-detail  { border-color: var(--acc);  color: var(--acc);  font-weight: var(--w-semibold); }
+.tnr-pop-btn.tnr-pop-contact { border-color: #4fc3f7; color: #4fc3f7; font-weight: var(--w-semibold); }
+.tnr-pop-btn.tnr-pop-print   { border-color: var(--road); color: var(--road); font-weight: var(--w-semibold); }
+.tnr-pop-btn.tnr-pop-fav     { flex: 1; }
+
+.leaflet-popup.tnr-popup .leaflet-popup-content-wrapper { padding: 2px; }
+.leaflet-popup.tnr-popup .leaflet-popup-content { margin: 10px 12px; }
+
+/* ════════════════════════════════════════
+   GPS pulse — only colored "glow" allowed
+   ════════════════════════════════════════ */
+@keyframes tnr-gps-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(0, 230, 118, .4); }
+  70%  { box-shadow: 0 0 0 8px rgba(0, 230, 118, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
+}
+.tnr-gps-pulse { animation: tnr-gps-pulse 1s infinite; }
+
+/* ════════════════════════════════════════
+   Scrollbar hidden (still scrollable)
+   ใช้กับ panel/drawer ที่อยากให้ scroll ได้แต่ไม่โชว์ track
+   ════════════════════════════════════════ */
+.scrollbar-hidden {
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE / Edge legacy */
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;                  /* Chrome / Safari / new Edge */
+}

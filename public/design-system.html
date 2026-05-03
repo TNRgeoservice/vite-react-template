@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TNR MapHub — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── Tokens ── */
+  :root {
+    /* Surfaces */
+    --bg:   #0d1520;
+    --bg2:  #162030;
+    --bg3:  #1e2d42;
+    --panel:#111c2b;
+    --brd:  #213045;
+
+    /* Text */
+    --tx:   #dce8f5;
+    --tx2:  #7a9ab8;
+    --txd:  #3d5672;
+
+    /* Brand + accents */
+    --acc:    #00e676;   /* green primary */
+    --acc2:   #00c853;
+    --land:   #40c4ff;   /* cyan */
+    --road:   #ffb300;   /* amber */
+    --poly:   #b388ff;   /* purple */
+    --red:    #ff5252;
+    --danger: #ef4444;
+    --line:   #06c755;
+
+    /* Status */
+    --st-available: #00e676;
+    --st-reserved:  #ffb300;
+    --st-sold:      #ff5252;
+
+    /* Pipeline stages */
+    --pl-interested:  #40c4ff;
+    --pl-negotiating: #ffb300;
+    --pl-offered:     #ab47bc;
+    --pl-closed:      #00e676;
+    --pl-lost:        #ef4444;
+
+    /* Radius */
+    --r-sm: 6px;
+    --r:    8px;
+    --r-md: 10px;
+    --r-lg: 12px;
+    --r-pill: 999px;
+
+    /* Shadow */
+    --sh-fab:   0 3px 14px rgba(0,0,0,.5);
+    --sh-float: 0 4px 20px rgba(0,0,0,.55);
+    --sh-modal: 0 -8px 40px rgba(0,0,0,.65);
+    --sh-popup: 0 8px 30px rgba(0,0,0,.65);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--tx);
+    font-family: 'Mitr', 'IBM Plex Sans Thai', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  /* ── Page layout ── */
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  .page-header {
+    border-bottom: 1px solid var(--brd);
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+  }
+  .page-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+  .page-sub {
+    color: var(--tx2);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  section {
+    margin-bottom: 48px;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--tx2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--brd);
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .grid {
+    display: grid;
+    gap: 12px;
+  }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .grid-4 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .grid-5 { grid-template-columns: repeat(5, minmax(180px, 1fr)); }
+  .label {
+    font-size: 10px;
+    color: var(--tx2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+  hr.div { border: 0; border-top: 1px dashed var(--brd); margin: 16px 0; }
+
+  /* ── Color swatches ── */
+  .swatch {
+    background: var(--panel);
+    border: 1px solid var(--brd);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .swatch-color {
+    height: 70px;
+  }
+  .swatch-meta {
+    padding: 8px 10px;
+  }
+  .swatch-name {
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .swatch-val {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--tx2);
+  }
+
+  /* ── Typography demo ── */
+  .type-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--brd);
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-label {
+    width: 110px;
+    font-size: 10px;
+    color: var(--tx2);
+    text-transform: uppercase;
+  }
+
+  /* ────────────────────────────────
+     PRIMITIVES
+     ────────────────────────────────*/
+
+  /* Button */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: var(--r);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: opacity .15s, background .15s;
+  }
+  .btn:active { opacity: .78; }
+  .btn-primary { background: var(--acc); color: #0d1520; }
+  .btn-secondary { background: var(--bg3); color: var(--tx); border-color: var(--brd); }
+  .btn-ghost { background: transparent; color: var(--tx2); border-color: var(--brd); }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-line   { background: var(--line); color: #fff; }
+  .btn-cyan   { background: var(--land); color: #0d1520; }
+  .btn-sm { padding: 6px 10px; font-size: 11px; }
+  .btn-icon { padding: 6px 10px; font-size: 14px; }
+  .btn-fab {
+    border-radius: var(--r-pill);
+    padding: 10px 18px;
+    box-shadow: var(--sh-fab);
+    font-size: 13px;
+  }
+
+  /* Input */
+  .input, .textarea, .select {
+    width: 100%;
+    padding: 8px 10px;
+    background: var(--panel);
+    border: 1px solid var(--brd);
+    border-radius: var(--r);
+    color: var(--tx);
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+  }
+  .input:focus, .textarea:focus, .select:focus {
+    border-color: var(--land);
+  }
+  .textarea { resize: vertical; min-height: 60px; }
+
+  /* Badge */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: var(--r-pill);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .badge-available { background: var(--st-available); color: #0d1520; }
+  .badge-reserved  { background: var(--st-reserved);  color: #0d1520; }
+  .badge-sold      { background: var(--st-sold);      color: #fff;    }
+  .badge-pending   { background: var(--road); color: #0d1520; }
+  .badge-accepted  { background: var(--acc);  color: #0d1520; }
+  .badge-declined  { background: var(--danger); color: #fff;  }
+  .badge-revoked   { background: var(--tx2);  color: #0d1520; }
+  .badge-count     { background: var(--bg);   color: var(--tx2); padding: 2px 8px; }
+
+  /* Card */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--brd);
+    border-radius: var(--r-lg);
+    padding: 14px;
+  }
+  .card-tight { padding: 10px; border-radius: var(--r-md); }
+
+  /* Tab */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--brd);
+    background: var(--bg2);
+  }
+  .tab {
+    padding: 10px 18px;
+    font-size: 12px;
+    color: var(--tx2);
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .tab.active {
+    color: var(--tx);
+    border-bottom-color: var(--acc);
+    background: var(--bg3);
+  }
+
+  /* Modal preview frame */
+  .modal-shell {
+    width: 100%;
+    max-width: 380px;
+    background: var(--bg);
+    border: 1px solid var(--brd);
+    border-radius: var(--r-lg);
+    padding: 18px;
+    box-shadow: var(--sh-popup);
+  }
+
+  /* Sheet (mobile bottom) */
+  .sheet-shell {
+    width: 100%;
+    max-width: 380px;
+    background: var(--bg);
+    border: 1px solid var(--brd);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    overflow: hidden;
+  }
+
+  /* ────────────────────────────────
+     COMPOSED
+     ────────────────────────────────*/
+
+  /* TopBar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 52px;
+    padding: 0 12px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--brd);
+    border-radius: var(--r-lg);
+  }
+  .tb-icon {
+    width: 36px; height: 36px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 0; background: transparent;
+    color: var(--tx);
+    font-size: 18px;
+    border-radius: var(--r);
+    cursor: pointer;
+  }
+  .tb-icon.active {
+    background: var(--land);
+    color: var(--bg);
+  }
+  .tb-title-stack { flex: 1; line-height: 1.2; }
+  .tb-title { font-size: 13.5px; font-weight: 600; letter-spacing: -0.2px; }
+  .tb-sub   { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--txd); }
+  .tb-link {
+    background: var(--bg3);
+    color: var(--tx);
+    padding: 4px 10px;
+    border-radius: var(--r);
+    text-decoration: none;
+    font-size: 11px;
+  }
+
+  /* Drawer NavLink */
+  .navlink {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: var(--r);
+    color: var(--tx);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .navlink:hover { background: var(--bg2); }
+
+  /* ChatWindow header */
+  .cw-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--brd);
+  }
+  .cw-name {
+    font-size: 13px; font-weight: 700; color: var(--tx);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .cw-plot {
+    font-size: 10px; color: var(--tx2);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .cw-stage {
+    background: var(--bg);
+    color: var(--land);
+    border: 1px solid var(--land);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: var(--r-sm);
+  }
+  .cw-btn {
+    width: 26px; height: 26px;
+    border: 1px solid var(--brd);
+    background: var(--bg);
+    color: var(--tx2);
+    border-radius: var(--r-sm);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .cw-btn.warn { color: var(--road); }
+
+  /* Message bubble */
+  .bubble-row {
+    display: flex;
+    margin-bottom: 6px;
+  }
+  .bubble-row.right { justify-content: flex-end; }
+  .bubble-row.center { justify-content: center; }
+  .bubble {
+    max-width: 75%;
+    padding: 8px 12px;
+    border-radius: var(--r-md);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .bubble.received { background: var(--bg3); color: var(--tx); border-bottom-left-radius: 2px; }
+  .bubble.sent     { background: var(--acc); color: var(--bg); border-bottom-right-radius: 2px; }
+  .bubble.system   {
+    background: transparent; color: var(--road);
+    border: 1px dashed var(--road); font-size: 11px;
+    padding: 6px 12px;
+  }
+
+  /* Pipeline column + card */
+  .pipe-col {
+    background: var(--panel);
+    border: 1px solid var(--brd);
+    border-radius: var(--r-lg);
+    padding: 10px;
+    min-height: 240px;
+  }
+  .pipe-head {
+    display: flex; align-items: center; gap: 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--brd);
+    margin-bottom: 10px;
+  }
+  .pipe-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .pipe-name { font-size: 13px; font-weight: 700; }
+  .pipe-card {
+    background: var(--bg);
+    border: 1px solid var(--brd);
+    border-radius: var(--r-md);
+    padding: 10px;
+    margin-bottom: 8px;
+    cursor: grab;
+  }
+  .pipe-card-title {
+    font-size: 12px; font-weight: 600;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    margin-bottom: 4px;
+  }
+  .pipe-card-peer {
+    font-size: 11px; color: var(--land);
+    margin-bottom: 6px;
+  }
+  .pipe-card-msg {
+    font-size: 11px; color: var(--tx2);
+    line-height: 1.35;
+    overflow: hidden; text-overflow: ellipsis;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    min-height: 28px;
+  }
+  .pipe-card-foot {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 8px; gap: 6px;
+  }
+  .pipe-card-foot .select {
+    font-size: 10px; padding: 3px 4px;
+    background: var(--panel);
+  }
+  .pipe-date {
+    font-size: 10px; color: var(--tx2);
+  }
+
+  /* Cobroker row */
+  .cb-row {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--bg);
+    border: 1px solid var(--brd);
+    border-radius: var(--r);
+    padding: 8px 10px;
+  }
+  .cb-name {
+    font-size: 12px; font-weight: 600;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .cb-email {
+    font-size: 10px; color: var(--tx2);
+  }
+  .cb-pct {
+    font-size: 13px; font-weight: 700; color: var(--land);
+    min-width: 44px; text-align: right;
+  }
+
+  /* Plot detail header (price + status) */
+  .plot-hero {
+    background: var(--panel);
+    border: 1px solid var(--brd);
+    border-radius: var(--r-lg);
+    padding: 16px;
+  }
+  .plot-name {
+    font-size: 18px; font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .plot-meta {
+    font-size: 12px; color: var(--tx2);
+    margin-bottom: 12px;
+  }
+  .plot-price {
+    font-size: 22px; font-weight: 700; color: var(--acc);
+    line-height: 1.2;
+  }
+  .plot-pps {
+    font-size: 12px; color: var(--tx2);
+    margin-top: 2px;
+  }
+
+  /* Filter sidebar item */
+  .fs-group {
+    background: var(--panel);
+    border: 1px solid var(--brd);
+    border-radius: var(--r-lg);
+    padding: 12px;
+  }
+  .fs-group-title {
+    font-size: 11px; font-weight: 600;
+    color: var(--tx2);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .fs-chip-row {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .fs-chip {
+    background: var(--bg3);
+    border: 1px solid var(--brd);
+    color: var(--tx2);
+    border-radius: var(--r-pill);
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .fs-chip.on {
+    background: var(--land); color: var(--bg); border-color: var(--land);
+  }
+
+  /* Toast / Notification line (used as mini illustration) */
+  .toast {
+    background: var(--bg3);
+    border: 1px solid var(--brd);
+    border-left: 3px solid var(--acc);
+    padding: 10px 14px;
+    border-radius: var(--r);
+    font-size: 12px;
+    box-shadow: var(--sh-float);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="page-header">
+    <h1 class="page-title">TNR MapHub — Design System</h1>
+    <div class="page-sub">Design tokens + component reference · ใช้สำหรับแต่ง UI / preview เท่านั้น (ไม่มี logic)</div>
+  </header>
+
+  <!-- ════════════════════════════════════════
+       LAYER 1 — TOKENS
+       ════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Color · Surfaces</h2>
+    <div class="grid grid-4">
+      <div class="swatch"><div class="swatch-color" style="background:#0d1520"></div><div class="swatch-meta"><div class="swatch-name">bg</div><div class="swatch-val mono">#0d1520</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#111c2b"></div><div class="swatch-meta"><div class="swatch-name">panel</div><div class="swatch-val mono">#111c2b</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#162030"></div><div class="swatch-meta"><div class="swatch-name">bg2</div><div class="swatch-val mono">#162030</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#1e2d42"></div><div class="swatch-meta"><div class="swatch-name">bg3</div><div class="swatch-val mono">#1e2d42</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#213045"></div><div class="swatch-meta"><div class="swatch-name">brd</div><div class="swatch-val mono">#213045</div></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Color · Text</h2>
+    <div class="grid grid-3">
+      <div class="swatch"><div class="swatch-color" style="background:#dce8f5"></div><div class="swatch-meta"><div class="swatch-name">tx (primary)</div><div class="swatch-val mono">#dce8f5</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#7a9ab8"></div><div class="swatch-meta"><div class="swatch-name">tx2 (muted)</div><div class="swatch-val mono">#7a9ab8</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#3d5672"></div><div class="swatch-meta"><div class="swatch-name">txd (dim)</div><div class="swatch-val mono">#3d5672</div></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Color · Brand &amp; Accents</h2>
+    <div class="grid grid-4">
+      <div class="swatch"><div class="swatch-color" style="background:#00e676"></div><div class="swatch-meta"><div class="swatch-name">acc · green</div><div class="swatch-val mono">#00e676</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#40c4ff"></div><div class="swatch-meta"><div class="swatch-name">land · cyan</div><div class="swatch-val mono">#40c4ff</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#ffb300"></div><div class="swatch-meta"><div class="swatch-name">road · amber</div><div class="swatch-val mono">#ffb300</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#b388ff"></div><div class="swatch-meta"><div class="swatch-name">poly · purple</div><div class="swatch-val mono">#b388ff</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#ff5252"></div><div class="swatch-meta"><div class="swatch-name">red</div><div class="swatch-val mono">#ff5252</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#ef4444"></div><div class="swatch-meta"><div class="swatch-name">danger</div><div class="swatch-val mono">#ef4444</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#06c755"></div><div class="swatch-meta"><div class="swatch-name">line (LINE app)</div><div class="swatch-val mono">#06c755</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#ab47bc"></div><div class="swatch-meta"><div class="swatch-name">offered</div><div class="swatch-val mono">#ab47bc</div></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Typography</h2>
+    <div class="card">
+      <div class="type-row">
+        <span class="type-label">2xl · 20px</span>
+        <span style="font-size:20px;font-weight:700;letter-spacing:-0.2px">ที่ดินสวย ติดถนนใหญ่</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">xl · 17px</span>
+        <span style="font-size:17px;font-weight:600">หัวเรื่องรอง</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">lg · 15px</span>
+        <span style="font-size:15px;font-weight:600">หัวข้อ Card</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">md · 14px</span>
+        <span style="font-size:14px">เนื้อหาทั่วไป สอบถามรายละเอียดได้</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">body · 13px</span>
+        <span style="font-size:13px">ข้อความในแชต / paragraph ปกติ</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">sm · 11.5px</span>
+        <span style="font-size:11.5px;color:var(--tx2)">caption / metadata</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">xs · 10px</span>
+        <span style="font-size:10px;color:var(--tx2)">timestamp · label</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">mono</span>
+        <span class="mono" style="font-size:13px">100.5018° E, 13.7563° N</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Radius · Shadow · Spacing</h2>
+    <div class="row">
+      <div class="card" style="padding:18px;text-align:center"><div style="width:60px;height:40px;background:var(--bg3);border-radius:6px;margin:0 auto 6px"></div><div class="label">r-sm 6</div></div>
+      <div class="card" style="padding:18px;text-align:center"><div style="width:60px;height:40px;background:var(--bg3);border-radius:8px;margin:0 auto 6px"></div><div class="label">r 8</div></div>
+      <div class="card" style="padding:18px;text-align:center"><div style="width:60px;height:40px;background:var(--bg3);border-radius:10px;margin:0 auto 6px"></div><div class="label">r-md 10</div></div>
+      <div class="card" style="padding:18px;text-align:center"><div style="width:60px;height:40px;background:var(--bg3);border-radius:12px;margin:0 auto 6px"></div><div class="label">r-lg 12</div></div>
+      <div class="card" style="padding:18px;text-align:center"><div style="width:60px;height:40px;background:var(--bg3);border-radius:999px;margin:0 auto 6px"></div><div class="label">pill</div></div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <div class="card" style="box-shadow:var(--sh-fab);padding:14px 18px"><div class="label">sh-fab</div>floating action btn</div>
+      <div class="card" style="box-shadow:var(--sh-float);padding:14px 18px"><div class="label">sh-float</div>chat window</div>
+      <div class="card" style="box-shadow:var(--sh-popup);padding:14px 18px"><div class="label">sh-popup</div>map popup</div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       LAYER 2 — PRIMITIVES
+       ════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Buttons</h2>
+    <div class="row">
+      <button class="btn btn-primary">บันทึก</button>
+      <button class="btn btn-secondary">ยกเลิก</button>
+      <button class="btn btn-ghost">ยกเลิก</button>
+      <button class="btn btn-danger">ลบ</button>
+      <button class="btn btn-cyan">🔥 Heat</button>
+      <button class="btn btn-line">LINE</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn btn-primary btn-sm">บันทึก sm</button>
+      <button class="btn btn-secondary btn-sm">ยกเลิก sm</button>
+      <button class="btn btn-icon" style="background:var(--bg);border-color:var(--brd);color:var(--road)">⏰</button>
+      <button class="btn btn-icon" style="background:var(--bg);border-color:var(--brd);color:var(--tx2)">×</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn btn-fab btn-primary">＋ เพิ่มที่ดิน</button>
+      <button class="btn btn-fab" style="background:var(--poly);color:#0d1520">✏️ วาดแปลง</button>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Inputs</h2>
+    <div class="grid grid-3">
+      <div>
+        <div class="label">Text</div>
+        <input class="input" placeholder="ค้นหาแปลง...">
+      </div>
+      <div>
+        <div class="label">Select</div>
+        <select class="select"><option>ทุกสถานะ</option><option>ว่าง</option><option>จอง</option></select>
+      </div>
+      <div>
+        <div class="label">Range (commission %)</div>
+        <input type="range" min="0" max="100" value="10" style="width:100%">
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <div class="label">Textarea</div>
+      <textarea class="textarea" placeholder="หมายเหตุ..."></textarea>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Badges</h2>
+    <div class="label">Plot status</div>
+    <div class="row" style="margin-bottom:14px">
+      <span class="badge badge-available">ว่าง</span>
+      <span class="badge badge-reserved">จอง</span>
+      <span class="badge badge-sold">ขายแล้ว</span>
+    </div>
+    <div class="label">Pipeline stage</div>
+    <div class="row" style="margin-bottom:14px">
+      <span class="badge" style="background:var(--pl-interested);color:#0d1520">สนใจ</span>
+      <span class="badge" style="background:var(--pl-negotiating);color:#0d1520">เจรจา</span>
+      <span class="badge" style="background:var(--pl-offered);color:#fff">เสนอราคา</span>
+      <span class="badge" style="background:var(--pl-closed);color:#0d1520">ปิดดีล</span>
+      <span class="badge" style="background:var(--pl-lost);color:#fff">ยกเลิก</span>
+    </div>
+    <div class="label">Cobroker invite</div>
+    <div class="row" style="margin-bottom:14px">
+      <span class="badge badge-pending">รอตอบรับ</span>
+      <span class="badge badge-accepted">ยอมรับแล้ว</span>
+      <span class="badge badge-declined">ปฏิเสธ</span>
+      <span class="badge badge-revoked">ยกเลิก</span>
+    </div>
+    <div class="label">Counters / verified</div>
+    <div class="row">
+      <span class="badge badge-count">12</span>
+      <span class="badge" style="background:var(--land);color:#0d1520">✓ Verified</span>
+      <span class="badge" style="background:var(--danger);color:#fff">9+</span>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Cards</h2>
+    <div class="grid grid-3">
+      <div class="card">
+        <div style="font-weight:700;margin-bottom:4px">Plain card</div>
+        <div style="color:var(--tx2);font-size:12px">background panel + border brd</div>
+      </div>
+      <div class="card card-tight">
+        <div style="font-weight:700;margin-bottom:4px">Tight card (10/r-md)</div>
+        <div style="color:var(--tx2);font-size:12px">ใช้ใน list rows</div>
+      </div>
+      <div class="card" style="border-color:var(--acc)">
+        <div style="font-weight:700;margin-bottom:4px">Highlight card</div>
+        <div style="color:var(--tx2);font-size:12px">border = accent</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Tabs</h2>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="tabs">
+        <button class="tab active">📋 รายการ</button>
+        <button class="tab">📈 วิเคราะห์</button>
+        <button class="tab">🤝 คำเชิญร่วมขาย</button>
+      </div>
+      <div style="padding:18px;color:var(--tx2);font-size:12px">เนื้อหาของ tab ที่ active</div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Modal &amp; Sheet shells</h2>
+    <div class="row">
+      <div class="modal-shell">
+        <div style="font-size:15px;font-weight:700;margin-bottom:14px">🤝 เชิญนายหน้าร่วม</div>
+        <div class="label">อีเมลนายหน้า</div>
+        <input class="input" placeholder="broker@example.com" style="margin-bottom:12px">
+        <div class="label">ส่วนแบ่งค่าคอม %</div>
+        <input type="range" min="1" max="100" value="10" style="width:100%;margin-bottom:14px">
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn btn-ghost btn-sm">ยกเลิก</button>
+          <button class="btn btn-primary btn-sm">ส่งคำเชิญ</button>
+        </div>
+      </div>
+      <div class="sheet-shell">
+        <div style="height:4px;width:40px;background:var(--brd);border-radius:2px;margin:8px auto"></div>
+        <div style="padding:14px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:6px">เพิ่มข้อมูลที่ดิน</div>
+          <div style="font-size:11px;color:var(--tx2);margin-bottom:10px">📍 13.7563°N, 100.5018°E</div>
+          <input class="input" placeholder="ชื่อแปลง" style="margin-bottom:8px">
+          <input class="input" placeholder="ราคา (บาท)" style="margin-bottom:8px">
+          <button class="btn btn-primary" style="width:100%">บันทึก</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       LAYER 3 — COMPOSED
+       ════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">TopBar</h2>
+    <div class="topbar">
+      <button class="tb-icon" style="position:relative">
+        ☰
+        <span class="badge" style="background:var(--danger);color:#fff;position:absolute;top:2px;right:2px;font-size:9px;padding:1px 5px">3</span>
+      </button>
+      <button class="tb-icon active">🔍</button>
+      <div class="tb-title-stack">
+        <div class="tb-title">TNR MapHub</div>
+        <div class="tb-sub">beta</div>
+      </div>
+      <a class="tb-link" href="#">🗂 รายการ</a>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Drawer Nav (left side panel)</h2>
+    <div class="card" style="max-width:300px;padding:8px">
+      <a class="navlink" href="#"><span>🗂 รายการที่ดิน</span></a>
+      <a class="navlink" href="#"><span>🔍 เปรียบเทียบ</span></a>
+      <a class="navlink" href="#"><span>👤 โปรไฟล์ของฉัน</span></a>
+      <a class="navlink" href="#">
+        <span>💬 กล่องข้อความ</span>
+        <span class="badge" style="background:var(--danger);color:#fff">5</span>
+      </a>
+      <a class="navlink" href="#"><span>❤️ รายการโปรด</span></a>
+      <a class="navlink" href="#"><span>📊 Broker Dashboard</span></a>
+      <a class="navlink" href="#"><span>🗂 Pipeline ดีล</span></a>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">ChatWindow Header (desktop floating)</h2>
+    <div class="card" style="padding:0;overflow:hidden;max-width:340px">
+      <div class="cw-header">
+        <div style="flex:1;min-width:0">
+          <div class="cw-name">💬 คุณสมชาย ใจดี</div>
+          <div class="cw-plot">ที่ดินติดถนนใหญ่ จ.เชียงใหม่</div>
+        </div>
+        <select class="cw-stage"><option>เจรจา</option></select>
+        <button class="cw-btn warn">⏰</button>
+        <button class="cw-btn">–</button>
+        <button class="cw-btn">×</button>
+      </div>
+      <div style="padding:12px;background:var(--bg)">
+        <div class="bubble-row"><div class="bubble received">สวัสดีครับ ที่ดินยังว่างไหม</div></div>
+        <div class="bubble-row right"><div class="bubble sent">ยังว่างครับ สนใจดูพื้นที่จริงไหม</div></div>
+        <div class="bubble-row center"><div class="bubble system">⏰ เตือน: นัดดูที่ 14:00</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Pipeline (Kanban — ครบ 5 stage)</h2>
+    <div class="grid grid-5" style="overflow-x:auto">
+      <div class="pipe-col">
+        <div class="pipe-head">
+          <span class="pipe-dot" style="background:var(--pl-interested)"></span>
+          <span class="pipe-name">สนใจ</span>
+          <span class="badge badge-count" style="margin-left:auto">3</span>
+        </div>
+        <div class="pipe-card">
+          <div class="pipe-card-title">🏷 ที่ดิน 5 ไร่ จ.เชียงใหม่</div>
+          <div class="pipe-card-peer">💬 สมชาย</div>
+          <div class="pipe-card-msg">สนใจดูพื้นที่จริงครับ ขอนัดวันเสาร์ได้ไหม</div>
+          <div class="pipe-card-foot">
+            <select class="select" style="font-size:10px;padding:3px 4px"><option>สนใจ</option></select>
+            <span class="pipe-date">25 เม.ย.</span>
+          </div>
+        </div>
+        <div class="pipe-card">
+          <div class="pipe-card-title">🏷 บ้านสวน 2 ไร่</div>
+          <div class="pipe-card-peer">💬 มาลี</div>
+          <div class="pipe-card-msg">📷 รูปภาพ</div>
+          <div class="pipe-card-foot">
+            <select class="select" style="font-size:10px;padding:3px 4px"><option>สนใจ</option></select>
+            <span class="pipe-date">24 เม.ย.</span>
+          </div>
+        </div>
+      </div>
+      <div class="pipe-col">
+        <div class="pipe-head">
+          <span class="pipe-dot" style="background:var(--pl-negotiating)"></span>
+          <span class="pipe-name">เจรจา</span>
+          <span class="badge badge-count" style="margin-left:auto">1</span>
+        </div>
+        <div class="pipe-card">
+          <div class="pipe-card-title">🏷 ที่ดินเปล่า อ.หางดง</div>
+          <div class="pipe-card-peer">💬 วิชัย</div>
+          <div class="pipe-card-msg">ลดได้ไหมครับ งบ 4.5 ล้าน</div>
+          <div class="pipe-card-foot">
+            <select class="select" style="font-size:10px;padding:3px 4px"><option>เจรจา</option></select>
+            <span class="pipe-date">22 เม.ย.</span>
+          </div>
+        </div>
+      </div>
+      <div class="pipe-col">
+        <div class="pipe-head">
+          <span class="pipe-dot" style="background:var(--pl-offered)"></span>
+          <span class="pipe-name">เสนอราคา</span>
+          <span class="badge badge-count" style="margin-left:auto">2</span>
+        </div>
+        <div class="pipe-card">
+          <div class="pipe-card-title">🏷 สวนผลไม้ จ.จันทบุรี</div>
+          <div class="pipe-card-peer">💬 สมศักดิ์</div>
+          <div class="pipe-card-msg">เสนอ 3.2 ล้าน รอตอบ</div>
+          <div class="pipe-card-foot">
+            <select class="select" style="font-size:10px;padding:3px 4px"><option>เสนอราคา</option></select>
+            <span class="pipe-date">20 เม.ย.</span>
+          </div>
+        </div>
+      </div>
+      <div class="pipe-col">
+        <div class="pipe-head">
+          <span class="pipe-dot" style="background:var(--pl-closed)"></span>
+          <span class="pipe-name">ปิดดีล</span>
+          <span class="badge badge-count" style="margin-left:auto">1</span>
+        </div>
+        <div class="pipe-card">
+          <div class="pipe-card-title">🏷 ที่ดิน 1 ไร่ ลำพูน</div>
+          <div class="pipe-card-peer">💬 อรุณ</div>
+          <div class="pipe-card-msg">โอนเสร็จ 18 เม.ย. ✅</div>
+          <div class="pipe-card-foot">
+            <select class="select" style="font-size:10px;padding:3px 4px"><option>ปิดดีล</option></select>
+            <span class="pipe-date">18 เม.ย.</span>
+          </div>
+        </div>
+      </div>
+      <div class="pipe-col">
+        <div class="pipe-head">
+          <span class="pipe-dot" style="background:var(--pl-lost)"></span>
+          <span class="pipe-name">ยกเลิก</span>
+          <span class="badge badge-count" style="margin-left:auto">0</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Cobroker rows (ในหน้า plot)</h2>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div style="font-size:13px;font-weight:700">🤝 นายหน้าร่วม <span style="color:var(--tx2);font-weight:400">· 2 ราย</span></div>
+        <button class="btn btn-cyan btn-sm">＋ เชิญนายหน้า</button>
+      </div>
+      <div class="stack">
+        <div class="cb-row">
+          <div style="flex:1;min-width:0">
+            <div class="cb-name">นายหน้า ก.</div>
+            <div class="cb-email">broker.a@example.com</div>
+          </div>
+          <div class="cb-pct">10%</div>
+          <span class="badge badge-accepted">ยอมรับแล้ว</span>
+          <button class="cw-btn" style="color:var(--danger);border-color:var(--brd)">×</button>
+        </div>
+        <div class="cb-row">
+          <div style="flex:1;min-width:0">
+            <div class="cb-name">broker.b@example.com</div>
+          </div>
+          <div class="cb-pct">5%</div>
+          <span class="badge badge-pending">รอตอบรับ</span>
+          <button class="cw-btn" style="color:var(--danger);border-color:var(--brd)">×</button>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--brd);font-size:11px;color:var(--tx2)">
+        รวมค่าคอมที่แบ่งให้นายหน้า: <strong style="color:var(--tx)">15%</strong>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Plot detail hero (price + status)</h2>
+    <div class="plot-hero">
+      <h3 class="plot-name">ที่ดินสวย ติดถนนใหญ่ จ.เชียงใหม่</h3>
+      <div class="plot-meta">อ.หางดง · จ.เชียงใหม่ · เนื้อที่ 5-2-30 (2230 ตร.ว.)</div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
+        <div>
+          <div class="plot-price">4,500,000 ฿</div>
+          <div class="plot-pps">503 ฿/ตร.ม.</div>
+        </div>
+        <span class="badge badge-available">✅ ว่างขาย</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Filter sidebar group</h2>
+    <div class="fs-group" style="max-width:320px">
+      <div class="fs-group-title">สถานะ</div>
+      <div class="fs-chip-row" style="margin-bottom:12px">
+        <span class="fs-chip on">ทั้งหมด</span>
+        <span class="fs-chip">ว่าง</span>
+        <span class="fs-chip">จอง</span>
+        <span class="fs-chip">ขายแล้ว</span>
+      </div>
+      <div class="fs-group-title">ประเภทโฉนด</div>
+      <div class="fs-chip-row" style="margin-bottom:12px">
+        <span class="fs-chip">โฉนด</span>
+        <span class="fs-chip on">น.ส.3</span>
+        <span class="fs-chip">ส.ป.ก.</span>
+      </div>
+      <div class="fs-group-title">ราคา (บาท)</div>
+      <div style="display:flex;gap:8px">
+        <input class="input" placeholder="ต่ำสุด">
+        <input class="input" placeholder="สูงสุด">
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Toast / Notification</h2>
+    <div class="stack" style="max-width:400px">
+      <div class="toast">⏰ เตือนคุยต่อเรื่อง "ที่ดิน 5 ไร่ จ.เชียงใหม่"</div>
+      <div class="toast" style="border-left-color:var(--land)">📷 มีคนดูแปลงของคุณ 3 ครั้งวันนี้</div>
+      <div class="toast" style="border-left-color:var(--road)">🤝 คุณได้รับเชิญเป็นนายหน้าร่วม</div>
+      <div class="toast" style="border-left-color:var(--danger)">❌ สลิปถูกปฏิเสธ</div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
