@@ -58,7 +58,7 @@ async function reverseNominatim(lat: number, lng: number): Promise<GeocodeResult
       headers: { 'Accept': 'application/json' },
     });
     if (!res.ok) return EMPTY;
-    const j = await res.json();
+    const j = await res.json()as any;
     const a = j?.address || {};
     // OSM keys: state(จังหวัด), county/state_district(อำเภอ?), suburb/village/neighbourhood(ตำบล?)
     return {
