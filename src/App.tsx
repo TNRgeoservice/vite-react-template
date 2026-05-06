@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Map, Globe, Grid3X3, Box, MapPin, Layers, ArrowRight, ChevronDown } from 'lucide-react'
+import { Map, MapPin, Layers, ArrowRight, ChevronDown, Search, Tag, Users, LogIn } from 'lucide-react'
 
 // Animation variants
 const fadeInUp = {
@@ -68,11 +68,25 @@ function App() {
               className="hidden md:flex items-center gap-8"
             >
               <a href="#features" className="text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
-                Services
+                ฟีเจอร์
+              </a>
+              <a href="#sellers" className="text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
+                ลงประกาศฟรี
               </a>
               <a href="#about" className="text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
-                About
+                เกี่ยวกับ
               </a>
+              <motion.a
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                href="https://map.tnrmaphub.com/?login=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 border border-[var(--brd)] text-[var(--tx)] rounded-lg text-sm font-semibold hover:bg-[var(--bg2)] transition-colors"
+              >
+                <LogIn className="w-4 h-4" />
+                เข้าสู่ระบบ
+              </motion.a>
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -86,17 +100,32 @@ function App() {
               </motion.a>
             </motion.nav>
 
-            <motion.a
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              whileTap={{ scale: 0.95 }}
-              href="https://map.tnrmaphub.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="md:hidden inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--acc)] text-[var(--bg)] rounded-lg text-sm font-semibold"
-            >
-              เปิดแผนที่
-            </motion.a>
+            {/* Mobile actions */}
+            <div className="md:hidden flex items-center gap-2">
+              <motion.a
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                whileTap={{ scale: 0.95 }}
+                href="https://map.tnrmaphub.com/?login=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="เข้าสู่ระบบ"
+                className="inline-flex items-center justify-center w-9 h-9 border border-[var(--brd)] text-[var(--tx)] rounded-lg"
+              >
+                <LogIn className="w-4 h-4" />
+              </motion.a>
+              <motion.a
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                whileTap={{ scale: 0.95 }}
+                href="https://map.tnrmaphub.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--acc)] text-[var(--bg)] rounded-lg text-sm font-semibold"
+              >
+                เปิดแผนที่
+              </motion.a>
+            </div>
           </div>
         </div>
       </motion.header>
@@ -161,17 +190,17 @@ function App() {
               >
                 <Layers className="w-4 h-4 text-[var(--acc)]" />
               </motion.div>
-              <span className="text-sm text-[var(--tx2)]">Powered by TNR Geoservice</span>
+              <span className="text-sm text-[var(--tx2)]">โดย TNR Geoservice — ผู้เชี่ยวชาญด้าน GIS</span>
             </motion.div>
 
             <motion.h1
               variants={fadeInUp}
               className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6"
             >
-              Smart{' '}
+              ศูนย์รวม{' '}
               <motion.span
                 className="text-[var(--land)] inline-block"
-                animate={{ 
+                animate={{
                   textShadow: [
                     '0 0 20px rgba(64, 196, 255, 0)',
                     '0 0 20px rgba(64, 196, 255, 0.5)',
@@ -180,17 +209,17 @@ function App() {
                 }}
                 transition={{ duration: 3, repeat: Infinity }}
               >
-                Land Valuation
+                ฝากขายที่ดิน
               </motion.span>
-              <br />& Spatial Analysis
+              <br />ลงประกาศฟรี ค้นหาด้วยแผนที่ GIS
             </motion.h1>
 
             <motion.p
               variants={fadeInUp}
               className="text-lg sm:text-xl text-[var(--tx2)] mb-8 max-w-2xl leading-relaxed"
             >
-              Professional GIS analysis, land subdivision planning, and 3D architectural rendering.
-              We transform spatial data into actionable insights for informed decision-making.
+              แพลตฟอร์มซื้อขายที่ดินออนไลน์ ลงประกาศขายที่ดินฟรี เจ้าของขายเอง
+              ค้นหาที่ดินทำเลดีผ่านระบบแผนที่ — ดูพิกัด ผังเมือง โฉนด และเปรียบเทียบราคาได้ในที่เดียว
             </motion.p>
 
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4">
@@ -202,8 +231,8 @@ function App() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[var(--acc)] text-[var(--bg)] rounded-xl text-base font-semibold hover:bg-[var(--acc2)] transition-all"
               >
-                <MapPin className="w-5 h-5" />
-                เปิดแผนที่
+                <Search className="w-5 h-5" />
+                ค้นหาที่ดินจากแผนที่
                 <motion.span
                   animate={{ x: [0, 5, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
@@ -214,10 +243,11 @@ function App() {
               <motion.a
                 whileHover={{ scale: 1.02, backgroundColor: 'var(--bg2)' }}
                 whileTap={{ scale: 0.98 }}
-                href="#features"
+                href="#sellers"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-[var(--brd)] text-[var(--tx)] rounded-xl text-base font-medium transition-colors"
               >
-                Explore Services
+                <Tag className="w-5 h-5" />
+                ลงประกาศฟรี
               </motion.a>
             </motion.div>
 
@@ -229,9 +259,9 @@ function App() {
               className="grid grid-cols-3 gap-6 mt-16 pt-8 border-t border-[var(--brd)]"
             >
               {[
-                { icon: Globe, label: 'Spatial Analysis', value: 'GIS', color: 'var(--land)' },
-                { icon: Grid3X3, label: 'Workflow', value: 'Digital', color: 'var(--acc)' },
-                { icon: Box, label: 'Visualization', value: '3D', color: 'var(--poly)' },
+                { icon: Map, label: 'แผนที่ GIS แม่นยำ', value: 'GIS', color: 'var(--land)' },
+                { icon: Tag, label: 'ลงประกาศ', value: 'ฟรี', color: 'var(--acc)' },
+                { icon: Users, label: 'เจ้าของขายเอง', value: 'ไม่มีนายหน้า', color: 'var(--poly)' },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
@@ -241,7 +271,7 @@ function App() {
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <stat.icon className="w-4 h-4" style={{ color: stat.color }} />
-                    <span className="text-2xl font-bold">{stat.value}</span>
+                    <span className="text-xl sm:text-2xl font-bold">{stat.value}</span>
                   </div>
                   <p className="text-sm text-[var(--tx2)]">{stat.label}</p>
                 </motion.div>
@@ -262,7 +292,7 @@ function App() {
             transition={{ duration: 2, repeat: Infinity }}
             className="flex flex-col items-center gap-2 text-[var(--tx2)]"
           >
-            <span className="text-xs">Scroll</span>
+            <span className="text-xs">เลื่อนลง</span>
             <ChevronDown className="w-4 h-4" />
           </motion.div>
         </motion.div>
@@ -279,10 +309,10 @@ function App() {
             className="text-center mb-16"
           >
             <motion.h2 variants={fadeInUp} className="text-3xl sm:text-4xl font-bold mb-4">
-              Our Services
+              ทำไมต้อง TNR MapHub
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-[var(--tx2)] max-w-2xl mx-auto">
-              Comprehensive spatial solutions from data analysis to visualization
+              ครบทุกเครื่องมือในการซื้อขายที่ดิน — ตั้งแต่ค้นหา วิเคราะห์ทำเล จนถึงปิดดีล
             </motion.p>
           </motion.div>
 
@@ -295,25 +325,25 @@ function App() {
           >
             {[
               {
-                icon: Globe,
-                title: 'GIS Analysis',
+                icon: Map,
+                title: 'ค้นหาที่ดินจากแผนที่',
                 color: 'var(--land)',
-                description: 'Geographic Information Systems analysis for land assessment, terrain mapping, and spatial data processing.',
-                features: ['Topographic analysis', 'Land use mapping', 'Spatial data integration'],
+                description: 'ดูที่ดินขายทั่วไทยบนแผนที่ GIS แม่นยำ — เห็นพิกัดจริง รูปแปลง ขนาด ติดถนนเส้นไหน',
+                features: ['ดูพิกัด GPS ทุกแปลง', 'ซ้อนชั้นผังเมือง/พื้นที่ป่า', 'กรองตามจังหวัด/ราคา/ขนาด'],
               },
               {
-                icon: Grid3X3,
-                title: 'Land Subdivision',
+                icon: Tag,
+                title: 'ลงประกาศขายฟรี',
                 color: 'var(--acc)',
-                description: 'Professional layout design and subdivision planning for residential and commercial development projects.',
-                features: ['Plot layout optimization', 'Road network planning', 'Utility corridor design'],
+                description: 'เจ้าของที่ดินลงประกาศได้ฟรี ไม่มีค่าธรรมเนียม ไม่ผ่านนายหน้า — ติดต่อผู้ซื้อโดยตรง',
+                features: ['ลงประกาศฟรีไม่จำกัด', 'แชทคุยกับผู้ซื้อโดยตรง', 'แชร์ FB/LINE เพิ่ม reach'],
               },
               {
-                icon: Box,
-                title: '3D Rendering',
+                icon: Layers,
+                title: 'ข้อมูลเชิงลึก ตัดสินใจแม่นยำ',
                 color: 'var(--poly)',
-                description: 'High-quality 3D architectural visualization and terrain modeling for project presentations.',
-                features: ['Architectural visualization', 'Terrain modeling', 'Project fly-throughs'],
+                description: 'มากกว่าเว็บประกาศทั่วไป — ดูโฉนด ผังเมือง ราคาเปรียบเทียบรอบพื้นที่ ก่อนตัดสินใจซื้อขาย',
+                features: ['เปรียบเทียบราคา/ตร.วา', 'ข้อมูลโฉนด เอกสารสิทธิ์', 'แลนด์มาร์ก สิ่งใกล้เคียง'],
               },
             ].map((card, i) => (
               <motion.div
@@ -363,8 +393,67 @@ function App() {
         </div>
       </section>
 
+      {/* Sellers Section — ลงประกาศฟรี (กิน keyword group: ฝากขายที่ดิน, ลงประกาศขายที่ดินฟรี) */}
+      <section id="sellers" className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={staggerContainer}
+            className="grid md:grid-cols-2 gap-10 items-center"
+          >
+            <motion.div variants={fadeInUp}>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--acc)]/10 border border-[var(--acc)]/30 mb-4">
+                <Tag className="w-4 h-4 text-[var(--acc)]" />
+                <span className="text-sm text-[var(--acc)]">สำหรับเจ้าของที่ดิน</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+                ฝากขายที่ดินกับเรา <span className="text-[var(--acc)]">ฟรี ไม่มีนายหน้า</span>
+              </h2>
+              <p className="text-[var(--tx2)] text-lg leading-relaxed mb-6">
+                ลงประกาศขายที่ดินได้ไม่จำกัด ไม่มีค่าธรรมเนียม คุยกับผู้ซื้อโดยตรงผ่านระบบแชท
+                — เหมาะสำหรับเจ้าของที่ดินที่อยากขายเองโดยไม่ผ่านนายหน้า
+              </p>
+              <ul className="space-y-3 mb-8">
+                {[
+                  'ลงประกาศขายที่ดินฟรี ไม่จำกัดจำนวนแปลง',
+                  'ติดต่อผู้ซื้อโดยตรง ไม่ผ่านนายหน้า',
+                  'แชร์ Facebook / LINE ขยายการเข้าถึง',
+                  'แสดงบนแผนที่ — ผู้ซื้อหาเจอง่ายกว่า',
+                ].map((t, i) => (
+                  <li key={i} className="flex items-start gap-3 text-[var(--tx)]">
+                    <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[var(--acc)]" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+              <motion.a
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                href="https://map.tnrmaphub.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--acc)] text-[var(--bg)] rounded-xl text-base font-semibold hover:bg-[var(--acc2)] transition-all"
+              >
+                <Tag className="w-5 h-5" />
+                เริ่มลงประกาศฟรี
+                <ArrowRight className="w-4 h-4" />
+              </motion.a>
+            </motion.div>
+            <motion.div variants={fadeInUp} className="relative">
+              <div className="aspect-square rounded-2xl bg-[var(--bg2)] border border-[var(--brd)] p-8 flex flex-col justify-center items-center text-center">
+                <div className="text-6xl font-black text-[var(--acc)] mb-2">ฟรี</div>
+                <div className="text-xl text-[var(--tx)] font-semibold mb-1">ลงประกาศขายที่ดิน</div>
+                <div className="text-sm text-[var(--tx2)]">ไม่จำกัดจำนวน · ไม่มีค่าธรรมเนียม</div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* About Section */}
-      <section id="about" className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg2)]">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -374,15 +463,14 @@ function App() {
             className="max-w-3xl mx-auto text-center"
           >
             <motion.h2 variants={fadeInUp} className="text-3xl sm:text-4xl font-bold mb-6">
-              About TNR Geoservice
+              เกี่ยวกับ TNR Geoservice
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-[var(--tx2)] text-lg leading-relaxed mb-8">
-              We specialize in digital land planning and spatial analysis services. Our expertise lies in
-              layout design, GIS data processing, and 3D visualization — helping clients make informed
-              decisions through precise spatial data analysis.
+              เราคือผู้เชี่ยวชาญด้านการวางผังที่ดินดิจิทัลและการวิเคราะห์ข้อมูลเชิงพื้นที่ (GIS)
+              พัฒนาแพลตฟอร์ม TNR MapHub เพื่อให้การซื้อขายที่ดินในไทยโปร่งใส แม่นยำ และเข้าถึงง่ายกว่าที่เคย
             </motion.p>
             <motion.p variants={fadeIn} className="text-sm text-[var(--txd)] italic">
-              Note: We provide layout design and data analysis services only. On-site land surveying is not included in our services.
+              หมายเหตุ: บริการของเราเน้นการออกแบบผังและวิเคราะห์ข้อมูลเชิงพื้นที่ ไม่รวมการรังวัดที่ดินภาคสนาม
             </motion.p>
           </motion.div>
         </div>
@@ -415,16 +503,16 @@ function App() {
           />
 
           <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl font-bold mb-4">
-            Ready to explore?
+            พร้อมเริ่มต้นซื้อขายที่ดินแล้วหรือยัง?
           </motion.h2>
           <motion.p variants={fadeInUp} className="text-[var(--tx2)] mb-8">
-            Open our interactive map to browse available land listings and explore spatial data.
+            เปิดแผนที่ค้นหาที่ดินทำเลดี หรือลงประกาศขายของคุณเองได้ฟรีในไม่กี่คลิก
           </motion.p>
           <motion.a
             variants={scaleIn}
-            whileHover={{ 
-              scale: 1.05, 
-              boxShadow: '0 0 40px rgba(0, 230, 118, 0.5)' 
+            whileHover={{
+              scale: 1.05,
+              boxShadow: '0 0 40px rgba(0, 230, 118, 0.5)'
             }}
             whileTap={{ scale: 0.95 }}
             href="https://map.tnrmaphub.com"
@@ -433,7 +521,7 @@ function App() {
             className="inline-flex items-center gap-2 px-8 py-4 bg-[var(--acc)] text-[var(--bg)] rounded-xl text-lg font-semibold hover:bg-[var(--acc2)] transition-all"
           >
             <MapPin className="w-5 h-5" />
-            เปิดแผนที่
+            เปิดแผนที่ TNR MapHub
             <motion.span
               animate={{ x: [0, 5, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
@@ -455,15 +543,32 @@ function App() {
           >
             <Map className="w-5 h-5 text-[var(--acc)]" />
             <span className="font-semibold">TNR MapHub</span>
+            <span className="text-xs text-[var(--tx2)] hidden sm:inline">— ฝากขายที่ดิน ลงประกาศฟรี</span>
           </motion.div>
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-sm text-[var(--tx2)]"
+            className="flex items-center gap-4 text-sm text-[var(--tx2)]"
           >
-            © {new Date().getFullYear()} TNR MapHub by TNR Geoservice. All rights reserved.
-          </motion.p>
+            <a
+              href="https://www.facebook.com/TNRGEOSERVICE"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[var(--acc)] transition-colors"
+            >
+              Facebook
+            </a>
+            <a
+              href="https://map.tnrmaphub.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[var(--acc)] transition-colors"
+            >
+              เปิดแผนที่
+            </a>
+            <span>© {new Date().getFullYear()} TNR Geoservice</span>
+          </motion.div>
         </div>
       </footer>
     </div>

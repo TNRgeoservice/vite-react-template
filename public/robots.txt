@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tnrmaphub.com/sitemap.xml
+Sitemap: https://map.tnrmaphub.com/sitemap.xml
