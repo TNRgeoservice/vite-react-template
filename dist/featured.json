@@ -1,0 +1,90 @@
+[
+  {
+    "id": "demo-01",
+    "title": "ที่ดินติดถนนใหญ่ วิวภูเขา",
+    "province": "เชียงใหม่",
+    "district": "สันทราย",
+    "areaText": "8-2-15",
+    "price": 9800000,
+    "pricePerSqWa": 3906,
+    "image": "/showcase/showcase-04.webp",
+    "tags": ["ติดถนน", "ไฟฟ้า-น้ำพร้อม"]
+  },
+  {
+    "id": "demo-02",
+    "title": "แปลงเปล่า ใกล้แหล่งท่องเที่ยว",
+    "province": "นครราชสีมา",
+    "district": "ปากช่อง",
+    "areaText": "15-1-08",
+    "price": 21500000,
+    "pricePerSqWa": 3284,
+    "image": "/showcase/showcase-10.webp",
+    "tags": ["วิวเขา", "ใกล้แหล่งท่องเที่ยว"]
+  },
+  {
+    "id": "demo-03",
+    "title": "ที่ดินโซนอุตสาหกรรม",
+    "province": "ชลบุรี",
+    "district": "พนัสนิคม",
+    "areaText": "23-0-00",
+    "price": 48000000,
+    "pricePerSqWa": 3609,
+    "image": "/showcase/showcase-17.webp",
+    "tags": ["ใกล้โรงงาน", "ติดถนน 4 เลน"]
+  },
+  {
+    "id": "demo-04",
+    "title": "ที่ดินติดถนนใหญ่ ใกล้เมือง",
+    "province": "ขอนแก่น",
+    "district": "เมืองขอนแก่น",
+    "areaText": "12-3-45",
+    "price": 16900000,
+    "pricePerSqWa": 3450,
+    "image": "/showcase/showcase-09.webp",
+    "tags": ["ติดถนนใหญ่", "ใกล้เมือง"]
+  },
+  {
+    "id": "demo-05",
+    "title": "แปลงสวยพร้อมพัฒนา",
+    "province": "ภูเก็ต",
+    "district": "ถลาง",
+    "areaText": "5-2-30",
+    "price": 28500000,
+    "pricePerSqWa": 12947,
+    "image": "/showcase/showcase-23.webp",
+    "tags": ["ใกล้ทะเล", "ทำเลทอง"]
+  },
+  {
+    "id": "demo-06",
+    "title": "ที่ดินจัดสรร พร้อมสาธารณูปโภค",
+    "province": "ระยอง",
+    "district": "บ้านฉาง",
+    "areaText": "3-1-00",
+    "price": 7200000,
+    "pricePerSqWa": 5538,
+    "image": "/showcase/showcase-05.webp",
+    "tags": ["แบ่งขายได้", "ไฟฟ้า-น้ำพร้อม"]
+  },
+  {
+    "id": "demo-07",
+    "title": "ที่ดินเปล่า ผังเมืองสีเหลือง",
+    "province": "นนทบุรี",
+    "district": "บางใหญ่",
+    "areaText": "6-0-50",
+    "price": 18500000,
+    "pricePerSqWa": 7592,
+    "image": "/showcase/showcase-37.webp",
+    "tags": ["ใกล้รถไฟฟ้า", "ผังเมืองสีเหลือง"]
+  },
+  {
+    "id": "demo-08",
+    "title": "ที่ดินบรรยากาศธรรมชาติ",
+    "province": "ประจวบคีรีขันธ์",
+    "district": "หัวหิน",
+    "areaText": "10-0-00",
+    "price": 19000000,
+    "pricePerSqWa": 4750,
+    "image": "/showcase/showcase-02.webp",
+    "tags": ["ใกล้ทะเล", "บรรยากาศดี"]
+  }
+]
