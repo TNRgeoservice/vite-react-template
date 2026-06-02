@@ -39,6 +39,16 @@ export function ArticlesIndex() {
                 borderRadius: 12, padding: '18px 20px', textDecoration: 'none', color: 'inherit',
               }}
             >
+              {meta.cover && (
+                <img
+                  src={meta.cover}
+                  alt={meta.title}
+                  style={{
+                    width: '100%', height: 'auto', aspectRatio: '1200 / 630', objectFit: 'cover',
+                    borderRadius: 8, border: '1px solid #213045', marginBottom: 12, display: 'block',
+                  }}
+                />
+              )}
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
                 {(meta.tags ?? []).slice(0, 3).map(t => (
                   <span key={t} style={{

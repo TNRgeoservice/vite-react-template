@@ -35,6 +35,17 @@ export function ArticlePage() {
               <Link to="/articles" style={{ color: '#7a9ab8', textDecoration: 'none' }}>บทความ</Link>
             </nav>
 
+            {article.meta.cover && (
+              <img
+                src={article.meta.cover}
+                alt={article.meta.title}
+                style={{
+                  width: '100%', height: 'auto', aspectRatio: '1200 / 630', objectFit: 'cover',
+                  borderRadius: 12, border: '1px solid #213045', marginBottom: 24, display: 'block',
+                }}
+              />
+            )}
+
             <article.Body />
 
             <div style={{ marginTop: 40, paddingTop: 20, borderTop: '1px solid #213045' }}>

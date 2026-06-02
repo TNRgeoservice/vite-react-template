@@ -16,7 +16,7 @@ export interface ArticleMeta {
   updated?:    string;   // ISO last-updated
   tags?:       string[];
   readMin?:    number;   // เวลาอ่านโดยประมาณ (นาที)
-  cover?:      string;   // OG image (absolute URL); ไม่ใส่ = ใช้ default
+  cover?:      string;   // hero + การ์ด thumbnail + OG; absolute URL: https://tnrmaphub.com/article-images/{slug}.webp (1200×630); ไม่ใส่ = ไม่โชว์ภาพ
 }
 
 export interface Article {
