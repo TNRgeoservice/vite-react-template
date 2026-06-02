@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Map, MapPin, Layers, ArrowRight, ChevronDown, Search, Tag, Users, LogIn } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import HeroSearch from './components/HeroSearch'
 import QuickFilterChips from './components/QuickFilterChips'
 import FeaturedPlots from './components/FeaturedPlots'
@@ -70,6 +71,9 @@ function App() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="hidden md:flex items-center gap-8"
             >
+              <Link to="/articles" className="text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
+                บทความ
+              </Link>
               <a href="#features" className="text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
                 ฟีเจอร์
               </a>
