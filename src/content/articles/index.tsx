@@ -6,6 +6,7 @@
 // ════════════════════════════════════════
 import type { ComponentType } from 'react';
 import { CityPlanOnline, meta as cityPlanMeta } from './city-plan-online';
+import { LandSubdivisionVsAllocation, meta as subdivisionMeta } from './land-subdivision-vs-allocation';
 
 export interface ArticleMeta {
   slug:        string;   // URL: /articles/{slug}
@@ -25,6 +26,7 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: subdivisionMeta, Body: LandSubdivisionVsAllocation },
   { meta: cityPlanMeta, Body: CityPlanOnline },
 ];
 

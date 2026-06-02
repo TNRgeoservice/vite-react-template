@@ -34,6 +34,7 @@ interface PageSeo {
   title:       string;
   description: string;
   ogType:      'website' | 'article';
+  image?:      string;   // override og:image + twitter:image (absolute URL)
   jsonLd:      object[];
 }
 
@@ -49,6 +50,13 @@ function buildHtml(template: string, seo: PageSeo, bodyHtml: string): string {
     .replace(/<meta property="og:description"[^>]*\/?>/, `<meta property="og:description" content="${esc(seo.description)}" />`)
     .replace(/<meta name="twitter:title"[^>]*\/?>/, `<meta name="twitter:title" content="${esc(fullTitle)}" />`)
     .replace(/<meta name="twitter:description"[^>]*\/?>/, `<meta name="twitter:description" content="${esc(seo.description)}" />`);
+
+  // override og:image + twitter:image ถ้าหน้านั้นมีภาพปก (ระวัง: "og:image" ปิดด้วย quote เพื่อไม่ชน og:image:width)
+  if (seo.image) {
+    html = html
+      .replace(/<meta property="og:image" content="[^"]*"\s*\/?>/, `<meta property="og:image" content="${seo.image}" />`)
+      .replace(/<meta name="twitter:image" content="[^"]*"\s*\/?>/, `<meta name="twitter:image" content="${seo.image}" />`);
+  }
 
   // ฝัง JSON-LD เฉพาะหน้า ก่อน </head>
   const ld = seo.jsonLd
@@ -88,7 +96,7 @@ function run() {
   for (const { meta } of articles) {
     const url = `${SITE}/articles/${meta.slug}`;
     writeHtml(`articles/${meta.slug}`, buildHtml(template, {
-      url, title: meta.title, description: meta.description, ogType: 'article',
+      url, title: meta.title, description: meta.description, ogType: 'article', image: meta.cover,
       jsonLd: [
         {
           '@context': 'https://schema.org', '@type': 'Article',
