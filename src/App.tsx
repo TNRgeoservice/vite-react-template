@@ -109,6 +109,9 @@ function App() {
 
             {/* Mobile actions */}
             <div className="md:hidden flex items-center gap-2">
+              <Link to="/articles" className="text-sm font-medium text-[var(--tx2)] hover:text-[var(--tx)] transition-colors px-1">
+                บทความ
+              </Link>
               <motion.a
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
