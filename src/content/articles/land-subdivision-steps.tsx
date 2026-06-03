@@ -93,6 +93,24 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
+function Figure({ src, alt, caption }: { src: string; alt: string; caption: string }) {
+  return (
+    <figure style={{ margin: '0 0 16px' }}>
+      <img
+        src={src}
+        alt={alt}
+        style={{
+          width: '100%', height: 'auto', aspectRatio: '16 / 9', objectFit: 'cover',
+          borderRadius: 10, border: `1px solid ${C.border}`, display: 'block',
+        }}
+      />
+      <figcaption style={{ fontSize: 12.5, color: C.muted, marginTop: 6, textAlign: 'center' }}>
+        {caption}
+      </figcaption>
+    </figure>
+  );
+}
+
 export function LandSubdivisionSteps() {
   return (
     <article style={{ color: C.text }}>
@@ -127,6 +145,11 @@ export function LandSubdivisionSteps() {
       </Section>
 
       <Section title="5 ช่วงของการแบ่งแปลงที่ดิน">
+        <Figure
+          src="/article-images/land-subdivision-steps-fig2.webp"
+          alt="ภาพมุมสูงที่ดินแปลงใหญ่แบ่งเป็นแปลงย่อย พร้อมแนวเขตและถนนเข้าออก"
+          caption="ที่ดินผืนใหญ่ถูกแบ่งเป็นแปลงย่อย — เห็นแนวเขตและหลักหมุดบนพื้นจริง"
+        />
         <ol style={{ listStyle: 'none', padding: 0, margin: '4px 0 0', display: 'grid', gap: 10 }}>
           {STEPS.map(s => (
             <li key={s.n} style={{
@@ -148,6 +171,11 @@ export function LandSubdivisionSteps() {
       </Section>
 
       <Section title="ขั้นที่คนพลาดบ่อย: เพื่อนบ้านไม่มาระวังแนวเขต">
+        <Figure
+          src="/article-images/land-subdivision-steps-fig1.webp"
+          alt="ช่างรังวัดที่ดินใช้กล้องสำรวจ พร้อมหลักเขตและเจ้าของที่ดินข้างเคียง"
+          caption="ช่างรังวัดปักหลักเขต โดยเจ้าของที่ดินข้างเคียงต้องมาระวังแนวเขตด้วย"
+        />
         <p style={p}>
           ตอนช่างรังวัดลงพื้นที่ (ช่วงที่ 3) เจ้าของที่ดินข้างเคียงต้องมาดูและเซ็นรับรองแนวเขตด้วย
           ถ้าเพื่อนบ้านไม่มา งานมักค้างตรงนี้แหละ
