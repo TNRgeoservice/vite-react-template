@@ -19,7 +19,10 @@ export function ArticlePage() {
   return (
     <div style={{ minHeight: '100vh', background: '#0d1520', color: '#dce8f5' }}>
       <ArticleHeader />
-      <main style={{ maxWidth: 820, margin: '0 auto', padding: '24px 16px 80px' }}>
+      <main style={{
+        maxWidth: 680, margin: '0 auto', padding: '24px 16px 80px',
+        fontFamily: "'Noto Serif Thai', Mitr, Georgia, serif",
+      }}>
         {!article ? (
           <div style={{ padding: '60px 0', textAlign: 'center', color: '#7a9ab8' }}>
             <p style={{ fontSize: 18, marginBottom: 12 }}>ไม่พบบทความที่ต้องการ</p>
