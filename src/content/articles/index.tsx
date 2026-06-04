@@ -8,6 +8,7 @@ import type { ComponentType } from 'react';
 import { CityPlanOnline, meta as cityPlanMeta } from './city-plan-online';
 import { LandSubdivisionVsAllocation, meta as subdivisionMeta } from './land-subdivision-vs-allocation';
 import { LandSubdivisionSteps, meta as subdivisionStepsMeta } from './land-subdivision-steps';
+import { LandAppraisalPriceOnline, meta as appraisalMeta } from './land-appraisal-price-online';
 
 export interface ArticleMeta {
   slug:        string;   // URL: /articles/{slug}
@@ -27,6 +28,7 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: appraisalMeta, Body: LandAppraisalPriceOnline },
   { meta: subdivisionStepsMeta, Body: LandSubdivisionSteps },
   { meta: subdivisionMeta, Body: LandSubdivisionVsAllocation },
   { meta: cityPlanMeta, Body: CityPlanOnline },
