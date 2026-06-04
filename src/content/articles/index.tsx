@@ -9,6 +9,7 @@ import { CityPlanOnline, meta as cityPlanMeta } from './city-plan-online';
 import { LandSubdivisionVsAllocation, meta as subdivisionMeta } from './land-subdivision-vs-allocation';
 import { LandSubdivisionSteps, meta as subdivisionStepsMeta } from './land-subdivision-steps';
 import { LandAppraisalPriceOnline, meta as appraisalMeta } from './land-appraisal-price-online';
+import { ObjectLandAppraisalPrice, meta as objectAppraisalMeta } from './object-land-appraisal-price';
 
 export interface ArticleMeta {
   slug:        string;   // URL: /articles/{slug}
@@ -28,6 +29,7 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: objectAppraisalMeta, Body: ObjectLandAppraisalPrice },
   { meta: appraisalMeta, Body: LandAppraisalPriceOnline },
   { meta: subdivisionStepsMeta, Body: LandSubdivisionSteps },
   { meta: subdivisionMeta, Body: LandSubdivisionVsAllocation },
