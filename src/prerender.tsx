@@ -93,7 +93,7 @@ function run() {
   }, renderRoute('/articles')));
 
   // /articles/:slug
-  for (const { meta } of articles) {
+  for (const { meta, faq } of articles) {
     const url = `${SITE}/articles/${meta.slug}`;
     writeHtml(`articles/${meta.slug}`, buildHtml(template, {
       url, title: meta.title, description: meta.description, ogType: 'article', image: meta.cover,
@@ -115,6 +115,13 @@ function run() {
             { '@type': 'ListItem', position: 3, name: meta.title, item: url },
           ],
         },
+        ...(faq && faq.length ? [{
+          '@context': 'https://schema.org', '@type': 'FAQPage',
+          mainEntity: faq.map(f => ({
+            '@type': 'Question', name: f.q,
+            acceptedAnswer: { '@type': 'Answer', text: f.a },
+          })),
+        }] : []),
       ],
     }, renderRoute(`/articles/${meta.slug}`)));
   }

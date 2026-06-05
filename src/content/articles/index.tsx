@@ -5,11 +5,11 @@
 // เพิ่มบทความใหม่ = สร้างไฟล์ component + เพิ่ม 1 entry ใน array นี้
 // ════════════════════════════════════════
 import type { ComponentType } from 'react';
-import { CityPlanOnline, meta as cityPlanMeta } from './city-plan-online';
-import { LandSubdivisionVsAllocation, meta as subdivisionMeta } from './land-subdivision-vs-allocation';
-import { LandSubdivisionSteps, meta as subdivisionStepsMeta } from './land-subdivision-steps';
-import { LandAppraisalPriceOnline, meta as appraisalMeta } from './land-appraisal-price-online';
-import { ObjectLandAppraisalPrice, meta as objectAppraisalMeta } from './object-land-appraisal-price';
+import { CityPlanOnline, meta as cityPlanMeta, FAQ as cityPlanFaq } from './city-plan-online';
+import { LandSubdivisionVsAllocation, meta as subdivisionMeta, FAQ as subdivisionFaq } from './land-subdivision-vs-allocation';
+import { LandSubdivisionSteps, meta as subdivisionStepsMeta, FAQ as subdivisionStepsFaq } from './land-subdivision-steps';
+import { LandAppraisalPriceOnline, meta as appraisalMeta, FAQ as appraisalFaq } from './land-appraisal-price-online';
+import { ObjectLandAppraisalPrice, meta as objectAppraisalMeta, FAQ as objectAppraisalFaq } from './object-land-appraisal-price';
 
 export interface ArticleMeta {
   slug:        string;   // URL: /articles/{slug}
@@ -26,14 +26,15 @@ export interface ArticleMeta {
 export interface Article {
   meta: ArticleMeta;
   Body: ComponentType;
+  faq?: { q: string; a: string }[];   // ใช้ gen FAQPage JSON-LD ตอน prerender
 }
 
 export const articles: Article[] = [
-  { meta: objectAppraisalMeta, Body: ObjectLandAppraisalPrice },
-  { meta: appraisalMeta, Body: LandAppraisalPriceOnline },
-  { meta: subdivisionStepsMeta, Body: LandSubdivisionSteps },
-  { meta: subdivisionMeta, Body: LandSubdivisionVsAllocation },
-  { meta: cityPlanMeta, Body: CityPlanOnline },
+  { meta: objectAppraisalMeta, Body: ObjectLandAppraisalPrice, faq: objectAppraisalFaq },
+  { meta: appraisalMeta, Body: LandAppraisalPriceOnline, faq: appraisalFaq },
+  { meta: subdivisionStepsMeta, Body: LandSubdivisionSteps, faq: subdivisionStepsFaq },
+  { meta: subdivisionMeta, Body: LandSubdivisionVsAllocation, faq: subdivisionFaq },
+  { meta: cityPlanMeta, Body: CityPlanOnline, faq: cityPlanFaq },
 ];
 
 export function getArticle(slug: string): Article | undefined {
