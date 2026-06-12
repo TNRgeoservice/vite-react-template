@@ -5,6 +5,7 @@
 // เพิ่มบทความใหม่ = สร้างไฟล์ component + เพิ่ม 1 entry ใน array นี้
 // ════════════════════════════════════════
 import type { ComponentType } from 'react';
+import { LandlockedLand, meta as landlockedMeta, FAQ as landlockedFaq } from './landlocked-land';
 import { CheckLandBeforeBuying, meta as checkLandMeta, FAQ as checkLandFaq } from './check-land-before-buying';
 import { CityPlanOnline, meta as cityPlanMeta, FAQ as cityPlanFaq } from './city-plan-online';
 import { LandSubdivisionVsAllocation, meta as subdivisionMeta, FAQ as subdivisionFaq } from './land-subdivision-vs-allocation';
@@ -32,6 +33,7 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: landlockedMeta, Body: LandlockedLand, faq: landlockedFaq },
   { meta: checkLandMeta, Body: CheckLandBeforeBuying, faq: checkLandFaq },
   { meta: allocationLicenseMeta, Body: LandAllocationLicense, faq: allocationLicenseFaq },
   { meta: objectAppraisalMeta, Body: ObjectLandAppraisalPrice, faq: objectAppraisalFaq },
