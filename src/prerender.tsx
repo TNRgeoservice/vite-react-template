@@ -82,19 +82,19 @@ function run() {
 
   // /articles (index)
   writeHtml('articles', buildHtml(template, {
-    url:         `${SITE}/articles`,
+    url:         `${SITE}/articles/`,
     title:       'บทความ — ความรู้ที่ดิน ผังเมือง และการลงทุนอสังหาฯ',
     description: 'รวมบทความความรู้เรื่องที่ดิน ผังเมือง การตรวจสอบโฉนด ราคาประเมิน และการลงทุนอสังหาริมทรัพย์ จาก TNR MapHub',
     ogType:      'website',
     jsonLd: [{
       '@context': 'https://schema.org', '@type': 'CollectionPage',
-      name: 'บทความ TNR MapHub', url: `${SITE}/articles`, inLanguage: 'th-TH',
+      name: 'บทความ TNR MapHub', url: `${SITE}/articles/`, inLanguage: 'th-TH',
     }],
   }, renderRoute('/articles')));
 
   // /articles/:slug
   for (const { meta, faq } of articles) {
-    const url = `${SITE}/articles/${meta.slug}`;
+    const url = `${SITE}/articles/${meta.slug}/`;
     writeHtml(`articles/${meta.slug}`, buildHtml(template, {
       url, title: meta.title, description: meta.description, ogType: 'article', image: meta.cover,
       jsonLd: [
@@ -111,7 +111,7 @@ function run() {
           '@context': 'https://schema.org', '@type': 'BreadcrumbList',
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'หน้าหลัก', item: SITE },
-            { '@type': 'ListItem', position: 2, name: 'บทความ',   item: `${SITE}/articles` },
+            { '@type': 'ListItem', position: 2, name: 'บทความ',   item: `${SITE}/articles/` },
             { '@type': 'ListItem', position: 3, name: meta.title, item: url },
           ],
         },
@@ -130,9 +130,9 @@ function run() {
   const urls = [
     { loc: `${SITE}/`,             changefreq: 'weekly', priority: '1.0' },
     { loc: 'https://map.tnrmaphub.com/', changefreq: 'daily', priority: '0.9' },
-    { loc: `${SITE}/articles`,     changefreq: 'weekly', priority: '0.6' },
+    { loc: `${SITE}/articles/`,    changefreq: 'weekly', priority: '0.6' },
     ...articles.map(({ meta }) => ({
-      loc: `${SITE}/articles/${meta.slug}`, lastmod: meta.updated ?? meta.date,
+      loc: `${SITE}/articles/${meta.slug}/`, lastmod: meta.updated ?? meta.date,
       changefreq: 'monthly', priority: '0.6',
     })),
   ];
