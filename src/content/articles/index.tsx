@@ -14,6 +14,7 @@ import { LandSubdivisionSteps, meta as subdivisionStepsMeta, FAQ as subdivisionS
 import { LandAppraisalPriceOnline, meta as appraisalMeta, FAQ as appraisalFaq } from './land-appraisal-price-online';
 import { ObjectLandAppraisalPrice, meta as objectAppraisalMeta, FAQ as objectAppraisalFaq } from './object-land-appraisal-price';
 import { LandAllocationLicense, meta as allocationLicenseMeta, FAQ as allocationLicenseFaq } from './land-allocation-license';
+import { LandSalePurchaseAgreement, meta as salePurchaseMeta, FAQ as salePurchaseFaq } from './land-sale-purchase-agreement';
 
 export interface ArticleMeta {
   slug:        string;   // URL: /articles/{slug}
@@ -34,6 +35,7 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: salePurchaseMeta, Body: LandSalePurchaseAgreement, faq: salePurchaseFaq },
   { meta: appraisalVsMarketMeta, Body: AppraisalVsMarketPrice, faq: appraisalVsMarketFaq },
   { meta: landlockedMeta, Body: LandlockedLand, faq: landlockedFaq },
   { meta: checkLandMeta, Body: CheckLandBeforeBuying, faq: checkLandFaq },
