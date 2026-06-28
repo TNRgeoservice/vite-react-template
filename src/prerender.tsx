@@ -11,6 +11,7 @@ import { Routes, Route } from 'react-router-dom';
 import { articles } from './content/articles';
 import { ArticlesIndex } from './pages/ArticlesIndex';
 import { ArticlePage } from './pages/ArticlePage';
+import { PdfStudioPage } from './pages/PdfStudioPage';
 
 const SITE = 'https://tnrmaphub.com';
 const DIST = path.resolve(process.cwd(), 'dist');
@@ -24,6 +25,7 @@ function renderRoute(url: string): string {
       <Routes>
         <Route path="/articles" element={<ArticlesIndex />} />
         <Route path="/articles/:slug" element={<ArticlePage />} />
+        <Route path="/tnrpdfstudio" element={<PdfStudioPage />} />
       </Routes>
     </StaticRouter>,
   );
@@ -92,6 +94,23 @@ function run() {
     }],
   }, renderRoute('/articles')));
 
+  // /tnrpdfstudio (lead-magnet landing สำหรับโปรแกรม TNR PDF Studio)
+  writeHtml('tnrpdfstudio', buildHtml(template, {
+    url:         `${SITE}/tnrpdfstudio/`,
+    title:       'TNR PDF Studio — โปรแกรมแก้ PDF โฉนด/เอกสารที่ดิน ฟรี',
+    description: 'ดาวน์โหลดฟรี! โปรแกรมแก้ไขไฟล์ PDF สำหรับงานโฉนดและเอกสารที่ดิน — ลบ/แก้ข้อความบนสแกน OCR ไทย ใส่ลายน้ำ ปกปิดข้อมูล รวม-แยกไฟล์ แปลงเป็น Word ทำงานบนเครื่องคุณ',
+    ogType:      'website',
+    jsonLd: [{
+      '@context': 'https://schema.org', '@type': 'SoftwareApplication',
+      name: 'TNR PDF Studio', applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Windows 10, Windows 11', inLanguage: 'th-TH',
+      url: `${SITE}/tnrpdfstudio/`,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'THB' },
+      publisher: { '@type': 'Organization', name: 'TNR Geoservice' },
+      description: 'โปรแกรมแก้ไข PDF โฉนดและเอกสารที่ดินฟรี — OCR ไทย ลายน้ำ ปกปิดข้อมูล รวม-แยกไฟล์ แปลง Word',
+    }],
+  }, renderRoute('/tnrpdfstudio')));
+
   // /articles/:slug
   for (const { meta, faq } of articles) {
     const url = `${SITE}/articles/${meta.slug}/`;
@@ -130,6 +149,7 @@ function run() {
   const urls = [
     { loc: `${SITE}/`,             changefreq: 'weekly', priority: '1.0' },
     { loc: 'https://map.tnrmaphub.com/', changefreq: 'daily', priority: '0.9' },
+    { loc: `${SITE}/tnrpdfstudio/`, changefreq: 'monthly', priority: '0.8' },
     { loc: `${SITE}/articles/`,    changefreq: 'weekly', priority: '0.6' },
     ...articles.map(({ meta }) => ({
       loc: `${SITE}/articles/${meta.slug}/`, lastmod: meta.updated ?? meta.date,

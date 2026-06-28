@@ -20,6 +20,12 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": [
+    "src/*.ts",
+    "src/*.tsx",
+    "src/components/*.tsx",
+    "src/lib/tagTaxonomy.ts",
+    "src/worker"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
