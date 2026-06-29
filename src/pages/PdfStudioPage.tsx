@@ -6,7 +6,7 @@
 import { useEffect, useState, createContext, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  FileText, Download, ShieldCheck, ScanLine, Stamp, Eraser,
+  FileText, Download, ShieldCheck, ScanLine, Eraser,
   Layers, Combine, Languages, ArrowRight, Map, Tag, X,
 } from 'lucide-react';
 
@@ -20,7 +20,6 @@ const FEATURES = [
   { icon: Eraser,    color: 'var(--acc)',  title: 'ลบ/แก้ข้อความบนสแกน',  desc: 'ครอบเนียน (smart whiteout) แล้วพิมพ์ทับ — กลมกลืนกับงานสแกนโฉนด เอกสารราชการ' },
   { icon: Languages, color: 'var(--land)', title: 'OCR ภาษาไทย',           desc: 'ดึงข้อความจากเอกสารสแกนเป็นข้อความแก้ไขได้ รองรับไทย+อังกฤษ' },
   { icon: ScanLine,  color: 'var(--poly)', title: 'ตรวจ & แก้กล่องข้อความ', desc: 'จับกล่องข้อความอัตโนมัติ คลิกแก้ทีละจุด พร้อมจับคู่ฟอนต์/ขนาดเดิม' },
-  { icon: Stamp,     color: 'var(--road)', title: 'ลายน้ำ · เลขหน้า · ตรา', desc: 'ใส่ลายน้ำ "สำเนาถูกต้อง" เลขหน้า หัว-ท้ายกระดาษ และตราประทับ' },
   { icon: ShieldCheck,color:'var(--acc)',  title: 'ปกปิดข้อมูล (Redact)',  desc: 'ลบข้อมูลส่วนตัวออกจริง — เลขบัตร เบอร์โทร ที่อยู่ ตรวจจับอัตโนมัติได้' },
   { icon: Combine,   color: 'var(--land)', title: 'รวม · แยก · หมุนหน้า',   desc: 'จัดการหน้า PDF — รวมหลายไฟล์ แยกหน้า หมุน ลบ แทรกหน้าใหม่' },
   { icon: Layers,    color: 'var(--poly)', title: 'เลเยอร์ + เอฟเฟกต์',     desc: 'จัดการทุกอย่างเป็นเลเยอร์ ปรับเส้นขอบ เงา ไล่สี ความทึบ แบบ Photoshop' },
