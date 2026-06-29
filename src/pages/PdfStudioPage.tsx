@@ -1,41 +1,20 @@
 // ════════════════════════════════════════
 // src/pages/PdfStudioPage.tsx  — หน้า /tnrpdfstudio
 // Landing + lead magnet สำหรับ TNR PDF Studio (.exe ฟรี)
-// flow: intro/ฟีเจอร์ → login (เก็บ lead ลง Firestore) → ปุ่มโหลด → CTA marketplace
-// SSR-safe: อ้าง firebase เฉพาะใน useEffect / event handler (auth/db = undefined ตอน prerender)
+// flow: intro/ฟีเจอร์ → ปุ่มดาวน์โหลดตรง (ไม่ต้องล็อกอิน) → CTA marketplace
 // ════════════════════════════════════════
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FileText, Download, ShieldCheck, ScanLine, Stamp, Eraser,
-  Layers, Combine, Languages, LogIn, ArrowRight, Map, Tag, Check, LogOut,
+  Layers, Combine, Languages, ArrowRight, Map, Tag,
 } from 'lucide-react';
-import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  type User,
-} from 'firebase/auth';
-import { FirebaseError } from 'firebase/app';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '../lib/fb';
 
 // ── ตั้งค่า ────────────────────────────────────────────────────────────────
 // GitHub "latest release" — ชี้ไป release ล่าสุดเสมอ ตราบใดที่ชื่อไฟล์ asset = "TNR_PDF_Studio.exe" (ไม่ใส่เวอร์ชันในชื่อไฟล์)
 // อัปเวอร์ชันใหม่: สร้าง release ใหม่ (tag อะไรก็ได้) แนบไฟล์ชื่อเดิม → ลิงก์นี้ไม่ต้องแก้ ไม่ต้อง redeploy
 const DOWNLOAD_URL = 'https://github.com/TNRgeoservice/vite-react-template/releases/latest/download/TNR_PDF_Studio.exe';
-const LEAD_COL = 'pdfstudio_leads'; // ⚠️ ต้องตั้ง Firestore rules ให้ผู้ใช้ที่ล็อกอินเขียน doc ของตัวเองได้
 const MAP_URL = 'https://map.tnrmaphub.com';
-
-const ERR_MAP: Record<string, string> = {
-  'auth/user-not-found':       'ไม่พบบัญชีนี้',
-  'auth/wrong-password':       'รหัสผ่านไม่ถูกต้อง',
-  'auth/invalid-credential':   'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
-  'auth/email-already-in-use': 'อีเมลนี้ถูกใช้แล้ว ลองเข้าสู่ระบบ',
-  'auth/weak-password':        'รหัสผ่านต้องมีอย่างน้อย 6 ตัว',
-  'auth/invalid-email':        'รูปแบบอีเมลไม่ถูกต้อง',
-};
 
 const FEATURES = [
   { icon: Eraser,    color: 'var(--acc)',  title: 'ลบ/แก้ข้อความบนสแกน',  desc: 'ครอบเนียน (smart whiteout) แล้วพิมพ์ทับ — กลมกลืนกับงานสแกนโฉนด เอกสารราชการ' },
@@ -61,14 +40,8 @@ const GALLERY_SHOTS = [
 ];
 
 export function PdfStudioPage() {
-  const [user, setUser]   = useState<User | null>(null);
-  const [ready, setReady] = useState(false);
-
   useEffect(() => {
     document.title = 'TNR PDF Studio — โปรแกรมแก้ PDF โฉนด/เอกสารที่ดิน ฟรี | TNR MapHub';
-    if (!auth) { setReady(true); return; }
-    const unsub = onAuthStateChanged(auth, (u) => { setUser(u); setReady(true); });
-    return () => unsub();
   }, []);
 
   return (
@@ -76,7 +49,7 @@ export function PdfStudioPage() {
       <Header />
       <Hero />
       <Features />
-      <DownloadSection user={user} ready={ready} />
+      <DownloadSection />
       <MarketplaceCTA />
       <Footer />
     </div>
@@ -212,163 +185,30 @@ function Features() {
   );
 }
 
-// ── Download (login gate + lead capture) ────────────────────────────────────
-function DownloadSection({ user, ready }: { user: User | null; ready: boolean }) {
+// ── Download (ดาวน์โหลดตรง ไม่ต้องล็อกอิน) ───────────────────────────────────
+function DownloadSection() {
   return (
     <section id="download" className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-3xl sm:text-4xl font-bold mb-3">ดาวน์โหลดฟรี</h2>
           <p className="text-[var(--tx2)]">
-            เข้าสู่ระบบด้วยอีเมลเพื่อรับลิงก์ดาวน์โหลด — บัญชีเดียวใช้ได้ทั้งโปรแกรมและแผนที่ TNR MapHub
+            กดดาวน์โหลดได้เลย ไม่ต้องสมัครสมาชิก — โปรแกรมทำงานบนเครื่องคุณ ข้อมูลไม่อัปโหลดขึ้นเว็บ
           </p>
         </div>
 
-        <div className="bg-[var(--bg2)] border border-[var(--brd)] rounded-2xl p-6 sm:p-8">
-          {!ready ? (
-            <div className="text-center text-[var(--tx2)] py-6">กำลังโหลด…</div>
-          ) : user ? (
-            <DownloadReady user={user} />
-          ) : (
-            <AuthForm />
-          )}
+        <div className="bg-[var(--bg2)] border border-[var(--brd)] rounded-2xl p-6 sm:p-8 text-center">
+          <a
+            href={DOWNLOAD_URL}
+            className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-[var(--acc)] text-[var(--bg)] rounded-xl text-lg font-semibold hover:bg-[var(--acc2)] transition-all"
+          >
+            <Download className="w-5 h-5" />
+            ดาวน์โหลด TNR PDF Studio (.exe)
+          </a>
+          <p className="text-xs text-[var(--txd)] mt-3">Windows 10/11 · ขนาดประมาณ 150 MB · ฟรีไม่มีค่าใช้จ่าย</p>
         </div>
       </div>
     </section>
-  );
-}
-
-function DownloadReady({ user }: { user: User }) {
-  const [msg, setMsg] = useState('');
-  const [busy, setBusy] = useState(false);
-
-  async function logLead() {
-    if (!db) return;
-    try {
-      await setDoc(doc(db, LEAD_COL, user.uid), {
-        uid: user.uid,
-        email: user.email ?? '',
-        source: 'tnrpdfstudio',
-        downloadAt: serverTimestamp(),
-      }, { merge: true });
-    } catch (e) {
-      // เก็บ lead ไม่ได้ (เช่น rules ยังไม่เปิด) — ไม่บล็อกการโหลด
-      console.warn('lead log failed', e);
-    }
-  }
-
-  async function handleDownload() {
-    setBusy(true);
-    await logLead();
-    setBusy(false);
-    if (DOWNLOAD_URL) {
-      window.location.href = DOWNLOAD_URL;
-    } else {
-      setMsg('บันทึกอีเมลของคุณไว้แล้ว ✓ ไฟล์ดาวน์โหลดกำลังเตรียมพร้อม — เราจะแจ้งทางอีเมลเมื่อพร้อมให้โหลด');
-    }
-  }
-
-  return (
-    <div className="text-center">
-      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--acc)]/10 border border-[var(--acc)]/30 mb-5">
-        <Check className="w-4 h-4 text-[var(--acc)]" />
-        <span className="text-sm text-[var(--acc)]">เข้าสู่ระบบแล้ว · {user.email}</span>
-      </div>
-      <button
-        onClick={handleDownload}
-        disabled={busy}
-        className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-[var(--acc)] text-[var(--bg)] rounded-xl text-lg font-semibold hover:bg-[var(--acc2)] transition-all disabled:opacity-60"
-      >
-        <Download className="w-5 h-5" />
-        {busy ? 'กำลังเตรียม…' : 'ดาวน์โหลด TNR PDF Studio (.exe)'}
-      </button>
-      <p className="text-xs text-[var(--txd)] mt-3">Windows 10/11 · ขนาดประมาณ 150 MB · ฟรีไม่มีค่าใช้จ่าย</p>
-      {msg && <p className="mt-4 text-sm text-[var(--land)]">{msg}</p>}
-      <button onClick={() => auth && signOut(auth)} className="mt-5 inline-flex items-center gap-1.5 text-xs text-[var(--tx2)] hover:text-[var(--tx)]">
-        <LogOut className="w-3.5 h-3.5" /> ออกจากระบบ
-      </button>
-    </div>
-  );
-}
-
-function AuthForm() {
-  const [tab, setTab]     = useState<'login' | 'register'>('login');
-  const [email, setEmail] = useState('');
-  const [pw, setPw]       = useState('');
-  const [err, setErr]     = useState('');
-  const [busy, setBusy]   = useState(false);
-  const isReg = tab === 'register';
-
-  async function submit() {
-    if (!auth || !db) { setErr('ระบบยังไม่พร้อม ลองรีเฟรชหน้า'); return; }
-    if (!email || !pw) { setErr('กรุณากรอกอีเมลและรหัสผ่าน'); return; }
-    setBusy(true); setErr('');
-    try {
-      if (isReg) {
-        const cred = await createUserWithEmailAndPassword(auth, email, pw);
-        // สร้าง user doc (เหมือน flow สมัครของ map.tnrmaphub.com)
-        await setDoc(doc(db, 'users', cred.user.uid), {
-          email, role: 'user', createdAt: Date.now(),
-          displayName: '', phone: '', lineId: '', bio: '',
-        }, { merge: true });
-      } else {
-        await signInWithEmailAndPassword(auth, email, pw);
-      }
-      // onAuthStateChanged ใน parent จะสลับไปหน้าโหลดเอง
-    } catch (e) {
-      const code = e instanceof FirebaseError ? e.code : '';
-      setErr(ERR_MAP[code] || (e as Error).message);
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  return (
-    <div>
-      <div className="mb-5 flex gap-2">
-        <TabBtn active={!isReg} onClick={() => { setTab('login'); setErr(''); }}>เข้าสู่ระบบ</TabBtn>
-        <TabBtn active={isReg} onClick={() => { setTab('register'); setErr(''); }}>สมัครสมาชิก</TabBtn>
-      </div>
-
-      <label className="block text-sm text-[var(--tx2)] mb-1">อีเมล</label>
-      <input
-        type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-        placeholder="name@example.com"
-        className="w-full mb-3 px-3 py-2.5 rounded-lg bg-[var(--bg)] border border-[var(--brd)] text-[var(--tx)] outline-none focus:border-[var(--acc)] transition-colors"
-      />
-      <label className="block text-sm text-[var(--tx2)] mb-1">รหัสผ่าน</label>
-      <input
-        type="password" value={pw} onChange={(e) => setPw(e.target.value)}
-        onKeyDown={(e) => e.key === 'Enter' && submit()}
-        placeholder="••••••"
-        className="w-full mb-2 px-3 py-2.5 rounded-lg bg-[var(--bg)] border border-[var(--brd)] text-[var(--tx)] outline-none focus:border-[var(--acc)] transition-colors"
-      />
-
-      {err && <div className="mt-2 mb-1 text-sm text-[var(--red)]">{err}</div>}
-
-      <button
-        onClick={submit} disabled={busy}
-        className="mt-3 w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-[var(--acc)] text-[var(--bg)] rounded-xl text-base font-semibold hover:bg-[var(--acc2)] transition-all disabled:opacity-60"
-      >
-        <LogIn className="w-5 h-5" />
-        {busy ? 'กำลังดำเนินการ…' : isReg ? 'สมัครแล้วรับลิงก์โหลด' : 'เข้าสู่ระบบรับลิงก์โหลด'}
-      </button>
-      <p className="text-xs text-[var(--txd)] mt-3 text-center">
-        การเข้าสู่ระบบถือว่ายอมรับให้เราติดต่อกลับเรื่องบริการที่ดินของ TNR MapHub
-      </p>
-    </div>
-  );
-}
-
-function TabBtn({ active, onClick, children }: { active: boolean; onClick: () => void; children: ReactNode }) {
-  return (
-    <button
-      onClick={onClick}
-      className={'flex-1 rounded-lg py-2 text-sm font-medium transition-colors ' +
-        (active ? 'bg-[var(--acc)] text-[var(--bg)]' : 'bg-[var(--bg)] text-[var(--tx2)] border border-[var(--brd)]')}
-    >
-      {children}
-    </button>
   );
 }
 
