@@ -74,6 +74,10 @@ function App() {
               <Link to="/articles" className="text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
                 บทความ
               </Link>
+              <Link to="/tnrpdfstudio" className="inline-flex items-center gap-1.5 text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
+                PDF Studio
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[var(--acc)]/15 text-[var(--acc)] leading-none">ฟรี</span>
+              </Link>
               <a href="#features" className="text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
                 ฟีเจอร์
               </a>
@@ -111,6 +115,9 @@ function App() {
             <div className="md:hidden flex items-center gap-2">
               <Link to="/articles" className="text-sm font-medium text-[var(--tx2)] hover:text-[var(--tx)] transition-colors px-1">
                 บทความ
+              </Link>
+              <Link to="/tnrpdfstudio" className="text-sm font-medium text-[var(--tx2)] hover:text-[var(--tx)] transition-colors px-1">
+                PDF Studio
               </Link>
               <motion.a
                 initial={{ opacity: 0 }}

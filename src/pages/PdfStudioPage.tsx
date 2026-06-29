@@ -22,8 +22,9 @@ import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../lib/fb';
 
 // ── ตั้งค่า ────────────────────────────────────────────────────────────────
-// TODO: ใส่ลิงก์ไฟล์ .exe เมื่อ host แล้ว (R2 / GitHub Releases) — ดู memory pdfeditor
-const DOWNLOAD_URL = '';            // ว่าง = ยังไม่ host → ปุ่มจะเก็บ lead ไว้ + ขึ้น "เร็วๆ นี้"
+// GitHub "latest release" — ชี้ไป release ล่าสุดเสมอ ตราบใดที่ชื่อไฟล์ asset = "TNR_PDF_Studio.exe" (ไม่ใส่เวอร์ชันในชื่อไฟล์)
+// อัปเวอร์ชันใหม่: สร้าง release ใหม่ (tag อะไรก็ได้) แนบไฟล์ชื่อเดิม → ลิงก์นี้ไม่ต้องแก้ ไม่ต้อง redeploy
+const DOWNLOAD_URL = 'https://github.com/TNRgeoservice/vite-react-template/releases/latest/download/TNR_PDF_Studio.exe';
 const LEAD_COL = 'pdfstudio_leads'; // ⚠️ ต้องตั้ง Firestore rules ให้ผู้ใช้ที่ล็อกอินเขียน doc ของตัวเองได้
 const MAP_URL = 'https://map.tnrmaphub.com';
 
@@ -45,6 +46,18 @@ const FEATURES = [
   { icon: Combine,   color: 'var(--land)', title: 'รวม · แยก · หมุนหน้า',   desc: 'จัดการหน้า PDF — รวมหลายไฟล์ แยกหน้า หมุน ลบ แทรกหน้าใหม่' },
   { icon: Layers,    color: 'var(--poly)', title: 'เลเยอร์ + เอฟเฟกต์',     desc: 'จัดการทุกอย่างเป็นเลเยอร์ ปรับเส้นขอบ เงา ไล่สี ความทึบ แบบ Photoshop' },
   { icon: FileText,  color: 'var(--road)', title: 'ส่งออก Word · รูปภาพ',   desc: 'แปลง PDF เป็น Word แก้ต่อได้ หรือบันทึกเป็น PNG/JPG ความละเอียดสูง' },
+];
+
+// ── ภาพหน้าจอ (วางไฟล์ใน public/pdfstudio/ แล้วใส่ชื่อไฟล์ใน file) ───────────────
+// file='' = ยังไม่มี → โชว์ placeholder "เร็วๆ นี้". ใส่ชื่อไฟล์เมื่อแคปภาพแล้ว.
+const SHOTS_DIR = '/pdfstudio';
+const HERO_SHOT = { file: '', caption: 'ภาพหน้าจอโปรแกรม TNR PDF Studio', ratio: '16 / 10' };
+const GALLERY_SHOTS = [
+  { file: '', caption: 'ลบ/แก้ข้อความบนโฉนดสแกน — ครอบเนียน' },
+  { file: '', caption: 'เทียบก่อน/หลังแก้ไข — สไลด์เทียบ' },
+  { file: '', caption: 'ใส่ลายน้ำ "สำเนาถูกต้อง" + เลขหน้า' },
+  { file: '', caption: 'ปกปิดข้อมูล (Redact) เลขบัตร/เบอร์โทร' },
+  { file: '', caption: 'OCR ไทย + ส่งออกเป็น Word' },
 ];
 
 export function PdfStudioPage() {
@@ -131,22 +144,31 @@ function Hero() {
           </div>
         </div>
 
-        {/* ภาพหน้าจอโปรแกรม (placeholder — ผู้ใช้จะแคปภาพมาใส่ทีหลัง) */}
-        <ScreenshotSlot label="ภาพหน้าจอโปรแกรม TNR PDF Studio" ratio="16 / 10" />
+        {/* ภาพหน้าจอโปรแกรม — โชว์ภาพจริงถ้ามี ไม่งั้น placeholder */}
+        <Shot file={HERO_SHOT.file} caption={HERO_SHOT.caption} ratio={HERO_SHOT.ratio} />
       </div>
     </section>
   );
 }
 
-// ── กล่อง placeholder สำหรับภาพ (ผู้ใช้จะแทนด้วยภาพจริง) ──────────────────────
-function ScreenshotSlot({ label, ratio = '16 / 9' }: { label: string; ratio?: string }) {
+// ── ช่องภาพ: โชว์ <img> ถ้ามีไฟล์ ไม่งั้นโชว์ placeholder dashed ──────────────────
+function Shot({ file, caption, ratio = '16 / 9' }: { file: string; caption: string; ratio?: string }) {
+  if (file) {
+    return (
+      <img
+        src={`${SHOTS_DIR}/${file}`} alt={caption} loading="lazy"
+        className="w-full rounded-2xl border border-[var(--brd)] bg-[var(--bg2)] object-cover shadow-lg"
+        style={{ aspectRatio: ratio }}
+      />
+    );
+  }
   return (
     <div
       className="w-full rounded-2xl border border-dashed border-[var(--brd)] bg-[var(--bg2)] flex flex-col items-center justify-center text-center p-6"
       style={{ aspectRatio: ratio }}
     >
       <FileText className="w-10 h-10 text-[var(--txd)] mb-3" />
-      <span className="text-sm text-[var(--tx2)]">{label}</span>
+      <span className="text-sm text-[var(--tx2)]">{caption}</span>
       <span className="text-xs text-[var(--txd)] mt-1">เร็วๆ นี้</span>
     </div>
   );
@@ -176,10 +198,14 @@ function Features() {
           ))}
         </div>
 
-        {/* แถวภาพตัวอย่างการใช้งาน (placeholder) */}
-        <div className="grid md:grid-cols-2 gap-6 mt-12">
-          <ScreenshotSlot label="ตัวอย่าง: ลบ/แก้ข้อความบนโฉนดสแกน" />
-          <ScreenshotSlot label="ตัวอย่าง: ใส่ลายน้ำ + ปกปิดข้อมูล" />
+        {/* แกลเลอรีภาพตัวอย่างการใช้งาน (จาก GALLERY_SHOTS) */}
+        <div className="mt-14">
+          <h3 className="text-center text-xl font-semibold mb-6">ตัวอย่างการใช้งานจริง</h3>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {GALLERY_SHOTS.map((s, i) => (
+              <Shot key={i} file={s.file} caption={s.caption} ratio="16 / 10" />
+            ))}
+          </div>
         </div>
       </div>
     </section>
