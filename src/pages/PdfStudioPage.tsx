@@ -3,11 +3,11 @@
 // Landing + lead magnet สำหรับ TNR PDF Studio (.exe ฟรี)
 // flow: intro/ฟีเจอร์ → ปุ่มดาวน์โหลดตรง (ไม่ต้องล็อกอิน) → CTA marketplace
 // ════════════════════════════════════════
-import { useEffect } from 'react';
+import { useEffect, useState, createContext, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FileText, Download, ShieldCheck, ScanLine, Stamp, Eraser,
-  Layers, Combine, Languages, ArrowRight, Map, Tag,
+  Layers, Combine, Languages, ArrowRight, Map, Tag, X,
 } from 'lucide-react';
 
 // ── ตั้งค่า ────────────────────────────────────────────────────────────────
@@ -39,20 +39,40 @@ const GALLERY_SHOTS = [
   { file: 'ocr-word.png', caption: 'OCR ไทย + ส่งออกเป็น Word' },
 ];
 
+// กดภาพ → เปิดดูเต็มจอ (lightbox) ; ส่ง opener ผ่าน context เลี่ยง prop drilling ผ่าน Hero/Features
+const ZoomCtx = createContext<(src: string, caption: string) => void>(() => {});
+
 export function PdfStudioPage() {
+  const [zoom, setZoom] = useState<{ src: string; caption: string } | null>(null);
+
   useEffect(() => {
     document.title = 'TNR PDF Studio — โปรแกรมแก้ PDF โฉนด/เอกสารที่ดิน ฟรี | TNR MapHub';
   }, []);
 
+  // ตอนเปิดภาพเต็มจอ: ล็อกสกรอลล์พื้นหลัง + ปิดด้วย Esc
+  useEffect(() => {
+    if (!zoom) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setZoom(null); };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [zoom]);
+
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--tx)]">
-      <Header />
-      <Hero />
-      <Features />
-      <DownloadSection />
-      <MarketplaceCTA />
-      <Footer />
-    </div>
+    <ZoomCtx.Provider value={(src, caption) => setZoom({ src, caption })}>
+      <div className="min-h-screen bg-[var(--bg)] text-[var(--tx)]">
+        <Header />
+        <Hero />
+        <Features />
+        <DownloadSection />
+        <MarketplaceCTA />
+        <Footer />
+      </div>
+      {zoom && <Lightbox src={zoom.src} caption={zoom.caption} onClose={() => setZoom(null)} />}
+    </ZoomCtx.Provider>
   );
 }
 
@@ -126,11 +146,14 @@ function Hero() {
 
 // ── ช่องภาพ: โชว์ <img> ถ้ามีไฟล์ ไม่งั้นโชว์ placeholder dashed ──────────────────
 function Shot({ file, caption, ratio = '16 / 9' }: { file: string; caption: string; ratio?: string }) {
+  const openZoom = useContext(ZoomCtx);
   if (file) {
+    const src = `${SHOTS_DIR}/${file}`;
     return (
       <img
-        src={`${SHOTS_DIR}/${file}`} alt={caption} loading="lazy"
-        className="w-full rounded-2xl border border-[var(--brd)] bg-[var(--bg2)] object-cover shadow-lg"
+        src={src} alt={caption} loading="lazy"
+        onClick={() => openZoom(src, caption)}
+        className="w-full rounded-2xl border border-[var(--brd)] bg-[var(--bg2)] object-cover shadow-lg cursor-zoom-in hover:opacity-90 hover:border-[var(--acc)]/40 transition-all"
         style={{ aspectRatio: ratio }}
       />
     );
@@ -143,6 +166,30 @@ function Shot({ file, caption, ratio = '16 / 9' }: { file: string; caption: stri
       <FileText className="w-10 h-10 text-[var(--txd)] mb-3" />
       <span className="text-sm text-[var(--tx2)]">{caption}</span>
       <span className="text-xs text-[var(--txd)] mt-1">เร็วๆ นี้</span>
+    </div>
+  );
+}
+
+// ── Lightbox: ดูภาพเต็มจอ (คลิกพื้นหลัง/ปุ่ม X/Esc เพื่อปิด) ────────────────────
+function Lightbox({ src, caption, onClose }: { src: string; caption: string; onClose: () => void }) {
+  return (
+    <div
+      onClick={onClose}
+      role="dialog" aria-modal="true" aria-label={caption}
+      className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-8"
+    >
+      <button
+        onClick={onClose} aria-label="ปิด"
+        className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+      >
+        <X className="w-5 h-5" />
+      </button>
+      <img
+        src={src} alt={caption}
+        onClick={(e) => e.stopPropagation()}
+        className="max-w-full max-h-[85vh] rounded-xl shadow-2xl object-contain cursor-default"
+      />
+      <p className="mt-4 text-sm text-white/80 text-center max-w-2xl">{caption}</p>
     </div>
   );
 }
