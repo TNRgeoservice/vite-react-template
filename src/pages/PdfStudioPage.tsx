@@ -30,13 +30,13 @@ const FEATURES = [
 // ── ภาพหน้าจอ (วางไฟล์ใน public/pdfstudio/ แล้วใส่ชื่อไฟล์ใน file) ───────────────
 // file='' = ยังไม่มี → โชว์ placeholder "เร็วๆ นี้". ใส่ชื่อไฟล์เมื่อแคปภาพแล้ว.
 const SHOTS_DIR = '/pdfstudio';
-const HERO_SHOT = { file: '', caption: 'ภาพหน้าจอโปรแกรม TNR PDF Studio', ratio: '16 / 10' };
+const HERO_SHOT = { file: 'hero.png', caption: 'ภาพหน้าจอโปรแกรม TNR PDF Studio', ratio: '16 / 10' };
 const GALLERY_SHOTS = [
-  { file: '', caption: 'ลบ/แก้ข้อความบนโฉนดสแกน — ครอบเนียน' },
-  { file: '', caption: 'เทียบก่อน/หลังแก้ไข — สไลด์เทียบ' },
-  { file: '', caption: 'ใส่ลายน้ำ "สำเนาถูกต้อง" + เลขหน้า' },
-  { file: '', caption: 'ปกปิดข้อมูล (Redact) เลขบัตร/เบอร์โทร' },
-  { file: '', caption: 'OCR ไทย + ส่งออกเป็น Word' },
+  { file: 'whiteout.png', caption: 'ลบ/แก้ข้อความบนโฉนดสแกน — ครอบเนียน' },
+  { file: 'compare.png', caption: 'เทียบก่อน/หลังแก้ไข — สไลด์เทียบ' },
+  { file: 'watermark.png', caption: 'ใส่ลายน้ำ "สำเนาถูกต้อง" + เลขหน้า' },
+  { file: 'redact.png', caption: 'ปกปิดข้อมูล (Redact) เลขบัตร/เบอร์โทร' },
+  { file: 'ocr-word.png', caption: 'OCR ไทย + ส่งออกเป็น Word' },
 ];
 
 export function PdfStudioPage() {
