@@ -7,7 +7,7 @@ import { useEffect, useState, createContext, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FileText, Download, ShieldCheck, ScanLine, Eraser,
-  Layers, Combine, Languages, ArrowRight, Map, Tag, X,
+  Layers, Combine, Languages, ArrowRight, Map, Tag, X, PlayCircle,
 } from 'lucide-react';
 
 // ── ตั้งค่า ────────────────────────────────────────────────────────────────
@@ -37,6 +37,9 @@ const GALLERY_SHOTS = [
   { file: 'ocr-word.png', caption: 'OCR ไทย + ส่งออกเป็น Word' },
 ];
 
+// วิดีโอวิธีใช้งาน — ใส่ YouTube video id (ส่วนหลัง v= ในลิงก์). ว่าง = โชว์ placeholder "เร็วๆ นี้"
+const VIDEO_ID = '';
+
 // กดภาพ → เปิดดูเต็มจอ (lightbox) ; ส่ง opener ผ่าน context เลี่ยง prop drilling ผ่าน Hero/Features
 const ZoomCtx = createContext<(src: string, caption: string) => void>(() => {});
 
@@ -65,6 +68,7 @@ export function PdfStudioPage() {
         <Header />
         <Hero />
         <Features />
+        <HowToVideo />
         <DownloadSection />
         <MarketplaceCTA />
         <Footer />
@@ -233,6 +237,40 @@ function Features() {
             ))}
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+// ── วิธีใช้งาน (วิดีโอ) ───────────────────────────────────────────────────────
+function HowToVideo() {
+  return (
+    <section id="how-to" className="py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-3">วิธีใช้งาน</h2>
+          <p className="text-[var(--tx2)]">ดูคลิปสั้นๆ แล้วเริ่มใช้ได้เลย — ตั้งแต่เปิดไฟล์จนส่งออก</p>
+        </div>
+        {VIDEO_ID ? (
+          <div className="relative rounded-2xl overflow-hidden border border-[var(--brd)] shadow-lg" style={{ aspectRatio: '16 / 9' }}>
+            <iframe
+              className="absolute inset-0 w-full h-full"
+              src={`https://www.youtube.com/embed/${VIDEO_ID}`}
+              title="วิธีใช้งาน TNR PDF Studio"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </div>
+        ) : (
+          <div
+            className="w-full rounded-2xl border border-dashed border-[var(--brd)] bg-[var(--bg2)] flex flex-col items-center justify-center text-center p-6"
+            style={{ aspectRatio: '16 / 9' }}
+          >
+            <PlayCircle className="w-12 h-12 text-[var(--txd)] mb-3" />
+            <span className="text-sm text-[var(--tx2)]">วิดีโอวิธีใช้งาน</span>
+            <span className="text-xs text-[var(--txd)] mt-1">เร็วๆ นี้</span>
+          </div>
+        )}
       </div>
     </section>
   );
