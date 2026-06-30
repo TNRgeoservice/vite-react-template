@@ -14,6 +14,7 @@ import {
 // GitHub "latest release" — ชี้ไป release ล่าสุดเสมอ ตราบใดที่ชื่อไฟล์ asset = "TNR_PDF_Studio.exe" (ไม่ใส่เวอร์ชันในชื่อไฟล์)
 // อัปเวอร์ชันใหม่: สร้าง release ใหม่ (tag อะไรก็ได้) แนบไฟล์ชื่อเดิม → ลิงก์นี้ไม่ต้องแก้ ไม่ต้อง redeploy
 const DOWNLOAD_URL = 'https://github.com/TNRgeoservice/vite-react-template/releases/latest/download/TNR_PDF_Studio.exe';
+const GH_REPO = 'TNRgeoservice/vite-react-template';   // ใช้ดึงยอดดาวน์โหลดจาก GitHub API
 const MAP_URL = 'https://map.tnrmaphub.com';
 
 const FEATURES = [
@@ -278,6 +279,25 @@ function HowToVideo() {
 
 // ── Download (ดาวน์โหลดตรง ไม่ต้องล็อกอิน) ───────────────────────────────────
 function DownloadSection() {
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    // ดึงยอดดาวน์โหลดสะสมจาก GitHub (รวมไฟล์ .exe ของทุก release) — public API ไม่ต้องใช้ token
+    fetch(`https://api.github.com/repos/${GH_REPO}/releases?per_page=100`)
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((rels: any[]) => {
+        const total = rels.reduce(
+          (sum: number, rel: any) =>
+            sum + (rel.assets || [])
+              .filter((a: any) => typeof a.name === 'string' && a.name.endsWith('.exe'))
+              .reduce((s: number, a: any) => s + (a.download_count || 0), 0),
+          0,
+        );
+        if (total > 0) setCount(total);
+      })
+      .catch(() => {});   // เงียบถ้าดึงไม่ได้ (rate limit/ออฟไลน์) — ไม่โชว์ตัวเลข
+  }, []);
+
   return (
     <section id="download" className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
@@ -296,7 +316,13 @@ function DownloadSection() {
             <Download className="w-5 h-5" />
             ดาวน์โหลด TNR PDF Studio (.exe)
           </a>
-          <p className="text-xs text-[var(--txd)] mt-3">Windows 10/11 · ขนาดประมาณ 150 MB · ฟรีไม่มีค่าใช้จ่าย</p>
+          {count != null && (
+            <p className="text-sm text-[var(--tx2)] mt-4 flex items-center justify-center gap-1.5">
+              <Download className="w-4 h-4 text-[var(--acc)]" />
+              ดาวน์โหลดไปแล้ว <span className="font-semibold text-[var(--tx)]">{count.toLocaleString('th-TH')}</span> ครั้ง
+            </p>
+          )}
+          <p className="text-xs text-[var(--txd)] mt-3">Windows 10/11 · ขนาดประมาณ 120 MB · ฟรีไม่มีค่าใช้จ่าย</p>
         </div>
       </div>
     </section>
