@@ -143,17 +143,24 @@ function Hero() {
 }
 
 // ── ช่องภาพ: โชว์ <img> ถ้ามีไฟล์ ไม่งั้นโชว์ placeholder dashed ──────────────────
-function Shot({ file, caption, ratio = '16 / 9' }: { file: string; caption: string; ratio?: string }) {
+function Shot({ file, caption, ratio = '16 / 9', withCaption = false }: { file: string; caption: string; ratio?: string; withCaption?: boolean }) {
   const openZoom = useContext(ZoomCtx);
   if (file) {
     const src = `${SHOTS_DIR}/${file}`;
-    return (
+    const img = (
       <img
         src={src} alt={caption} loading="lazy"
         onClick={() => openZoom(src, caption)}
         className="w-full rounded-2xl border border-[var(--brd)] bg-[var(--bg2)] object-cover shadow-lg cursor-zoom-in hover:opacity-90 hover:border-[var(--acc)]/40 transition-all"
         style={{ aspectRatio: ratio }}
       />
+    );
+    if (!withCaption) return img;
+    return (
+      <figure className="flex flex-col gap-3">
+        {img}
+        <figcaption className="text-sm text-[var(--tx2)] text-center px-2 leading-relaxed">{caption}</figcaption>
+      </figure>
     );
   }
   return (
@@ -218,10 +225,11 @@ function Features() {
 
         {/* แกลเลอรีภาพตัวอย่างการใช้งาน (จาก GALLERY_SHOTS) */}
         <div className="mt-14">
-          <h3 className="text-center text-xl font-semibold mb-6">ตัวอย่างการใช้งานจริง</h3>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h3 className="text-center text-xl font-semibold mb-2">ตัวอย่างการใช้งานจริง</h3>
+          <p className="text-center text-sm text-[var(--tx2)] mb-8">คลิกที่ภาพเพื่อดูขนาดเต็ม</p>
+          <div className="grid sm:grid-cols-2 gap-x-6 gap-y-8 max-w-5xl mx-auto">
             {GALLERY_SHOTS.map((s, i) => (
-              <Shot key={i} file={s.file} caption={s.caption} ratio="16 / 10" />
+              <Shot key={i} file={s.file} caption={s.caption} ratio="16 / 10" withCaption />
             ))}
           </div>
         </div>
