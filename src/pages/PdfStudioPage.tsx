@@ -17,7 +17,7 @@ const DOWNLOAD_URL = 'https://github.com/TNRgeoservice/vite-react-template/relea
 const MAP_URL = 'https://map.tnrmaphub.com';
 
 const FEATURES = [
-  { icon: Eraser,    color: 'var(--acc)',  title: 'ลบ/แก้ข้อความบนสแกน',  desc: 'ครอบเนียน (smart whiteout) แล้วพิมพ์ทับ — กลมกลืนกับงานสแกนโฉนด เอกสารราชการ' },
+  { icon: Eraser,    color: 'var(--acc)',  title: 'ลบ/แก้ข้อความบนสแกน',  desc: 'ครอบเนียน (smart whiteout) แล้วพิมพ์ทับ — กลมกลืนกับงานเอกสารสแกน เอกสารราชการ' },
   { icon: Languages, color: 'var(--land)', title: 'OCR ภาษาไทย',           desc: 'ดึงข้อความจากเอกสารสแกนเป็นข้อความแก้ไขได้ รองรับไทย+อังกฤษ' },
   { icon: ScanLine,  color: 'var(--poly)', title: 'ตรวจ & แก้กล่องข้อความ', desc: 'จับกล่องข้อความอัตโนมัติ คลิกแก้ทีละจุด พร้อมจับคู่ฟอนต์/ขนาดเดิม' },
   { icon: ShieldCheck,color:'var(--acc)',  title: 'ปกปิดข้อมูล (Redact)',  desc: 'ลบข้อมูลส่วนตัวออกจริง — เลขบัตร เบอร์โทร ที่อยู่ ตรวจจับอัตโนมัติได้' },
@@ -31,7 +31,7 @@ const FEATURES = [
 const SHOTS_DIR = '/pdfstudio';
 const HERO_SHOT = { file: 'hero.png', caption: 'ภาพหน้าจอโปรแกรม TNR PDF Studio', ratio: '16 / 10' };
 const GALLERY_SHOTS = [
-  { file: 'whiteout.png', caption: 'ลบ/แก้ข้อความบนโฉนดสแกน — ครอบเนียน' },
+  { file: 'whiteout.png', caption: 'ลบ/แก้ข้อความบนเอกสารสแกน — ครอบเนียน' },
   { file: 'compare.png', caption: 'เทียบก่อน/หลังแก้ไข — สไลด์เทียบ' },
   { file: 'redact.png', caption: 'ปกปิดข้อมูล (Redact) เลขบัตร/เบอร์โทร' },
   { file: 'ocr-word.png', caption: 'OCR ไทย + ส่งออกเป็น Word' },
@@ -44,7 +44,7 @@ export function PdfStudioPage() {
   const [zoom, setZoom] = useState<{ src: string; caption: string } | null>(null);
 
   useEffect(() => {
-    document.title = 'TNR PDF Studio — โปรแกรมแก้ PDF โฉนด/เอกสารที่ดิน ฟรี | TNR MapHub';
+    document.title = 'TNR PDF Studio — โปรแกรมแก้ PDF และเอกสาร ฟรี | TNR MapHub';
   }, []);
 
   // ตอนเปิดภาพเต็มจอ: ล็อกสกรอลล์พื้นหลัง + ปิดด้วย Esc
@@ -116,7 +116,7 @@ function Hero() {
             <span className="text-sm text-[var(--tx2)]">ฟรี 100% · สำหรับ Windows</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-6">
-            แก้ไข <span className="text-[var(--land)]">PDF โฉนด</span> และเอกสารที่ดิน
+            แก้ไข <span className="text-[var(--land)]">PDF</span> และเอกสาร
             <br />ได้ครบ จบในโปรแกรมเดียว
           </h1>
           <p className="text-lg text-[var(--tx2)] mb-8 leading-relaxed">
@@ -205,9 +205,9 @@ function Features() {
     <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg2)]">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">เครื่องมือครบสำหรับงานเอกสารที่ดิน</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">เครื่องมือครบสำหรับงานเอกสาร</h2>
           <p className="text-[var(--tx2)] max-w-2xl mx-auto">
-            ออกแบบมาเพื่อคนทำงานโฉนด เอกสารสิทธิ์ และเอกสารราชการ — ทำงานบนเครื่องคุณ ข้อมูลไม่รั่ว
+            ออกแบบมาเพื่อคนทำงานเอกสาร เอกสารสำคัญ และเอกสารราชการ — ทำงานบนเครื่องคุณ ข้อมูลไม่รั่ว
           </p>
         </div>
 
