@@ -15,6 +15,9 @@ import {
 // อัปเวอร์ชันใหม่: สร้าง release ใหม่ (tag อะไรก็ได้) แนบไฟล์ชื่อเดิม → ลิงก์นี้ไม่ต้องแก้ ไม่ต้อง redeploy
 const DOWNLOAD_URL = 'https://github.com/TNRgeoservice/vite-react-template/releases/latest/download/TNR_PDF_Studio.exe';
 const GH_REPO = 'TNRgeoservice/vite-react-template';   // ใช้ดึงยอดดาวน์โหลดจาก GitHub API
+// ยอดสะสมจาก release ที่ถูกลบไปแล้ว (GitHub ลบ asset = ยอดหายจาก API ถาวร) — บวกฐานนี้กับยอดจริง
+// ⚠️ รอบหน้าอัปเวอร์ชัน: สร้าง release ใหม่โดย "ไม่ลบอันเก่า" ยอดจะสะสมเองไม่ต้องมาบวกเพิ่มตรงนี้
+const DOWNLOAD_BASELINE = 16;
 const MAP_URL = 'https://map.tnrmaphub.com';
 
 const FEATURES = [
@@ -293,7 +296,7 @@ function DownloadSection() {
               .reduce((s: number, a: any) => s + (a.download_count || 0), 0),
           0,
         );
-        if (total > 0) setCount(total);
+        setCount(DOWNLOAD_BASELINE + total);
       })
       .catch(() => {});   // เงียบถ้าดึงไม่ได้ (rate limit/ออฟไลน์) — ไม่โชว์ตัวเลข
   }, []);
