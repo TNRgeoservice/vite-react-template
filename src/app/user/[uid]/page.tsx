@@ -62,6 +62,7 @@ async function getRatings(uid: string): Promise<RatingSummary> {
     const snap = await db
       .collection('ratings')
       .where('agentUid', '==', uid)
+      .limit(1000)
       .get();
     const items = snap.docs.map((d) => d.data());
     const count = items.length;
@@ -112,7 +113,7 @@ async function getUserPlots(uid: string): Promise<PlotPoint[]> {
         locCode: data?.locCode ?? null,
         landmark: data?.landmark ?? null,
         notes: data?.notes ?? null,
-        phone: data?.phone ?? null,
+        phone: null, // public profile listing — do not expose owner phone here
         photos: data?.photos || [],
         photoUrls: data?.photoUrls || [],
         ownerUid: data?.ownerUid ?? null,
