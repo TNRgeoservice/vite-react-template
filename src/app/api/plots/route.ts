@@ -24,8 +24,9 @@ export async function GET(req: NextRequest) {
 
     const snap  = await q.get();
     const plots = snap.docs.map((d) => {
-      const data = d.data();
+      const { phone, ownerUid, ...data } = d.data();
       // Drop server Timestamp objects — convert to ISO for JSON safety
+      // phone/ownerUid excluded: this endpoint is public and unauthenticated
       return {
         id: d.id,
         ...data,
