@@ -5,6 +5,8 @@
 // เพิ่มบทความใหม่ = สร้างไฟล์ component + เพิ่ม 1 entry ใน array นี้
 // ════════════════════════════════════════
 import type { ComponentType } from 'react';
+import { InheritedLandDivision, meta as inheritedLandMeta, FAQ as inheritedLandFaq } from './inherited-land-division';
+import { LandTransferFee, meta as landTransferFeeMeta, FAQ as landTransferFeeFaq } from './land-transfer-fee';
 import { SpkToTitleDeed, meta as spkMeta, FAQ as spkFaq } from './spk-to-title-deed';
 import { LandFillingCost, meta as landFillingMeta, FAQ as landFillingFaq } from './land-filling-cost';
 import { AppraisalVsMarketPrice, meta as appraisalVsMarketMeta, FAQ as appraisalVsMarketFaq } from './appraisal-vs-market-price';
@@ -37,6 +39,8 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: inheritedLandMeta, Body: InheritedLandDivision, faq: inheritedLandFaq },
+  { meta: landTransferFeeMeta, Body: LandTransferFee, faq: landTransferFeeFaq },
   { meta: spkMeta, Body: SpkToTitleDeed, faq: spkFaq },
   { meta: landFillingMeta, Body: LandFillingCost, faq: landFillingFaq },
   { meta: salePurchaseMeta, Body: LandSalePurchaseAgreement, faq: salePurchaseFaq },
