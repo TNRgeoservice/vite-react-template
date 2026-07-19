@@ -138,12 +138,12 @@ const formats = [
 
 // ── real work samples (from TNR GEOSERVICE archive) ──
 const portfolio = [
-  { src: '/subdivision/portfolio/work-1.jpg', w: 1600, h: 1131, title: 'แบ่ง 18 แปลง + พื้นที่ส่วนกลาง', meta: 'ถนนภายใน 8 ม. · มาตราส่วน 1:500' },
-  { src: '/subdivision/portfolio/work-2.jpg', w: 1600, h: 1131, title: 'โครงการจัดสรร 42 แปลง', meta: 'ถนน 8–10 ม. · มาตราส่วน 1:1000' },
-  { src: '/subdivision/portfolio/work-3.jpg', w: 1600, h: 2263, title: 'ผังเต็มพื้นที่ 44 แปลง', meta: 'แปลง 100–200 ตร.ว. · 1:1000' },
-  { src: '/subdivision/portfolio/work-4.jpg', w: 1600, h: 1132, title: 'แบ่งแปลงใหญ่ 14 แปลง', meta: 'แปลง 100+ ตร.ว. · ถนน 6–8 ม.' },
-  { src: '/subdivision/portfolio/work-5.jpg', w: 1600, h: 2263, title: 'ผังแบ่งแปลงติดถนนคอนกรีต', meta: 'ถนนภายใน 7–8 ม. · 1:500' },
-  { src: '/subdivision/portfolio/work-6.jpg', w: 1600, h: 1132, title: 'แบ่งแปลงใหญ่ติดร่องน้ำ', meta: 'แปลงหลักไร่ · แสดงเนื้อที่ ตร.ว./ไร่' },
+  { src: '/subdivision/portfolio/subdivision-plan-18-lots.webp', w: 1400, h: 990, title: 'แบ่ง 18 แปลง + พื้นที่ส่วนกลาง', meta: 'ถนนภายใน 8 ม. · มาตราส่วน 1:500' },
+  { src: '/subdivision/portfolio/subdivision-plan-42-lots.webp', w: 1400, h: 990, title: 'โครงการจัดสรร 42 แปลง', meta: 'ถนน 8–10 ม. · มาตราส่วน 1:1000' },
+  { src: '/subdivision/portfolio/subdivision-plan-44-lots.webp', w: 1400, h: 1980, title: 'ผังเต็มพื้นที่ 44 แปลง', meta: 'แปลง 100–200 ตร.ว. · 1:1000' },
+  { src: '/subdivision/portfolio/subdivision-plan-14-large-lots.webp', w: 1400, h: 991, title: 'แบ่งแปลงใหญ่ 14 แปลง', meta: 'แปลง 100+ ตร.ว. · ถนน 6–8 ม.' },
+  { src: '/subdivision/portfolio/subdivision-plan-concrete-road.webp', w: 1400, h: 1980, title: 'ผังแบ่งแปลงติดถนนคอนกรีต', meta: 'ถนนภายใน 7–8 ม. · 1:500' },
+  { src: '/subdivision/portfolio/subdivision-plan-waterside-lots.webp', w: 1400, h: 991, title: 'แบ่งแปลงใหญ่ติดร่องน้ำ', meta: 'แปลงหลักไร่ · แสดงเนื้อที่ ตร.ว./ไร่' },
 ]
 
 export const faqs = [
