@@ -106,7 +106,7 @@ const inputMethods = [
   },
 ]
 
-const steps = [
+export const steps = [
   {
     no: '01', tag: 'ทางเลือกส่งข้อมูล', title: 'ส่งไฟล์สแกนโฉนด',
     desc: 'ลูกค้าส่งภาพสแกนโฉนดมาให้ เราถอดรูปแปลงจากโฉนด — ความแม่นยำระยะ 90–100% ขึ้นอยู่กับปีที่รังวัดและมาตราส่วนของโฉนด',
@@ -146,7 +146,7 @@ const portfolio = [
   { src: '/subdivision/portfolio/work-6.jpg', w: 1600, h: 1132, title: 'แบ่งแปลงใหญ่ติดร่องน้ำ', meta: 'แปลงหลักไร่ · แสดงเนื้อที่ ตร.ว./ไร่' },
 ]
 
-const faqs = [
+export const faqs = [
   {
     q: 'ใช้เวลานานไหม',
     a: 'ขึ้นอยู่กับความซับซ้อนของงานและจำนวนแปลง เราทำงานแบบทยอยส่งแบบร่างให้เห็นความคืบหน้าเป็นระยะ ไม่ต้องรอจนจบแล้วค่อยเห็นงาน',
@@ -300,9 +300,10 @@ export function SubdivisionPlanPage() {
             style={{ background: 'var(--bg)', minHeight: '18rem' }}
           >
             <img
-              src="/subdivision/hero.png"
-              alt="ภาพจำลองผังแบ่งแปลงที่ดินแบบไอโซเมตริก"
-              loading="eager"
+              src="/subdivision/hero.webp"
+              alt="ตัวอย่างผังแบ่งแปลงที่ดินสำหรับออกแบบผังจัดสรร โดย TNR GEOSERVICE"
+              width={1400} height={933}
+              loading="eager" fetchpriority="high" decoding="async"
               onError={hideOnError}
               className="w-full h-full object-cover"
             />
@@ -318,7 +319,7 @@ export function SubdivisionPlanPage() {
             variants={staggerContainer} className="max-w-3xl mb-12"
           >
             <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">
-              ส่งข้อมูลแปลงได้ 3 ทาง — เลือกได้ตามที่มี
+              รับทำผังแบ่งแปลงที่ดินจากข้อมูล 3 แบบ — เลือกได้ตามที่มี
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-[var(--tx2)] text-base">
               แต่ละวิธีให้ความแม่นยำระยะต่างกัน ยิ่งข้อมูลตั้งต้นดี ผังยิ่งตรงกับของจริง
@@ -369,9 +370,10 @@ export function SubdivisionPlanPage() {
               style={{ background: 'var(--bg)' }}
             >
               <img
-                src="/subdivision/deed-to-digital.png"
-                alt="แปลงไฟล์สแกนโฉนดเป็นรูปแปลงดิจิทัล"
-                loading="lazy"
+                src="/subdivision/deed-to-digital.webp"
+                alt="แปลงไฟล์สแกนโฉนดที่ดินเป็นรูปแปลงดิจิทัลเพื่อทำผังแบ่งแปลง"
+                width={1200} height={800}
+                loading="lazy" decoding="async"
                 onError={hideOnError}
                 className="w-full h-auto object-cover"
               />
@@ -533,7 +535,7 @@ export function SubdivisionPlanPage() {
             variants={staggerContainer} className="mb-10 max-w-2xl"
           >
             <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">
-              เลือกไฟล์ผลลัพธ์ตามการใช้งาน
+              รับเขียนผังแบ่งขายที่ดินเป็นไฟล์ JPG PDF DWG และ SHP
             </motion.h2>
             <motion.p variants={fadeInUp} className="text-[var(--tx2)] text-base">
               แตะเลือกนามสกุลไฟล์เพื่อดูว่าแต่ละแบบเหมาะกับงานไหน
@@ -586,6 +588,73 @@ export function SubdivisionPlanPage() {
               <p className="text-[var(--tx)] text-base sm:text-lg leading-relaxed">{formats[activeFmt].detail}</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ── Service knowledge (SEO content) ── */}
+      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-t border-[var(--brd)]">
+        <div className="max-w-5xl mx-auto">
+          <motion.h2
+            initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.4 }}
+            variants={fadeInUp}
+            className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8"
+          >
+            รู้ก่อนจ้างทำผังแบ่งแปลงที่ดิน
+          </motion.h2>
+
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}
+            variants={staggerContainer}
+            className="grid md:grid-cols-2 gap-8"
+          >
+            <motion.div variants={fadeInUp}>
+              <h3 className="text-lg font-semibold text-[var(--tx)] mb-2">ผังแบ่งแปลงที่ดิน กับ ผังจัดสรร ต่างกันอย่างไร</h3>
+              <p className="text-sm text-[var(--tx2)] leading-relaxed mb-3">
+                ผังแบ่งแปลงที่ดิน คือแบบวางตำแหน่ง ขนาด และหน้ากว้างของแต่ละแปลง พร้อมถนนภายในและมาตราส่วน
+                เพื่อวางแผนแบ่งขายหรือพัฒนาที่ดิน ส่วนการจัดสรรที่ดินเป็นกระบวนการทางกฎหมายที่ต้องรังวัด
+                และยื่นขออนุญาตกับหน่วยงานราชการ — ผังที่เราจัดทำเป็นแบบออกแบบและนำเสนอ ไม่ใช่เอกสารราชการ
+              </p>
+              <p className="text-sm text-[var(--tx2)] leading-relaxed">
+                อ่านต่อ:{' '}
+                <Link to="/articles/land-subdivision-vs-allocation" className="text-[var(--land)] hover:underline">แบ่งแปลงที่ดินกับจัดสรรที่ดินต่างกันอย่างไร</Link>
+                {' · '}
+                <Link to="/articles/land-subdivision-steps" className="text-[var(--land)] hover:underline">ขั้นตอนแบ่งแปลงที่ดิน</Link>
+                {' · '}
+                <Link to="/articles/land-allocation-license" className="text-[var(--land)] hover:underline">การขออนุญาตจัดสรรที่ดิน</Link>
+              </p>
+            </motion.div>
+
+            <motion.div variants={fadeInUp}>
+              <h3 className="text-lg font-semibold text-[var(--tx)] mb-2">บริการนี้เหมาะกับใคร</h3>
+              <ul className="space-y-2">
+                {[
+                  'เจ้าของที่ดินที่ต้องการวางแผนแบ่งขายที่ดิน',
+                  'ผู้เตรียมโครงการจัดสรรที่ดินก่อนยื่นขออนุญาต',
+                  'ผู้ต้องการแบบผังไว้นำเสนอหุ้นส่วนหรือผู้ซื้อ',
+                  'ผู้ต้องการไฟล์ CAD (.dwg) หรือ GIS (.shp) ไปทำงานต่อ',
+                ].map((t) => (
+                  <li key={t} className="flex items-start gap-2 text-sm text-[var(--tx2)]">
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[var(--acc)] shrink-0" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInUp}
+            className="mt-8 rounded-2xl border border-[var(--brd)] bg-[var(--bg2)] p-6"
+          >
+            <h3 className="text-lg font-semibold text-[var(--tx)] mb-2">ราคาและขอบเขตงาน</h3>
+            <p className="text-sm text-[var(--tx2)] leading-relaxed">
+              ราคาออกแบบผังแบ่งแปลงที่ดินประเมินตามจำนวนแปลง ความซับซ้อนของผัง ข้อมูลตั้งต้น และรูปแบบไฟล์ที่ต้องการ
+              จึงไม่มีราคาสำเร็จรูปที่ใช้ได้กับทุกงาน — ส่งรายละเอียดแปลงและความต้องการมาเพื่อประเมินราคาเป็นรายงานได้
+              ขอบเขตงานครอบคลุมการออกแบบผังและส่งมอบไฟล์ .jpg .pdf .dwg .shp โดยไม่รวมการรังวัดที่ดินภาคสนาม
+              และการยื่นขออนุญาตจัดสรรกับหน่วยงานราชการ
+            </p>
+          </motion.div>
         </div>
       </section>
 

@@ -12,7 +12,7 @@ import { articles } from './content/articles';
 import { ArticlesIndex } from './pages/ArticlesIndex';
 import { ArticlePage } from './pages/ArticlePage';
 import { PdfStudioPage } from './pages/PdfStudioPage';
-import { SubdivisionPlanPage } from './pages/SubdivisionPlanPage';
+import { SubdivisionPlanPage, faqs as subFaqs, steps as subSteps } from './pages/SubdivisionPlanPage';
 
 const SITE = 'https://tnrmaphub.com';
 const DIST = path.resolve(process.cwd(), 'dist');
@@ -116,18 +116,44 @@ function run() {
   // /subdivisionplan (landing บริการรับทำผังแบ่งแปลงที่ดิน โดย TNR GEOSERVICE)
   writeHtml('subdivisionplan', buildHtml(template, {
     url:         `${SITE}/subdivisionplan/`,
-    title:       'รับทำผังแบ่งแปลงที่ดิน — ออกแบบผังจัดสรร ไฟล์ .jpg .pdf .dwg .shp',
-    description: 'บริการรับทำผังแบ่งแปลงที่ดินโดย TNR GEOSERVICE — ส่งแค่ไฟล์สแกนโฉนด เลขโฉนด หรือพิกัดหมุดก็เริ่มงานได้ ระบุจำนวนแปลง ขนาด หน้ากว้าง ถนนภายใน ตามต้องการ ทยอยส่งแบบร่างให้ตรวจก่อนส่งไฟล์สมบูรณ์',
+    title:       'รับทำผังแบ่งแปลงที่ดิน | ออกแบบผังจัดสรร ไฟล์ DWG SHP',
+    description: 'รับทำผังแบ่งแปลงที่ดินและออกแบบผังจัดสรรจากโฉนด เลขโฉนด หรือพิกัดหมุด ระบุจำนวนแปลง ขนาด หน้ากว้าง และถนนภายใน รับไฟล์ JPG PDF DWG SHP พร้อมทยอยส่งแบบร่างให้ตรวจ โดย TNR GEOSERVICE',
     ogType:      'website',
+    image:       `${SITE}/subdivision/og-subdivisionplan.jpg`,
     jsonLd: [
       {
         '@context': 'https://schema.org', '@type': 'Service',
+        '@id': `${SITE}/subdivisionplan/#service`,
         name: 'รับทำผังแบ่งแปลงที่ดิน',
-        serviceType: 'ออกแบบผังแบ่งแปลงที่ดิน / ผังจัดสรร',
-        provider: { '@type': 'Organization', name: 'TNR Geoservice', url: SITE },
-        areaServed: 'TH', inLanguage: 'th-TH',
+        alternateName: ['ออกแบบผังจัดสรร', 'รับทำผังจัดสรรที่ดิน', 'รับเขียนผังแบ่งแปลง DWG SHP'],
+        serviceType: 'ออกแบบผังแบ่งแปลงที่ดินและผังจัดสรร',
         url: `${SITE}/subdivisionplan/`,
-        description: 'รับทำผังแบ่งแปลงที่ดินจากไฟล์สแกนโฉนด เลขโฉนด หรือพิกัดหมุดแปลง ส่งไฟล์ .jpg .pdf .dwg .shp ทยอยส่งแบบร่างให้ตรวจก่อนส่งไฟล์สมบูรณ์',
+        image: `${SITE}/subdivision/og-subdivisionplan.jpg`,
+        description: 'บริการออกแบบผังแบ่งแปลงที่ดินจากไฟล์สแกนโฉนด เลขโฉนด หรือพิกัดหมุดแปลง ส่งมอบไฟล์ JPG PDF DWG และ SHP ทยอยส่งแบบร่างให้ตรวจก่อนส่งไฟล์สมบูรณ์',
+        provider: {
+          '@type': 'Organization',
+          name: 'TNR Geoservice', url: SITE,
+          sameAs: ['https://www.facebook.com/TNRGEOSERVICE'],
+        },
+        areaServed: { '@type': 'Country', name: 'Thailand' },
+        inLanguage: 'th-TH',
+      },
+      {
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        '@id': `${SITE}/subdivisionplan/#faq`,
+        mainEntity: subFaqs.map((f) => ({
+          '@type': 'Question', name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.a },
+        })),
+      },
+      {
+        '@context': 'https://schema.org', '@type': 'HowTo',
+        name: 'ขั้นตอนการจ้างทำผังแบ่งแปลงที่ดิน',
+        description: 'ขั้นตอนส่งข้อมูลแปลง กำหนดเงื่อนไขผัง ตรวจแบบร่าง และรับไฟล์ผังสมบูรณ์',
+        inLanguage: 'th-TH',
+        step: subSteps.map((s) => ({
+          '@type': 'HowToStep', position: Number(s.no), name: s.title, text: s.desc,
+        })),
       },
       {
         '@context': 'https://schema.org', '@type': 'BreadcrumbList',
@@ -178,7 +204,7 @@ function run() {
     { loc: `${SITE}/`,             changefreq: 'weekly', priority: '1.0' },
     { loc: 'https://map.tnrmaphub.com/', changefreq: 'daily', priority: '0.9' },
     { loc: `${SITE}/tnrpdfstudio/`, changefreq: 'monthly', priority: '0.8' },
-    { loc: `${SITE}/subdivisionplan/`, changefreq: 'monthly', priority: '0.8' },
+    { loc: `${SITE}/subdivisionplan/`, lastmod: '2026-07-19', changefreq: 'monthly', priority: '0.8' },
     { loc: `${SITE}/articles/`,    changefreq: 'weekly', priority: '0.6' },
     ...articles.map(({ meta }) => ({
       loc: `${SITE}/articles/${meta.slug}/`, lastmod: meta.updated ?? meta.date,
