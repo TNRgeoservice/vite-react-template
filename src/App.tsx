@@ -53,7 +53,7 @@ function App() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 shrink-0"
             >
               <motion.div
                 whileHover={{ rotate: 15, scale: 1.1 }}
@@ -62,7 +62,7 @@ function App() {
               >
                 <Map className="w-5 h-5 text-[var(--acc)]" />
               </motion.div>
-              <span className="text-lg font-semibold tracking-tight">TNR MapHub</span>
+              <span className="text-lg font-semibold tracking-tight whitespace-nowrap">TNR MapHub</span>
             </motion.div>
 
             <motion.nav
@@ -77,6 +77,9 @@ function App() {
               <Link to="/tnrpdfstudio" className="inline-flex items-center gap-1.5 text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
                 PDF Studio
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[var(--acc)]/15 text-[var(--acc)] leading-none">ฟรี</span>
+              </Link>
+              <Link to="/subdivisionplan" className="text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
+                ทำผังแบ่งแปลง
               </Link>
               <a href="#features" className="text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
                 ฟีเจอร์
@@ -111,26 +114,37 @@ function App() {
               </motion.a>
             </motion.nav>
 
-            {/* Mobile actions */}
-            <div className="md:hidden flex items-center gap-2">
-              <Link to="/articles" className="text-sm font-medium text-[var(--tx2)] hover:text-[var(--tx)] transition-colors px-1">
-                บทความ
-              </Link>
-              <Link to="/tnrpdfstudio" className="text-sm font-medium text-[var(--tx2)] hover:text-[var(--tx)] transition-colors px-1">
-                PDF Studio
-              </Link>
-              <motion.a
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                whileTap={{ scale: 0.95 }}
-                href="https://map.tnrmaphub.com/?login=1"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="เข้าสู่ระบบ"
-                className="inline-flex items-center justify-center w-9 h-9 border border-[var(--brd)] text-[var(--tx)] rounded-lg"
-              >
-                <LogIn className="w-4 h-4" />
-              </motion.a>
+            {/* Mobile actions — swipeable link strip + fixed CTA */}
+            <div className="md:hidden flex items-center gap-2 flex-1 min-w-0">
+              <div className="flex items-center gap-4 overflow-x-auto flex-nowrap min-w-0 scroll-smooth pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <Link to="/articles" className="shrink-0 whitespace-nowrap text-sm font-medium text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
+                  บทความ
+                </Link>
+                <Link to="/subdivisionplan" className="shrink-0 whitespace-nowrap text-sm font-medium text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
+                  ทำผังแบ่งแปลง
+                </Link>
+                <Link to="/tnrpdfstudio" className="shrink-0 whitespace-nowrap text-sm font-medium text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
+                  PDF Studio
+                </Link>
+                <a href="#features" className="shrink-0 whitespace-nowrap text-sm font-medium text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
+                  ฟีเจอร์
+                </a>
+                <a href="#sellers" className="shrink-0 whitespace-nowrap text-sm font-medium text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
+                  ลงประกาศฟรี
+                </a>
+                <a href="#about" className="shrink-0 whitespace-nowrap text-sm font-medium text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
+                  เกี่ยวกับ
+                </a>
+                <a
+                  href="https://map.tnrmaphub.com/?login=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="เข้าสู่ระบบ"
+                  className="shrink-0 inline-flex items-center justify-center w-9 h-9 border border-[var(--brd)] text-[var(--tx)] rounded-lg"
+                >
+                  <LogIn className="w-4 h-4" />
+                </a>
+              </div>
               <motion.a
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -138,7 +152,7 @@ function App() {
                 href="https://map.tnrmaphub.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--acc)] text-[var(--bg)] rounded-lg text-sm font-semibold"
+                className="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--acc)] text-[var(--bg)] rounded-lg text-sm font-semibold"
               >
                 เปิดแผนที่
               </motion.a>
@@ -576,6 +590,9 @@ function App() {
             viewport={{ once: true }}
             className="flex items-center gap-4 text-sm text-[var(--tx2)]"
           >
+            <Link to="/subdivisionplan" className="hover:text-[var(--acc)] transition-colors">
+              ทำผังแบ่งแปลง
+            </Link>
             <a
               href="https://www.facebook.com/TNRGEOSERVICE"
               target="_blank"
