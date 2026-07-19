@@ -47,9 +47,9 @@ function buildHtml(template: string, seo: PageSeo, bodyHtml: string): string {
   let html = template
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(fullTitle)}</title>`)
     .replace(/<meta name="description" content="[\s\S]*?"\s*\/?>/, `<meta name="description" content="${esc(seo.description)}" />`)
-    .replace(/<link rel="canonical"[^>]*\/?>/, `<link rel="canonical" href="${seo.url}" />`)
-    .replace(/<meta property="og:type"[^>]*\/?>/, `<meta property="og:type" content="${seo.ogType}" />`)
-    .replace(/<meta property="og:url"[^>]*\/?>/, `<meta property="og:url" content="${seo.url}" />`)
+    .replace(/<link rel="canonical"[^>]*\/?>/, `<link rel="canonical" href="${esc(seo.url)}" />`)
+    .replace(/<meta property="og:type"[^>]*\/?>/, `<meta property="og:type" content="${esc(seo.ogType)}" />`)
+    .replace(/<meta property="og:url"[^>]*\/?>/, `<meta property="og:url" content="${esc(seo.url)}" />`)
     .replace(/<meta property="og:title"[^>]*\/?>/, `<meta property="og:title" content="${esc(fullTitle)}" />`)
     .replace(/<meta property="og:description"[^>]*\/?>/, `<meta property="og:description" content="${esc(seo.description)}" />`)
     .replace(/<meta name="twitter:title"[^>]*\/?>/, `<meta name="twitter:title" content="${esc(fullTitle)}" />`)
@@ -58,13 +58,14 @@ function buildHtml(template: string, seo: PageSeo, bodyHtml: string): string {
   // override og:image + twitter:image ถ้าหน้านั้นมีภาพปก (ระวัง: "og:image" ปิดด้วย quote เพื่อไม่ชน og:image:width)
   if (seo.image) {
     html = html
-      .replace(/<meta property="og:image" content="[^"]*"\s*\/?>/, `<meta property="og:image" content="${seo.image}" />`)
-      .replace(/<meta name="twitter:image" content="[^"]*"\s*\/?>/, `<meta name="twitter:image" content="${seo.image}" />`);
+      .replace(/<meta property="og:image" content="[^"]*"\s*\/?>/, `<meta property="og:image" content="${esc(seo.image)}" />`)
+      .replace(/<meta name="twitter:image" content="[^"]*"\s*\/?>/, `<meta name="twitter:image" content="${esc(seo.image)}" />`);
   }
 
   // ฝัง JSON-LD เฉพาะหน้า ก่อน </head>
+  // safe JSON-LD: escape <, >, & so untrusted content can't break out of <script>
   const ld = seo.jsonLd
-    .map(o => `<script type="application/ld+json">${JSON.stringify(o)}</script>`)
+    .map(o => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026')}</script>`)
     .join('\n    ');
   html = html.replace('</head>', `    ${ld}\n  </head>`);
 
