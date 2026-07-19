@@ -12,6 +12,7 @@ import { articles } from './content/articles';
 import { ArticlesIndex } from './pages/ArticlesIndex';
 import { ArticlePage } from './pages/ArticlePage';
 import { PdfStudioPage } from './pages/PdfStudioPage';
+import { SubdivisionPlanPage } from './pages/SubdivisionPlanPage';
 
 const SITE = 'https://tnrmaphub.com';
 const DIST = path.resolve(process.cwd(), 'dist');
@@ -26,6 +27,7 @@ function renderRoute(url: string): string {
         <Route path="/articles" element={<ArticlesIndex />} />
         <Route path="/articles/:slug" element={<ArticlePage />} />
         <Route path="/tnrpdfstudio" element={<PdfStudioPage />} />
+        <Route path="/subdivisionplan" element={<SubdivisionPlanPage />} />
       </Routes>
     </StaticRouter>,
   );
@@ -111,6 +113,32 @@ function run() {
     }],
   }, renderRoute('/tnrpdfstudio')));
 
+  // /subdivisionplan (landing บริการรับทำผังแบ่งแปลงที่ดิน โดย TNR GEOSERVICE)
+  writeHtml('subdivisionplan', buildHtml(template, {
+    url:         `${SITE}/subdivisionplan/`,
+    title:       'รับทำผังแบ่งแปลงที่ดิน — ออกแบบผังจัดสรร ไฟล์ .jpg .pdf .dwg .shp',
+    description: 'บริการรับทำผังแบ่งแปลงที่ดินโดย TNR GEOSERVICE — ส่งแค่ไฟล์สแกนโฉนด เลขโฉนด หรือพิกัดหมุดก็เริ่มงานได้ ระบุจำนวนแปลง ขนาด หน้ากว้าง ถนนภายใน ตามต้องการ ทยอยส่งแบบร่างให้ตรวจก่อนส่งไฟล์สมบูรณ์',
+    ogType:      'website',
+    jsonLd: [
+      {
+        '@context': 'https://schema.org', '@type': 'Service',
+        name: 'รับทำผังแบ่งแปลงที่ดิน',
+        serviceType: 'ออกแบบผังแบ่งแปลงที่ดิน / ผังจัดสรร',
+        provider: { '@type': 'Organization', name: 'TNR Geoservice', url: SITE },
+        areaServed: 'TH', inLanguage: 'th-TH',
+        url: `${SITE}/subdivisionplan/`,
+        description: 'รับทำผังแบ่งแปลงที่ดินจากไฟล์สแกนโฉนด เลขโฉนด หรือพิกัดหมุดแปลง ส่งไฟล์ .jpg .pdf .dwg .shp ทยอยส่งแบบร่างให้ตรวจก่อนส่งไฟล์สมบูรณ์',
+      },
+      {
+        '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'หน้าหลัก', item: SITE },
+          { '@type': 'ListItem', position: 2, name: 'รับทำผังแบ่งแปลงที่ดิน', item: `${SITE}/subdivisionplan/` },
+        ],
+      },
+    ],
+  }, renderRoute('/subdivisionplan')));
+
   // /articles/:slug
   for (const { meta, faq } of articles) {
     const url = `${SITE}/articles/${meta.slug}/`;
@@ -150,6 +178,7 @@ function run() {
     { loc: `${SITE}/`,             changefreq: 'weekly', priority: '1.0' },
     { loc: 'https://map.tnrmaphub.com/', changefreq: 'daily', priority: '0.9' },
     { loc: `${SITE}/tnrpdfstudio/`, changefreq: 'monthly', priority: '0.8' },
+    { loc: `${SITE}/subdivisionplan/`, changefreq: 'monthly', priority: '0.8' },
     { loc: `${SITE}/articles/`,    changefreq: 'weekly', priority: '0.6' },
     ...articles.map(({ meta }) => ({
       loc: `${SITE}/articles/${meta.slug}/`, lastmod: meta.updated ?? meta.date,

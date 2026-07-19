@@ -11,6 +11,11 @@ const PdfStudioPage = lazy(() =>
   import('./pages/PdfStudioPage').then((m) => ({ default: m.PdfStudioPage }))
 )
 
+// lazy — landing บริการรับทำผังแบ่งแปลงที่ดิน
+const SubdivisionPlanPage = lazy(() =>
+  import('./pages/SubdivisionPlanPage').then((m) => ({ default: m.SubdivisionPlanPage }))
+)
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
@@ -22,6 +27,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           element={
             <Suspense fallback={<div style={{ minHeight: '100vh', background: '#0d1520' }} />}>
               <PdfStudioPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/subdivisionplan"
+          element={
+            <Suspense fallback={<div style={{ minHeight: '100vh', background: '#0d1520' }} />}>
+              <SubdivisionPlanPage />
             </Suspense>
           }
         />
