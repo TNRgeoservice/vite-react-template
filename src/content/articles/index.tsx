@@ -5,6 +5,8 @@
 // เพิ่มบทความใหม่ = สร้างไฟล์ component + เพิ่ม 1 entry ใน array นี้
 // ════════════════════════════════════════
 import type { ComponentType } from 'react';
+import { LandTitleDeedTypes, meta as titleDeedTypesMeta, FAQ as titleDeedTypesFaq } from './land-title-deed-types';
+import { VacantLandTax, meta as vacantLandTaxMeta, FAQ as vacantLandTaxFaq } from './vacant-land-tax';
 import { InheritedLandDivision, meta as inheritedLandMeta, FAQ as inheritedLandFaq } from './inherited-land-division';
 import { LandTransferFee, meta as landTransferFeeMeta, FAQ as landTransferFeeFaq } from './land-transfer-fee';
 import { SpkToTitleDeed, meta as spkMeta, FAQ as spkFaq } from './spk-to-title-deed';
@@ -39,6 +41,8 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: titleDeedTypesMeta, Body: LandTitleDeedTypes, faq: titleDeedTypesFaq },
+  { meta: vacantLandTaxMeta, Body: VacantLandTax, faq: vacantLandTaxFaq },
   { meta: inheritedLandMeta, Body: InheritedLandDivision, faq: inheritedLandFaq },
   { meta: landTransferFeeMeta, Body: LandTransferFee, faq: landTransferFeeFaq },
   { meta: spkMeta, Body: SpkToTitleDeed, faq: spkFaq },
