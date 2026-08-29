@@ -21,6 +21,8 @@ import { LandAppraisalPriceOnline, meta as appraisalMeta, FAQ as appraisalFaq } 
 import { ObjectLandAppraisalPrice, meta as objectAppraisalMeta, FAQ as objectAppraisalFaq } from './object-land-appraisal-price';
 import { LandAllocationLicense, meta as allocationLicenseMeta, FAQ as allocationLicenseFaq } from './land-allocation-license';
 import { LandSalePurchaseAgreement, meta as salePurchaseMeta, FAQ as salePurchaseFaq } from './land-sale-purchase-agreement';
+import { LandExpropriationCompensation, meta as expropriationMeta, FAQ as expropriationFaq } from './land-expropriation-compensation';
+import { NomineeLandHolding, meta as nomineeMeta, FAQ as nomineeFaq } from './nominee-land-holding';
 
 export interface ArticleMeta {
   slug:        string;   // URL: /articles/{slug}
@@ -41,6 +43,8 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: expropriationMeta, Body: LandExpropriationCompensation, faq: expropriationFaq },
+  { meta: nomineeMeta, Body: NomineeLandHolding, faq: nomineeFaq },
   { meta: titleDeedTypesMeta, Body: LandTitleDeedTypes, faq: titleDeedTypesFaq },
   { meta: vacantLandTaxMeta, Body: VacantLandTax, faq: vacantLandTaxFaq },
   { meta: inheritedLandMeta, Body: InheritedLandDivision, faq: inheritedLandFaq },
