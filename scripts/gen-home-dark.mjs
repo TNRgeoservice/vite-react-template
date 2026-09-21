@@ -48,7 +48,7 @@ function darken(hex) {
 const HEX = /#([0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-zA-Z_-])/g
 const convert = (v) => v.replace(HEX, (_, h) => darken(h.toLowerCase())).replace(/\bwhite\b/g, darken('ffffff')).replace(/\bblack\b/g, '#eaf1f8')
 // ส่วนที่ออกแบบเป็นแผงสีเข้มอยู่แล้ว (ตัวหนังสือขาวบนพื้นเขียวเข้ม/ป้ายดำ) — คงไว้ทั้งสองธีม
-const KEEP = /final-cta|plot-card-badge/
+const KEEP = /final-cta|plot-card-badge|line-fab/
 const SKIP = /^(box-shadow|text-shadow|filter|-webkit-tap-highlight-color)$/
 
 // ── ตัวอ่าน CSS ──

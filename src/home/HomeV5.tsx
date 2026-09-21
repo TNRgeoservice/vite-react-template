@@ -15,6 +15,7 @@ import './home.map.css'
 
 const MAP_URL = 'https://map.tnrmaphub.com'
 const FB_URL = 'https://www.facebook.com/TNRGEOSERVICE'
+const LINE_URL = 'https://line.me/ti/p/jkBzxcJVV0'
 const FONTS_HREF =
   'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Inter:wght@400;500;600;650;700;800&family=Mitr:wght@400;500&display=swap'
 
@@ -464,6 +465,7 @@ export default function HomeV5() {
               <Link to="/articles">บทความ</Link>
               <Link to="/subdivisionplan">ทำผังแบ่งแปลง</Link>
               <Link to="/tnrpdfstudio">PDF Studio</Link>
+              <a href={LINE_URL} target="_blank" rel="noopener noreferrer" aria-label="ติดต่อ TNR Geoservice ทาง LINE">LINE <Icon name="i-external" /></a>
               <a href={FB_URL} target="_blank" rel="noopener noreferrer" aria-label="TNR Geoservice บน Facebook">Facebook <Icon name="i-external" /></a>
               <a href={MAP_URL}>เปิดแผนที่ <Icon name="i-arrow" /></a>
             </nav>
@@ -474,6 +476,10 @@ export default function HomeV5() {
           </div>
         </div>
       </footer>
+
+      <a className="line-fab" href={LINE_URL} target="_blank" rel="noopener noreferrer" aria-label="ติดต่อ TNR Geoservice ทาง LINE">
+        <Icon name="i-chat" /><span>LINE</span>
+      </a>
     </div>
   )
 }

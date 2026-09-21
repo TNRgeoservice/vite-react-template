@@ -156,3 +156,14 @@
 .v5 .article-card p{font-size:13px;color:var(--muted);line-height:1.9;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 @media(max-width:1000px){.v5 .article-cards{grid-template-columns:repeat(2,1fr);gap:14px}.v5 .article-card:nth-child(3){display:none}}
 @media(max-width:760px){.v5 .articles-section{padding-top:8px}.v5 .article-cards{grid-template-columns:1fr}.v5 .article-card:nth-child(3){display:flex}}
+
+/* ปุ่ม LINE ลอย (สีแบรนด์ LINE คงที่ทั้งสองธีม) */
+.v5 .line-fab{position:fixed;right:18px;bottom:18px;z-index:14;min-height:48px;display:inline-flex;align-items:center;gap:8px;padding:0 18px 0 14px;border-radius:999px;background:#06c755;color:#fff;font:700 14px var(--latin);box-shadow:0 8px 22px #06c75566,0 2px 6px #0003;transition:transform .2s,box-shadow .2s}
+.v5 .line-fab:hover{transform:translateY(-3px);box-shadow:0 12px 28px #06c75577,0 2px 6px #0003}
+.v5 .line-fab .icon{width:22px;height:22px}
+@media(max-width:760px){.v5 .line-fab{right:12px;bottom:12px;padding:0 15px 0 12px}}
+
+/* ลิงก์ท้ายหน้า: ไม่ตัดคำกลางลิงก์ ขึ้นบรรทัดใหม่ทีละลิงก์แทน */
+.v5 .footer-links{flex-wrap:wrap;gap:0 22px}
+.v5 .footer-links a{white-space:nowrap}
+@media(max-width:760px){.v5 .footer{padding-bottom:78px}}
