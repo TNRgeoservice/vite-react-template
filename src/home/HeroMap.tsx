@@ -124,6 +124,7 @@ export default function HeroMap() {
   const govRef = useRef<Partial<Record<GovKey, TileLayer>>>({})
   const plotsRef = useRef<Record<string, { group: FeatureGroup; label: Marker }>>({})
 
+  const [active, setActive] = useState(false)
   const [ready, setReady] = useState(false)
   const [failed, setFailed] = useState(false)
   const [base, setBase] = useState(0)
@@ -140,13 +141,13 @@ export default function HeroMap() {
   const [pinned, setPinned] = useState<string | null>(null)
   const placePinRef = useRef<Marker | null>(null)
 
-  // สร้างแผนที่ครั้งเดียว — รอให้กล่องแผนที่เข้าใกล้จอก่อนค่อยโหลด Leaflet + ไทล์ (ระหว่างนี้แสดงภาพนิ่ง)
+  // สร้างแผนที่ครั้งเดียว — แสดงภาพนิ่งก่อน โหลด Leaflet + ไทล์ดาวเทียมเมื่อผู้ใช้กด "แตะเพื่อเล่นแผนที่" เท่านั้น
+  // (ประหยัดโควตา/ค่าไทล์ และไม่ถ่วงหน้าแรกของคนที่แค่เข้ามาดู)
   useEffect(() => {
+    if (!active) return
     let cancelled = false
     let map: LMap | undefined
-    let io: IntersectionObserver | undefined
     const start = () => {
-      io?.disconnect()
       void (async () => {
       try {
         const [{ default: L }] = await Promise.all([import('leaflet'), import('leaflet/dist/leaflet.css')])
@@ -182,15 +183,9 @@ export default function HeroMap() {
       }
       })()
     }
-    if ('IntersectionObserver' in window && elRef.current) {
-      io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) start() }, { rootMargin: '300px' })
-      io.observe(elRef.current)
-    } else {
-      start()
-    }
+    start()
     return () => {
       cancelled = true
-      io?.disconnect()
       map?.remove()
       mapRef.current = null
       baseRef.current = null
@@ -199,7 +194,7 @@ export default function HeroMap() {
       placePinRef.current = null
       setReady(false)
     }
-  }, [])
+  }, [active])
 
   // พื้นหลังแผนที่
   useEffect(() => {
@@ -378,87 +373,102 @@ export default function HeroMap() {
         </div>
         <div className="map-body hm">
           <div ref={elRef} className="hm-canvas" role="application" aria-label="แผนที่ดาวเทียมพร้อมรูปแปลงที่ดินตัวอย่าง" />
-          {!ready && <div className="hm-loading" aria-live="polite">{failed ? 'โหลดแผนที่ไม่สำเร็จ — เปิดแผนที่จริงจากปุ่มด้านบน' : ''}</div>}
+          {!ready && (
+            <div className="hm-loading">
+              {failed ? (
+                <p className="hm-fail">โหลดแผนที่ไม่สำเร็จ — เปิดแผนที่จริงจากปุ่มด้านบน</p>
+              ) : (
+                <button type="button" className="hm-start" onClick={() => setActive(true)} disabled={active} aria-busy={active}>
+                  <span className="hm-start-pill">{active ? 'กำลังโหลดแผนที่…' : '▶ แตะเพื่อเล่นแผนที่'}</span>
+                  <span className="hm-start-sub">ภาพดาวเทียมจริง · เลือกแปลง · เปิดชั้นข้อมูล · วัดระยะ</span>
+                </button>
+              )}
+            </div>
+          )}
 
-          <div className="hm-search">
-            <Icon name="i-search" />
-            <input
-              type="search" value={q} placeholder={pinned ? `📍 ${pinned}` : 'ค้นหาสถานที่ใกล้เคียง…'} aria-label="ค้นหาสถานที่ใกล้เคียง"
-              autoComplete="off"
-              onChange={(e) => { setQ(e.target.value); setSearchOpen(true) }}
-              onFocus={() => setSearchOpen(true)}
-              onBlur={() => window.setTimeout(() => setSearchOpen(false), 150)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && results[0]) { e.preventDefault(); goToPlace(results[0]) }
-                if (e.key === 'Escape') setSearchOpen(false)
-              }}
-            />
-            {pinned && !q && <button type="button" className="hm-clear" onClick={clearPlace} aria-label="ล้างสถานที่ที่ค้นหา">✕</button>}
-            {searchOpen && q.trim().length >= 2 && (
-              <div className="hm-suggest" role="listbox" aria-label="สถานที่ที่พบ">
-                {searching && !results.length && <div className="hm-suggest-note">กำลังค้นหา…</div>}
-                {!searching && !results.length && <div className="hm-suggest-note">ไม่พบสถานที่</div>}
-                {results.map((r, i) => (
-                  <button key={`${r.lat},${r.lng},${i}`} type="button" role="option" aria-selected="false" onMouseDown={(e) => e.preventDefault()} onClick={() => goToPlace(r)}>
-                    <b>{r.name}</b><small>{r.address}</small>
+          {ready && (
+            <>
+            <div className="hm-search">
+              <Icon name="i-search" />
+              <input
+                type="search" value={q} placeholder={pinned ? `📍 ${pinned}` : 'ค้นหาสถานที่ใกล้เคียง…'} aria-label="ค้นหาสถานที่ใกล้เคียง"
+                autoComplete="off"
+                onChange={(e) => { setQ(e.target.value); setSearchOpen(true) }}
+                onFocus={() => setSearchOpen(true)}
+                onBlur={() => window.setTimeout(() => setSearchOpen(false), 150)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && results[0]) { e.preventDefault(); goToPlace(results[0]) }
+                  if (e.key === 'Escape') setSearchOpen(false)
+                }}
+              />
+              {pinned && !q && <button type="button" className="hm-clear" onClick={clearPlace} aria-label="ล้างสถานที่ที่ค้นหา">✕</button>}
+              {searchOpen && q.trim().length >= 2 && (
+                <div className="hm-suggest" role="listbox" aria-label="สถานที่ที่พบ">
+                  {searching && !results.length && <div className="hm-suggest-note">กำลังค้นหา…</div>}
+                  {!searching && !results.length && <div className="hm-suggest-note">ไม่พบสถานที่</div>}
+                  {results.map((r, i) => (
+                    <button key={`${r.lat},${r.lng},${i}`} type="button" role="option" aria-selected="false" onMouseDown={(e) => e.preventDefault()} onClick={() => goToPlace(r)}>
+                      <b>{r.name}</b><small>{r.address}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="hm-card hm-filter">
+              <label htmlFor="price-range">งบสูงสุด <b className="latin">{budget}</b> ล้านบาท</label>
+              <input
+                id="price-range" type="range" min={MIN_BUDGET} max={MAX_BUDGET} step={500000} value={limit}
+                onChange={(e) => setLimit(Number(e.target.value))} aria-valuetext={`${budget} ล้านบาท`}
+              />
+              <div className="hm-hint" aria-live="polite">{visible ? `แสดง ${visible} แปลงตัวอย่าง` : 'ไม่พบแปลง ลองเพิ่มงบ'}</div>
+            </div>
+
+            <div className="hm-right">
+              <div className="hm-btns">
+                <button type="button" className="hm-btn" aria-pressed={showPrice} onClick={() => setShowPrice((v) => !v)}>
+                  <span className="hm-dot" aria-hidden="true" />แสดงราคา
+                </button>
+                <button type="button" className="hm-btn" onClick={() => setBase((b) => (b + 1) % BASEMAPS.length)} aria-label={`เปลี่ยนแผนที่พื้นหลัง (ตอนนี้ ${BASEMAPS[base].label})`}>
+                  <Icon name="i-map" />{BASEMAPS[base].label}
+                </button>
+              </div>
+              <div className="hm-card hm-layers" role="group" aria-label="ชั้นข้อมูลภาครัฐ">
+                <div className="hm-layers-t"><Icon name="i-layers" />ชั้นข้อมูล</div>
+                {GOV.map((g) => (
+                  <button
+                    key={g.key} type="button" className="hm-toggle" aria-pressed={layers[g.key]}
+                    onClick={() => setLayers((s) => ({ ...s, [g.key]: !s[g.key] }))}
+                  >
+                    {g.label}<span className="switch" aria-hidden="true" />
                   </button>
                 ))}
               </div>
-            )}
-          </div>
-          <div className="hm-card hm-filter">
-            <label htmlFor="price-range">งบสูงสุด <b className="latin">{budget}</b> ล้านบาท</label>
-            <input
-              id="price-range" type="range" min={MIN_BUDGET} max={MAX_BUDGET} step={500000} value={limit}
-              onChange={(e) => setLimit(Number(e.target.value))} aria-valuetext={`${budget} ล้านบาท`}
-            />
-            <div className="hm-hint" aria-live="polite">{visible ? `แสดง ${visible} แปลงตัวอย่าง` : 'ไม่พบแปลง ลองเพิ่มงบ'}</div>
-          </div>
-
-          <div className="hm-right">
-            <div className="hm-btns">
-              <button type="button" className="hm-btn" aria-pressed={showPrice} onClick={() => setShowPrice((v) => !v)}>
-                <span className="hm-dot" aria-hidden="true" />แสดงราคา
-              </button>
-              <button type="button" className="hm-btn" onClick={() => setBase((b) => (b + 1) % BASEMAPS.length)} aria-label={`เปลี่ยนแผนที่พื้นหลัง (ตอนนี้ ${BASEMAPS[base].label})`}>
-                <Icon name="i-map" />{BASEMAPS[base].label}
-              </button>
             </div>
-            <div className="hm-card hm-layers" role="group" aria-label="ชั้นข้อมูลภาครัฐ">
-              <div className="hm-layers-t"><Icon name="i-layers" />ชั้นข้อมูล</div>
-              {GOV.map((g) => (
-                <button
-                  key={g.key} type="button" className="hm-toggle" aria-pressed={layers[g.key]}
-                  onClick={() => setLayers((s) => ({ ...s, [g.key]: !s[g.key] }))}
-                >
-                  {g.label}<span className="switch" aria-hidden="true" />
+
+            <div className="hm-tools" role="group" aria-label="เครื่องมือบนแผนที่">
+              {TOOLS.map((t) => (
+                <button key={t.key} type="button" aria-pressed={tool === t.key} onClick={() => setTool((cur) => (cur === t.key ? null : t.key))} title={t.hint}>
+                  {t.label}
                 </button>
               ))}
             </div>
-          </div>
-
-          <div className="hm-tools" role="group" aria-label="เครื่องมือบนแผนที่">
-            {TOOLS.map((t) => (
-              <button key={t.key} type="button" aria-pressed={tool === t.key} onClick={() => setTool((cur) => (cur === t.key ? null : t.key))} title={t.hint}>
-                {t.label}
-              </button>
-            ))}
-          </div>
-          {tool && (
-            <div className="hm-readout" role="status" aria-live="polite">
-              <div className="hm-readout-main">{readout}</div>
-              <div className="hm-readout-sub">ระยะและเนื้อที่ใช้ดูคร่าวๆ เท่านั้น อ้างอิงทางกฎหมายไม่ได้</div>
-              <div className="hm-readout-act">
-                {tool !== 'edges' && <button type="button" onClick={() => setResetTick((n) => n + 1)}>ล้าง</button>}
-                <button type="button" onClick={() => setTool(null)}>ปิดเครื่องมือ</button>
+            {tool && (
+              <div className="hm-readout" role="status" aria-live="polite">
+                <div className="hm-readout-main">{readout}</div>
+                <div className="hm-readout-sub">ระยะและเนื้อที่ใช้ดูคร่าวๆ เท่านั้น อ้างอิงทางกฎหมายไม่ได้</div>
+                <div className="hm-readout-act">
+                  {tool !== 'edges' && <button type="button" onClick={() => setResetTick((n) => n + 1)}>ล้าง</button>}
+                  <button type="button" onClick={() => setTool(null)}>ปิดเครื่องมือ</button>
+                </div>
               </div>
-            </div>
+            )}
+            </>
           )}
         </div>
       </div>
       <div className="product-footnote">
         <span><Icon name="i-info" />แผนที่จริง · แปลงและราคาเป็นตัวอย่าง</span>
-        <span className="interaction-hint">คลิกแปลง · ปรับงบ · เปิดชั้นข้อมูล ↗</span>
+        <span className="interaction-hint">{ready ? 'คลิกแปลง · ปรับงบ · เปิดชั้นข้อมูล ↗' : 'แตะเพื่อเริ่มเล่นแผนที่ตัวอย่าง ↗'}</span>
       </div>
     </div>
   )

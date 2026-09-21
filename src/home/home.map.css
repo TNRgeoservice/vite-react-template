@@ -1,7 +1,14 @@
 /* home.map.css — แผนที่สาธิตในหน้าแรก: ธีมมืดแบบแอปแผนที่จริง (คงที่ทั้ง light/dark ของหน้าเว็บ) */
 .v5 .map-body.hm{height:540px;background:#0a1520;--hm-bg2:#162030;--hm-bg3:#1c2a3d;--hm-brd:#213045;--hm-tx:#dce8f5;--hm-tx2:#7a9ab8;--hm-acc:#00e676;color:var(--hm-tx)}
 .v5 .hm-canvas{position:absolute;inset:0;z-index:0;background:#0a1520;font-family:var(--body)}
-.v5 .hm-loading{position:absolute;inset:0;z-index:1;display:grid;place-items:center;text-align:center;padding:20px;font-size:13px;color:var(--hm-tx2);background:#0a1520 url('/hero-map-poster.jpg') center/cover no-repeat;pointer-events:none}
+.v5 .hm-loading{position:absolute;inset:0;z-index:1;display:grid;place-items:center;text-align:center;padding:20px;font-size:13px;color:var(--hm-tx2);background:#0a1520 url('/hero-map-poster.jpg') center/cover no-repeat}
+.v5 .hm-fail{background:#0d1520e6;border:1px solid #213045;border-radius:10px;padding:12px 16px;font-size:13px;color:#dce8f5}
+.v5 .hm-start{position:absolute;inset:0;width:100%;display:grid;place-content:center;justify-items:center;gap:10px;padding:16px;background:radial-gradient(ellipse 60% 40% at 50% 50%,#0a1520e6 0,#0a152099 55%,#0a152033 100%);color:#fff;text-align:center;cursor:pointer}
+.v5 .hm-start:disabled{cursor:progress}
+.v5 .hm-start-pill{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;background:#00e676;color:#06210f;font-size:15px;font-weight:700;box-shadow:0 8px 24px #0009,0 0 0 6px #00e67633;transition:transform .2s,box-shadow .2s}
+.v5 .hm-start:hover:not(:disabled) .hm-start-pill{transform:translateY(-2px) scale(1.03);box-shadow:0 12px 28px #000a,0 0 0 8px #00e67640}
+.v5 .hm-start:focus-visible{outline:3px solid #fff;outline-offset:-6px}
+.v5 .hm-start-sub{font-size:11px;line-height:1.6;text-shadow:0 1px 3px #000c;max-width:300px}
 .v5 .hm-appbar{background:#0d1520;border-bottom:1px solid #213045;color:#dce8f5}
 .v5 .hm-appbar .app-brand{font:700 13px var(--latin);gap:12px;color:#dce8f5}
 .v5 .hm-appbar .app-brand .icon{color:#dce8f5;width:20px}
