@@ -1,0 +1,113 @@
+/* home.map.css — แผนที่สาธิตในหน้าแรก: ธีมมืดแบบแอปแผนที่จริง (คงที่ทั้ง light/dark ของหน้าเว็บ) */
+.v5 .map-body.hm{height:540px;background:#0a1520;--hm-bg2:#162030;--hm-bg3:#1c2a3d;--hm-brd:#213045;--hm-tx:#dce8f5;--hm-tx2:#7a9ab8;--hm-acc:#00e676;color:var(--hm-tx)}
+.v5 .hm-canvas{position:absolute;inset:0;z-index:0;background:#0a1520;font-family:var(--body)}
+.v5 .hm-loading{position:absolute;inset:0;z-index:1;display:grid;place-items:center;text-align:center;padding:20px;font-size:13px;color:var(--hm-tx2);background:#0a1520 url('/hero-map-poster.jpg') center/cover no-repeat;pointer-events:none}
+.v5 .hm-appbar{background:#0d1520;border-bottom:1px solid #213045;color:#dce8f5}
+.v5 .hm-appbar .app-brand{font:700 13px var(--latin);gap:12px;color:#dce8f5}
+.v5 .hm-appbar .app-brand .icon{color:#dce8f5;width:20px}
+.v5 .hm-appbar small{font:400 9px var(--latin);color:#7a9ab8;margin-left:2px}
+.v5 .hm-appbar .example-badge{background:#162030;border-color:#213045;color:#7a9ab8}
+
+/* กล่องควบคุมลอยบนแผนที่ */
+.v5 .hm-search,.v5 .hm-card,.v5 .hm-btn,.v5 .hm-tools button,.v5 .hm-readout{position:relative;background:#162030f2;border:1px solid #213045;color:#dce8f5;box-shadow:0 2px 10px #0006;backdrop-filter:blur(6px)}
+.v5 .hm-search{position:absolute;z-index:600;top:12px;left:12px;width:min(230px,calc(100% - 190px));height:34px;display:flex;align-items:center;gap:8px;padding:0 6px 0 11px;border-radius:8px;font-size:11px;color:#7a9ab8}
+.v5 .hm-search input{flex:1;min-width:0;height:100%;background:transparent;border:0;outline:0;color:#dce8f5;font-size:11px}
+.v5 .hm-search input::placeholder{color:#7a9ab8;opacity:1}
+.v5 .hm-search:focus-within{border-color:#00e676}
+.v5 .hm-clear{min-width:26px;min-height:26px;border-radius:50%;background:transparent;color:#7a9ab8;font-size:12px}
+.v5 .hm-clear:hover{color:#dce8f5}
+.v5 .hm-suggest{position:absolute;left:-1px;right:-1px;top:calc(100% + 4px);max-height:230px;overflow-y:auto;background:#162030;border:1px solid #213045;border-radius:8px;box-shadow:0 8px 24px #000a}
+.v5 .hm-suggest button{width:100%;display:grid;gap:0;padding:7px 11px;background:transparent;color:#dce8f5;text-align:left;font-size:11px;border-bottom:1px solid #21304566}
+.v5 .hm-suggest button:last-child{border-bottom:0}
+.v5 .hm-suggest button:hover{background:#1c2a3d}
+.v5 .hm-suggest b{font-weight:600;line-height:1.5}
+.v5 .hm-suggest small{font-size:10px;color:#7a9ab8;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v5 .hm-suggest-note{padding:10px 11px;font-size:11px;color:#7a9ab8}
+.v5 .hm .tnr-place-pin>div{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;pointer-events:none;white-space:nowrap}
+.v5 .hm .tnr-place-pin span{font-size:22px;line-height:1;filter:drop-shadow(0 1px 2px #000a)}
+.v5 .hm .tnr-place-pin b{font:600 11px var(--body);color:#fff;background:#0d1520eb;border:1px solid #00e676;border-radius:6px;padding:1px 7px;margin-bottom:2px;box-shadow:0 1px 3px #0008}
+.v5 .hm-search .icon{width:14px;height:14px;color:#00e676}
+.v5 .hm-card{border-radius:10px;padding:10px 12px;font-size:11px}
+.v5 .hm-filter{position:absolute;z-index:500;top:54px;left:12px;width:min(190px,calc(100% - 190px))}
+.v5 .hm-filter label{display:block;font-size:11px;color:#7a9ab8}
+.v5 .hm-filter label b{color:#00e676;font-size:14px;font-weight:700}
+.v5 .hm-filter input[type=range]{height:30px;accent-color:#00e676}
+.v5 .hm-hint{font-size:10px;color:#7a9ab8;margin-top:-2px}
+.v5 .hm-right{position:absolute;z-index:500;top:12px;right:12px;display:grid;gap:8px;justify-items:end}
+.v5 .hm-btns{display:flex;gap:6px}
+.v5 .hm-btn{min-height:34px;display:inline-flex;align-items:center;gap:6px;padding:0 11px;border-radius:8px;font-size:11px;font-weight:600;transition:border-color .2s}
+.v5 .hm-btn .icon{width:14px;height:14px}
+.v5 .hm-btn:hover{border-color:#00e67699}
+.v5 .hm-btn[aria-pressed=true]{border-color:#00e676}
+.v5 .hm-dot{width:9px;height:9px;border-radius:50%;border:2px solid #7a9ab8}
+.v5 .hm-btn[aria-pressed=true] .hm-dot{border-color:#00e676;background:#00e676}
+.v5 .hm-layers{width:150px;padding:6px 8px}
+.v5 .hm-layers-t{display:flex;align-items:center;gap:6px;padding:3px 4px;font-size:10px;font-weight:600;color:#7a9ab8}
+.v5 .hm-layers-t .icon{width:12px;height:12px}
+.v5 .hm-toggle{width:100%;min-height:40px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 4px;background:transparent;color:#dce8f5;font-size:11px}
+.v5 .hm-toggle .switch{width:26px;height:15px;background:#2a3b52}
+.v5 .hm-toggle .switch:after{top:2.5px;left:2.5px;width:10px;height:10px}
+.v5 .hm-toggle[aria-pressed=true] .switch{background:#00e676}
+.v5 .hm-toggle .switch:after{background:#fff}
+.v5 .hm-toggle[aria-pressed=true] .switch:after{transform:translateX(11px)}
+.v5 .hm-tools{position:absolute;z-index:500;left:12px;bottom:26px;display:grid;gap:5px}
+.v5 .hm-tools button{min-height:30px;display:flex;align-items:center;padding:0 10px;border-radius:7px;font-size:10px;font-weight:600;text-align:left;transition:border-color .2s}
+.v5 .hm-tools button:hover{border-color:#00e67699}
+.v5 .hm-tools button[aria-pressed=true]{border-color:#ffb300;color:#ffb300}
+.v5 .hm-readout{position:absolute;z-index:500;left:50%;bottom:26px;transform:translateX(-50%);width:min(340px,calc(100% - 300px));min-width:230px;padding:9px 12px;border-radius:10px;border-color:#ffb30099;text-align:center}
+.v5 .hm-readout-main{font-size:12px;font-weight:700;color:#ffb300;line-height:1.5}
+.v5 .hm-readout-sub{font-size:9px;color:#7a9ab8;margin-top:1px}
+.v5 .hm-readout-act{display:flex;justify-content:center;gap:6px;margin-top:6px}
+.v5 .hm-readout-act button{min-height:28px;padding:0 10px;border:1px solid #213045;border-radius:6px;background:#1c2a3d;color:#dce8f5;font-size:10px}
+.v5 .hm-readout-act button:hover{border-color:#00e67699}
+.v5 .hm .leaflet-container.crosshair{cursor:crosshair}
+.v5 .hm .leaflet-container.tool-edges .tnr-price-label{display:none}
+.v5 .hm .tnr-edge-label span{position:absolute;transform:translate(-50%,-50%);font:700 11px var(--latin);color:#fff;white-space:nowrap;pointer-events:none;text-shadow:0 0 3px #000,0 0 3px #000,0 0 2px #000,0 0 2px #000}
+.v5 .hm .tnr-edge-label.area span{color:#ffb300;font-size:12px}
+
+/* Leaflet: attribution + popup การ์ดแปลง (สไตล์เดียวกับแผนที่จริง) */
+.v5 .hm .leaflet-control-attribution{background:#162030d9;color:#7a9ab8;font-size:9px;line-height:1.5}
+.v5 .hm .leaflet-control-attribution a{color:#00e676}
+.v5 .hm .leaflet-popup-content-wrapper{background:var(--hm-bg2);color:var(--hm-tx);border:1.5px solid var(--hm-brd);border-radius:12px;padding:2px;box-shadow:0 8px 28px #000a}
+.v5 .hm .leaflet-popup-content{margin:10px 12px;font-family:var(--body);font-size:13px;line-height:1.5;color:var(--hm-tx)}
+.v5 .hm .leaflet-popup-tip{background:var(--hm-bg2);border:1.5px solid var(--hm-brd)}
+.v5 .hm .leaflet-container a.leaflet-popup-close-button{color:var(--hm-tx2);top:6px;right:6px}
+.v5 .hm .tnr-pop-t{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:9px;padding-right:18px;font-weight:600;font-size:14px;letter-spacing:-.2px}
+.v5 .hm .tnr-st-tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600}
+.v5 .hm .tnr-st-available{background:#00e67626;color:#00e676;border:1px solid #00e6764d}
+.v5 .hm .tnr-pop-r{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;margin-bottom:4px}
+.v5 .hm .tnr-pop-k{color:var(--hm-tx2);flex-shrink:0}
+.v5 .hm .tnr-pop-v{color:var(--hm-tx);font-weight:500;text-align:right}
+.v5 .hm .tnr-pop-hl{font-size:13px;font-weight:600;color:var(--hm-acc)}
+.v5 .hm .tnr-pop-area{font-size:12px;font-weight:600;color:#ffb300}
+.v5 .hm .tnr-pop-actions{display:flex;gap:5px;margin-top:8px}
+.v5 .hm .tnr-pop-actions2{display:flex;gap:5px;margin-top:5px}
+.v5 .hm .leaflet-container a.tnr-pop-btn,.v5 .hm .tnr-pop-btn{flex:1;min-width:0;min-height:30px;padding:5px 4px;border-radius:6px;font-size:11px;border:1.5px solid var(--hm-brd);background:var(--hm-bg3);color:var(--hm-tx2);display:flex;align-items:center;justify-content:center;text-align:center;white-space:nowrap}
+.v5 .hm .leaflet-container a.tnr-pop-detail{border-color:var(--hm-acc);color:var(--hm-acc);font-weight:600}
+.v5 .hm .leaflet-container a.tnr-pop-contact{border-color:#4fc3f7;color:#4fc3f7;font-weight:600}
+.v5 .hm .tnr-pop-fav{flex:1.5 1 0}
+.v5 .hm .tnr-pop-ico{flex:0 0 34px!important}
+
+/* ป้ายราคาบนแผนที่ (เหมือนแผนที่จริง) */
+.v5 .hm .tnr-price-box{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:#0d1520eb;border:1px solid #00e676;border-radius:6px;padding:3px 8px;white-space:nowrap;text-align:center;line-height:1.25;box-shadow:0 1px 3px #0008;pointer-events:none;font-family:var(--body)}
+.v5 .hm .tnr-price-top{color:#00e676;font-size:12px;font-weight:700}
+.v5 .hm .tnr-price-sub{color:#7a9ab8;font-size:10px;font-weight:500}
+
+/* จัดเลย์เอาต์ตามความกว้างของกล่องแผนที่ (ไม่ใช่ความกว้างหน้าจอ) */
+.v5 .map-body.hm{container-type:inline-size}
+@container (max-width:640px){
+  .v5 .hm-filter{width:180px}
+}
+@container (max-width:520px){
+  .v5 .hm-search{width:calc(100% - 24px)}
+  .v5 .hm-tools{display:none}
+  .v5 .hm-readout{width:calc(100% - 24px);bottom:70px}
+  .v5 .hm-right{top:auto;bottom:22px;left:10px;right:10px;justify-items:stretch}
+  .v5 .hm-btns{justify-content:space-between}
+  .v5 .hm-layers{width:auto;display:flex;flex-wrap:wrap;column-gap:10px;padding:0 8px}
+  .v5 .hm-layers-t{display:none}
+  .v5 .hm-toggle{width:auto;min-height:36px;gap:8px}
+}
+@media(max-width:1000px){.v5 .map-body.hm{height:520px}}
+@media(max-width:760px){.v5 .map-body.hm{height:500px}}
+@media(max-width:420px){.v5 .map-body.hm{height:480px}}

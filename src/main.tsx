@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import App from './App'
+import HomeV5 from './home/HomeV5'
 import { ArticlesIndex } from './pages/ArticlesIndex'
 import { ArticlePage } from './pages/ArticlePage'
 import './index.css'
@@ -38,7 +38,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             </Suspense>
           }
         />
-        <Route path="*" element={<App />} />
+        <Route path="*" element={<HomeV5 />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
