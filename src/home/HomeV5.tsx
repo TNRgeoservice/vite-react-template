@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon, Sprite } from './Icon'
+import { MapHubWordmark } from '../components/ui/MapHubWordmark'
 import HeroSearch5 from './HeroSearch5'
 import HeroMap from './HeroMap'
 import Featured5 from './Featured5'
@@ -205,8 +206,7 @@ export default function HomeV5() {
       <header className="site-header">
         <div className="wrap header-inner">
           <Link className="brand" to="/" aria-label="TNR MapHub หน้าแรก">
-            <span className="brand-mark"><Icon name="i-map" /></span>
-            <span className="brand-name">TNR <span>MapHub</span></span>
+            <MapHubWordmark className="brand-logo" />
           </Link>
           <nav className="desktop-nav" aria-label="เมนูหลัก">{NAV.map((n) => navLink(n))}</nav>
           <div className="header-actions">
@@ -458,8 +458,7 @@ export default function HomeV5() {
         <div className="wrap">
           <div className="footer-main">
             <Link className="brand" to="/" aria-label="TNR MapHub กลับด้านบน">
-              <span className="brand-mark"><Icon name="i-map" /></span>
-              <span className="brand-name">TNR <span>MapHub</span></span>
+              <MapHubWordmark className="brand-logo" />
             </Link>
             <nav className="footer-links" aria-label="ลิงก์ท้ายหน้า">
               <Link to="/articles">บทความ</Link>

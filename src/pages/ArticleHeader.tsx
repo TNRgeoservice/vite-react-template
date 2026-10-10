@@ -3,7 +3,8 @@
 // Header เบาๆ สำหรับหน้าบทความ (logo → home, บทความ, เปิดแผนที่)
 // ════════════════════════════════════════
 import { Link } from 'react-router-dom';
-import { Map, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { MapHubWordmark } from '../components/ui/MapHubWordmark';
 
 const MAP_URL = 'https://map.tnrmaphub.com';
 
@@ -19,8 +20,7 @@ export function ArticleHeader() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: '#dce8f5' }}>
-          <Map className="w-5 h-5" color="#00e676" />
-          <span style={{ fontWeight: 700 }}>TNR MapHub</span>
+          <MapHubWordmark height={20} />
         </Link>
         <nav style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           <Link to="/articles" style={{ fontSize: 14, color: '#7a9ab8', textDecoration: 'none' }}>บทความ</Link>
