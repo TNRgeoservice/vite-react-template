@@ -23,7 +23,7 @@ const FONTS_HREF =
 const NAV = [
   { to: '/articles', label: 'บทความ' },
   { to: '/subdivisionplan', label: 'ทำผังแบ่งแปลง' },
-  { to: '/tnrpdfstudio', label: 'PDF Studio', badge: 'ฟรี' },
+  { to: '/tnrpdfstudio', label: 'Bailan', badge: 'ฟรี' },
   { href: '#tools', label: 'เครื่องมือคำนวณ' },
   { href: '#sellers', label: 'ลงประกาศฟรี' },
   { href: '#about', label: 'เกี่ยวกับ' },
@@ -189,7 +189,7 @@ export default function HomeV5() {
   const navLink = (n: (typeof NAV)[number], mobile = false) => {
     const inner = (
       <>
-        {n.label === 'PDF Studio' ? <span className="latin">PDF Studio</span> : n.label}
+        {n.label === 'Bailan' ? <span className="latin">Bailan</span> : n.label}
         {'badge' in n && <span className="new">{n.badge}</span>}
       </>
     )
@@ -463,7 +463,7 @@ export default function HomeV5() {
             <nav className="footer-links" aria-label="ลิงก์ท้ายหน้า">
               <Link to="/articles">บทความ</Link>
               <Link to="/subdivisionplan">ทำผังแบ่งแปลง</Link>
-              <Link to="/tnrpdfstudio">PDF Studio</Link>
+              <Link to="/tnrpdfstudio">Bailan</Link>
               <a href={LINE_URL} target="_blank" rel="noopener noreferrer" aria-label="ติดต่อ TNR Geoservice ทาง LINE">LINE <Icon name="i-external" /></a>
               <a href={FB_URL} target="_blank" rel="noopener noreferrer" aria-label="TNR Geoservice บน Facebook">Facebook <Icon name="i-external" /></a>
               <a href={MAP_URL}>เปิดแผนที่ <Icon name="i-arrow" /></a>

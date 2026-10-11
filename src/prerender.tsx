@@ -97,15 +97,15 @@ function run() {
     }],
   }, renderRoute('/articles')));
 
-  // /tnrpdfstudio (lead-magnet landing สำหรับโปรแกรม TNR PDF Studio)
+  // /tnrpdfstudio (lead-magnet landing สำหรับโปรแกรม Bailan — เดิมชื่อ TNR PDF Studio)
   writeHtml('tnrpdfstudio', buildHtml(template, {
     url:         `${SITE}/tnrpdfstudio/`,
-    title:       'TNR PDF Studio — โปรแกรมแก้ PDF โฉนด/เอกสารที่ดิน ฟรี',
-    description: 'ดาวน์โหลดฟรี! โปรแกรมแก้ไขไฟล์ PDF สำหรับงานโฉนดและเอกสารที่ดิน — ลบ/แก้ข้อความบนสแกน OCR ไทย ใส่ลายน้ำ ปกปิดข้อมูล รวม-แยกไฟล์ แปลงเป็น Word ทำงานบนเครื่องคุณ',
+    title:       'Bailan (ใบลาน) — โปรแกรมแก้ PDF โฉนด/เอกสารที่ดิน ฟรี',
+    description: 'ดาวน์โหลดฟรี! โปรแกรมแก้ไขไฟล์ PDF สำหรับงานโฉนดและเอกสารที่ดิน — ลบ/แก้ข้อความบนสแกน OCR ไทย แปลงรูปถ่ายเป็นสแกน ใส่ลายน้ำ ปกปิดข้อมูล รวม-แยกไฟล์ แปลงเป็น Word ทำงานบนเครื่องคุณ',
     ogType:      'website',
     jsonLd: [{
       '@context': 'https://schema.org', '@type': 'SoftwareApplication',
-      name: 'TNR PDF Studio', applicationCategory: 'BusinessApplication',
+      name: 'Bailan', alternateName: 'TNR PDF Studio', applicationCategory: 'BusinessApplication',
       operatingSystem: 'Windows 10, Windows 11', inLanguage: 'th-TH',
       url: `${SITE}/tnrpdfstudio/`,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'THB' },

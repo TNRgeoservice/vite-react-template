@@ -1,39 +1,72 @@
 // ════════════════════════════════════════
 // src/pages/PdfStudioPage.tsx  — หน้า /tnrpdfstudio
-// Landing + lead magnet สำหรับ TNR PDF Studio (.exe ฟรี)
-// flow: intro/ฟีเจอร์ → ปุ่มดาวน์โหลดตรง (ไม่ต้องล็อกอิน) → CTA marketplace
+// Landing + lead magnet สำหรับ Bailan (เดิมชื่อ TNR PDF Studio) — โปรแกรมแก้ PDF .exe ฟรี
+// ธีม/คลาสใช้ชุดเดียวกับหน้าแรก (.v5 "Daylight Precision") + ธีมสว่าง/มืดจำค่าร่วมกับหน้าแรก
+// flow: intro → ที่มาชื่อ → ฟีเจอร์ → วิดีโอ → ปุ่มดาวน์โหลดตรง (ไม่ต้องล็อกอิน) → CTA marketplace
 // ════════════════════════════════════════
 import { useEffect, useState, createContext, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  FileText, Download, ShieldCheck, ScanLine, Eraser,
-  Layers, Combine, Languages, ArrowRight, Map, Tag, X, PlayCircle,
+  FileText, Download, ShieldCheck, ScanLine, Eraser, Camera,
+  Layers, Combine, Languages, X, PlayCircle,
 } from 'lucide-react';
+import { Icon, Sprite } from '../home/Icon';
+import { MapHubWordmark } from '../components/ui/MapHubWordmark';
+import '../home/home.base.css';
+import '../home/home.extra.css';
+import '../home/home.dark.css';
+import './pdfstudio.css';
 
 // ── ตั้งค่า ────────────────────────────────────────────────────────────────
-// GitHub "latest release" — ชี้ไป release ล่าสุดเสมอ ตราบใดที่ชื่อไฟล์ asset = "TNR_PDF_Studio.exe" (ไม่ใส่เวอร์ชันในชื่อไฟล์)
+// GitHub "latest release" — ชี้ไป release ล่าสุดเสมอ ตราบใดที่ชื่อไฟล์ asset = "Bailan.exe" (ไม่ใส่เวอร์ชันในชื่อไฟล์)
 // อัปเวอร์ชันใหม่: สร้าง release ใหม่ (tag อะไรก็ได้) แนบไฟล์ชื่อเดิม → ลิงก์นี้ไม่ต้องแก้ ไม่ต้อง redeploy
-const DOWNLOAD_URL = 'https://github.com/TNRgeoservice/vite-react-template/releases/latest/download/TNR_PDF_Studio.exe';
+const DOWNLOAD_URL = 'https://github.com/TNRgeoservice/vite-react-template/releases/latest/download/Bailan.exe';
 const GH_REPO = 'TNRgeoservice/vite-react-template';   // ใช้ดึงยอดดาวน์โหลดจาก GitHub API
 // ยอดสะสมจาก release ที่ถูกลบไปแล้ว (GitHub ลบ asset = ยอดหายจาก API ถาวร) — บวกฐานนี้กับยอดจริง
 // ⚠️ รอบหน้าอัปเวอร์ชัน: สร้าง release ใหม่โดย "ไม่ลบอันเก่า" ยอดจะสะสมเองไม่ต้องมาบวกเพิ่มตรงนี้
 const DOWNLOAD_BASELINE = 16;
 const MAP_URL = 'https://map.tnrmaphub.com';
+const FB_URL = 'https://www.facebook.com/TNRGEOSERVICE';
+const LINE_URL = 'https://line.me/ti/p/jkBzxcJVV0';
+const FONTS_HREF =
+  'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Inter:wght@400;500;600;650;700;800&family=Mitr:wght@400;500&display=swap';
+const ICON_SRC = '/pdfstudio/bailan-icon.png';
+
+// ธีมใช้ key เดียวกับหน้าแรก (HomeV5) ให้สลับที่ไหนก็ตามกัน
+type Theme = 'light' | 'dark';
+const THEME_KEY = 'tnr-home-theme';
+const THEME_BG: Record<Theme, string> = { light: '#f6f8fb', dark: '#0d1520' };
+function initialTheme(): Theme {
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === 'light' || saved === 'dark') return saved;
+  } catch { /* ใช้ค่าอุปกรณ์แทน */ }
+  return typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+const NAV = [
+  { to: '/articles', label: 'บทความ' },
+  { to: '/subdivisionplan', label: 'ทำผังแบ่งแปลง' },
+  { to: '/tnrpdfstudio', label: 'Bailan', badge: 'ฟรี' },
+  { href: '/#tools', label: 'เครื่องมือคำนวณ' },
+  { href: '/#sellers', label: 'ลงประกาศฟรี' },
+] as const;
 
 const FEATURES = [
-  { icon: Eraser,    color: 'var(--acc)',  title: 'ลบ/แก้ข้อความบนสแกน',  desc: 'ครอบเนียน (smart whiteout) แล้วพิมพ์ทับ — กลมกลืนกับงานเอกสารสแกน เอกสารราชการ' },
-  { icon: Languages, color: 'var(--land)', title: 'OCR ภาษาไทย',           desc: 'ดึงข้อความจากเอกสารสแกนเป็นข้อความแก้ไขได้ รองรับไทย+อังกฤษ' },
-  { icon: ScanLine,  color: 'var(--poly)', title: 'ตรวจ & แก้กล่องข้อความ', desc: 'จับกล่องข้อความอัตโนมัติ คลิกแก้ทีละจุด พร้อมจับคู่ฟอนต์/ขนาดเดิม' },
-  { icon: ShieldCheck,color:'var(--acc)',  title: 'ปกปิดข้อมูล (Redact)',  desc: 'ลบข้อมูลส่วนตัวออกจริง — เลขบัตร เบอร์โทร ที่อยู่ ตรวจจับอัตโนมัติได้' },
-  { icon: Combine,   color: 'var(--land)', title: 'รวม · แยก · หมุนหน้า',   desc: 'จัดการหน้า PDF — รวมหลายไฟล์ แยกหน้า หมุน ลบ แทรกหน้าใหม่' },
-  { icon: Layers,    color: 'var(--poly)', title: 'เลเยอร์ + เอฟเฟกต์',     desc: 'จัดการทุกอย่างเป็นเลเยอร์ ปรับเส้นขอบ เงา ไล่สี ความทึบ แบบ Photoshop' },
-  { icon: FileText,  color: 'var(--road)', title: 'ส่งออก Word · รูปภาพ',   desc: 'แปลง PDF เป็น Word แก้ต่อได้ หรือบันทึกเป็น PNG/JPG ความละเอียดสูง' },
+  { icon: Eraser,      title: 'ลบ/แก้ข้อความบนสแกน',  desc: 'ครอบเนียน (smart whiteout) แล้วพิมพ์ทับ — กลมกลืนกับงานเอกสารสแกน เอกสารราชการ' },
+  { icon: Camera,      title: 'รูปถ่าย → สแกน', isNew: true, desc: 'ถ่ายเอกสารด้วยมือถือ แล้วให้โปรแกรมตัดพื้นหลัง ดัดมุมให้ตรง ลบเงา ให้เหมือนสแกน' },
+  { icon: Languages,   title: 'OCR ภาษาไทย',           desc: 'ดึงข้อความจากเอกสารสแกนเป็นข้อความแก้ไขได้ รองรับไทย+อังกฤษ' },
+  { icon: ScanLine,    title: 'ตรวจ & แก้กล่องข้อความ', desc: 'จับกล่องข้อความอัตโนมัติ คลิกแก้ทีละจุด พร้อมจับคู่ฟอนต์/ขนาดเดิม' },
+  { icon: ShieldCheck, title: 'ปกปิดข้อมูล (Redact)',  desc: 'ลบข้อมูลส่วนตัวออกจริง — เลขบัตร เบอร์โทร ที่อยู่ ตรวจจับอัตโนมัติได้' },
+  { icon: Combine,     title: 'รวม · แยก · หมุนหน้า',   desc: 'จัดการหน้า PDF — รวมหลายไฟล์ แยกหน้า หมุน ลบ แทรกหน้าใหม่ เปิดไฟล์รูปเป็น PDF ได้' },
+  { icon: Layers,      title: 'เลเยอร์ + เอฟเฟกต์',     desc: 'จัดการทุกอย่างเป็นเลเยอร์ ปรับเส้นขอบ เงา ไล่สี ความทึบ แบบ Photoshop' },
+  { icon: FileText,    title: 'ส่งออก Word · รูปภาพ',   desc: 'แปลง PDF เป็น Word แก้ต่อได้ หรือบันทึกเป็น PNG/JPG ความละเอียดสูง' },
 ];
 
 // ── ภาพหน้าจอ (วางไฟล์ใน public/pdfstudio/ แล้วใส่ชื่อไฟล์ใน file) ───────────────
 // file='' = ยังไม่มี → โชว์ placeholder "เร็วๆ นี้". ใส่ชื่อไฟล์เมื่อแคปภาพแล้ว.
 const SHOTS_DIR = '/pdfstudio';
-const HERO_SHOT = { file: 'hero.png', caption: 'ภาพหน้าจอโปรแกรม TNR PDF Studio', ratio: '16 / 10' };
+const HERO_SHOT = { file: 'hero.png', caption: 'ภาพหน้าจอโปรแกรม Bailan', ratio: '16 / 10' };
 const GALLERY_SHOTS = [
   { file: 'whiteout.png', caption: 'ลบ/แก้ข้อความบนเอกสารสแกน — ครอบเนียน' },
   { file: 'compare.png', caption: 'เทียบก่อน/หลังแก้ไข — สไลด์เทียบ' },
@@ -44,15 +77,42 @@ const GALLERY_SHOTS = [
 // วิดีโอวิธีใช้งาน — ใส่ YouTube video id (ส่วนหลัง v= ในลิงก์). ว่าง = โชว์ placeholder "เร็วๆ นี้"
 const VIDEO_ID = '';
 
-// กดภาพ → เปิดดูเต็มจอ (lightbox) ; ส่ง opener ผ่าน context เลี่ยง prop drilling ผ่าน Hero/Features
+// กดภาพ → เปิดดูเต็มจอ (lightbox) ; ส่ง opener ผ่าน context เลี่ยง prop drilling
 const ZoomCtx = createContext<(src: string, caption: string) => void>(() => {});
 
 export function PdfStudioPage() {
   const [zoom, setZoom] = useState<{ src: string; caption: string } | null>(null);
+  const [theme, setTheme] = useState<Theme>(initialTheme);
+  const [version, setVersion] = useState<string | null>(null);
 
   useEffect(() => {
-    document.title = 'TNR PDF Studio — โปรแกรมแก้ PDF และเอกสาร ฟรี | TNR MapHub';
+    document.title = 'Bailan — โปรแกรมแก้ PDF และเอกสาร ฟรี | TNR MapHub';
+    // ฟอนต์ชุดเดียวกับหน้าแรก
+    if (!document.querySelector('link[data-home-fonts]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = FONTS_HREF;
+      link.dataset.homeFonts = '';
+      document.head.appendChild(link);
+    }
+    // เลขเวอร์ชันล่าสุด (ไฟล์เดียวกับที่โปรแกรมใช้เช็กอัพเดท)
+    fetch('/tnrpdfstudio/version.json')
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((v) => setVersion(v.version))
+      .catch(() => {});
   }, []);
+
+  // สีพื้นหลังหน้า + theme-color ตามธีม (คืนค่าเมื่อออกจากหน้า)
+  useEffect(() => {
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    const prev = { bg: document.body.style.background, tc: meta?.content };
+    document.body.style.background = THEME_BG[theme];
+    if (meta) meta.content = THEME_BG[theme];
+    return () => {
+      document.body.style.background = prev.bg;
+      if (meta && prev.tc !== undefined) meta.content = prev.tc;
+    };
+  }, [theme]);
 
   // ตอนเปิดภาพเต็มจอ: ล็อกสกรอลล์พื้นหลัง + ปิดด้วย Esc
   useEffect(() => {
@@ -66,85 +126,122 @@ export function PdfStudioPage() {
     };
   }, [zoom]);
 
+  const toggleTheme = () => {
+    const next: Theme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    try { localStorage.setItem(THEME_KEY, next); } catch { /* ignore */ }
+  };
+
   return (
     <ZoomCtx.Provider value={(src, caption) => setZoom({ src, caption })}>
-      <div className="min-h-screen bg-[var(--bg)] text-[var(--tx)]">
-        <Header />
-        <Hero />
-        <Features />
-        <HowToVideo />
-        <DownloadSection />
-        <MarketplaceCTA />
+      <div className="v5" data-theme={theme}>
+        <Sprite />
+        <a className="skip" href="#main">ข้ามไปยังเนื้อหา</a>
+        <Header theme={theme} onToggleTheme={toggleTheme} />
+        <main id="main">
+          <Hero version={version} />
+          <NameStory />
+          <Features />
+          <HowToVideo />
+          <DownloadSection version={version} />
+          <MarketplaceCTA />
+        </main>
         <Footer />
+        <a className="line-fab" href={LINE_URL} target="_blank" rel="noopener noreferrer" aria-label="ติดต่อ TNR Geoservice ทาง LINE">
+          <Icon name="i-chat" /><span>LINE</span>
+        </a>
       </div>
       {zoom && <Lightbox src={zoom.src} caption={zoom.caption} onClose={() => setZoom(null)} />}
     </ZoomCtx.Provider>
   );
 }
 
-// ── Header ──────────────────────────────────────────────────────────────────
-function Header() {
+// ── Header (เหมือนหน้าแรก) ──────────────────────────────────────────────────
+function Header({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: () => void }) {
+  const navLink = (n: (typeof NAV)[number]) => {
+    const inner = (
+      <>
+        {n.label === 'Bailan' ? <span className="latin">Bailan</span> : n.label}
+        {'badge' in n && <span className="new">{n.badge}</span>}
+      </>
+    );
+    return 'to' in n
+      ? <Link key={n.label} to={n.to} className={n.to === '/tnrpdfstudio' ? 'active' : undefined}>{inner}</Link>
+      : <a key={n.label} href={n.href}>{inner}</a>;
+  };
   return (
-    <header className="sticky top-0 z-50 bg-[var(--bg)]/90 backdrop-blur-md border-b border-[var(--brd)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg bg-[var(--acc)]/10 flex items-center justify-center">
-              <FileText className="w-5 h-5 text-[var(--acc)]" />
-            </div>
-            <span className="text-lg font-semibold tracking-tight">TNR PDF Studio</span>
-          </Link>
-          <nav className="flex items-center gap-4 sm:gap-6">
-            <Link to="/articles" className="hidden sm:inline text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">
-              บทความ
-            </Link>
-            <a href={MAP_URL} target="_blank" rel="noopener noreferrer"
-               className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--acc)] text-[var(--bg)] rounded-lg text-sm font-semibold hover:bg-[var(--acc2)] transition-colors">
-              เปิดแผนที่ <ArrowRight className="w-4 h-4" />
-            </a>
-          </nav>
+    <header className="site-header">
+      <div className="wrap header-inner">
+        <Link className="brand" to="/" aria-label="TNR MapHub หน้าแรก">
+          <MapHubWordmark className="brand-logo" />
+        </Link>
+        <nav className="desktop-nav" aria-label="เมนูหลัก">{NAV.map(navLink)}</nav>
+        <div className="header-actions">
+          <button type="button" className="theme-toggle" onClick={onToggleTheme} aria-pressed={theme === 'dark'}
+                  aria-label={theme === 'dark' ? 'เปลี่ยนเป็นโหมดสว่าง' : 'เปลี่ยนเป็นโหมดมืด'} title={theme === 'dark' ? 'โหมดสว่าง' : 'โหมดมืด'}>
+            <Icon name={theme === 'dark' ? 'i-sun' : 'i-moon'} />
+          </button>
+          <a className="btn btn-primary" href="#download"><Download className="w-4 h-4" /> ดาวน์โหลด</a>
         </div>
+        <details className="mobile-menu">
+          <summary aria-label="เปิดเมนูหลัก"><Icon name="i-menu" /></summary>
+          <nav aria-label="เมนูมือถือ">
+            {NAV.map(navLink)}
+            <a href={MAP_URL}>เปิดแผนที่</a>
+          </nav>
+        </details>
       </div>
     </header>
   );
 }
 
 // ── Hero ────────────────────────────────────────────────────────────────────
-function Hero() {
+function Hero({ version }: { version: string | null }) {
   return (
-    <section className="relative pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.04]" style={{
-        backgroundImage: `linear-gradient(var(--tx) 1px, transparent 1px), linear-gradient(90deg, var(--tx) 1px, transparent 1px)`,
-        backgroundSize: '60px 60px',
-      }} />
-      <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-        <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--bg2)] border border-[var(--brd)] mb-6">
-            <Tag className="w-4 h-4 text-[var(--acc)]" />
-            <span className="text-sm text-[var(--tx2)]">ฟรี 100% · สำหรับ Windows</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-6">
-            แก้ไข <span className="text-[var(--land)]">PDF</span> และเอกสาร
-            <br />ได้ครบ จบในโปรแกรมเดียว
+    <section className="hero" aria-labelledby="hero-title">
+      <div className="wrap hero-grid">
+        <div className="hero-copy">
+          <div className="eyebrow"><span className="status-dot" />ฟรี 100% · สำหรับ Windows · โดย TNR Geoservice</div>
+          <h1 id="hero-title">
+            <span className="intro"><span className="latin">Bailan</span> · ใบลาน</span>
+            <em>แก้ไข <span className="latin">PDF</span></em>
+            <span className="last">และเอกสารได้ครบ<br />จบในโปรแกรมเดียว</span>
           </h1>
-          <p className="text-lg text-[var(--tx2)] mb-8 leading-relaxed">
-            TNR PDF Studio — โปรแกรมแก้ไขไฟล์ PDF บนเครื่องคุณ ลบ/แก้ข้อความบนสแกน OCR ไทย
-            ใส่ลายน้ำ ปกปิดข้อมูล รวม-แยกไฟล์ และแปลงเป็น Word ได้ฟรี ไม่ต้องอัปโหลดไฟล์ขึ้นเว็บ
+          <p className="hero-description">
+            โปรแกรมแก้ไขไฟล์ PDF บนเครื่องคุณ ลบ/แก้ข้อความบนสแกน OCR ไทย แปลงรูปถ่ายเป็นสแกน
+            ปกปิดข้อมูล รวม-แยกไฟล์ และแปลงเป็น Word ได้ฟรี ไม่ต้องอัปโหลดไฟล์ขึ้นเว็บ
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a href="#download"
-               className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[var(--acc)] text-[var(--bg)] rounded-xl text-base font-semibold hover:bg-[var(--acc2)] transition-all">
-              <Download className="w-5 h-5" /> ดาวน์โหลดฟรี
-            </a>
-            <a href="#features"
-               className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-[var(--brd)] text-[var(--tx)] rounded-xl text-base font-medium hover:bg-[var(--bg2)] transition-colors">
-              ดูฟีเจอร์ทั้งหมด
-            </a>
+          <div className="pdf-hero-actions">
+            <a className="btn btn-primary" href="#download"><Download className="w-5 h-5" /> ดาวน์โหลดฟรี</a>
+            <a className="btn btn-secondary" href="#features">ดูฟีเจอร์ทั้งหมด</a>
+          </div>
+          <div className="pdf-hero-meta">
+            <img src={ICON_SRC} alt="" width={40} height={40} />
+            <span><b>Bailan{version ? ` ${version}` : ''}</b>เดิมชื่อ TNR PDF Studio · อัพเดทในตัวโปรแกรม</span>
           </div>
         </div>
-
-        {/* ภาพหน้าจอโปรแกรม — โชว์ภาพจริงถ้ามี ไม่งั้น placeholder */}
         <Shot file={HERO_SHOT.file} caption={HERO_SHOT.caption} ratio={HERO_SHOT.ratio} />
+      </div>
+    </section>
+  );
+}
+
+// ── ที่มาของชื่อ ─────────────────────────────────────────────────────────────
+function NameStory() {
+  return (
+    <section className="section" style={{ paddingBottom: 0 }} aria-labelledby="story-title">
+      <div className="wrap">
+        <div className="pdf-story">
+          <img src={ICON_SRC} alt="โลโก้ Bailan" width={96} height={96} />
+          <div>
+            <div className="eyebrow">ทำไมชื่อ Bailan</div>
+            <h2 id="story-title">จากคัมภีร์ใบลาน สู่เอกสารดิจิทัล</h2>
+            <p>
+              ใบลานคือ “เอกสาร” ยุคแรกของไทย ที่ใช้จดบันทึกความรู้สำคัญสืบต่อกันมาหลายร้อยปี
+              Bailan จึงตั้งใจเป็นเครื่องมือดูแลเอกสารสำคัญของคุณในยุคนี้ — แก้ไขได้ ค้นหาได้ และปลอดภัยบนเครื่องของคุณเอง
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -153,56 +250,36 @@ function Hero() {
 // ── ช่องภาพ: โชว์ <img> ถ้ามีไฟล์ ไม่งั้นโชว์ placeholder dashed ──────────────────
 function Shot({ file, caption, ratio = '16 / 9', withCaption = false }: { file: string; caption: string; ratio?: string; withCaption?: boolean }) {
   const openZoom = useContext(ZoomCtx);
-  if (file) {
-    const src = `${SHOTS_DIR}/${file}`;
-    const img = (
-      <img
-        src={src} alt={caption} loading="lazy"
-        onClick={() => openZoom(src, caption)}
-        className="w-full rounded-2xl border border-[var(--brd)] bg-[var(--bg2)] object-cover shadow-lg cursor-zoom-in hover:opacity-90 hover:border-[var(--acc)]/40 transition-all"
-        style={{ aspectRatio: ratio }}
-      />
-    );
-    if (!withCaption) return img;
+  if (!file) {
     return (
-      <figure className="flex flex-col gap-3">
-        {img}
-        <figcaption className="text-sm text-[var(--tx2)] text-center px-2 leading-relaxed">{caption}</figcaption>
-      </figure>
+      <div className="pdf-shot-empty" style={{ aspectRatio: ratio }}>
+        <FileText className="w-10 h-10" />
+        <span>{caption}</span>
+        <small>เร็วๆ นี้</small>
+      </div>
     );
   }
+  const src = `${SHOTS_DIR}/${file}`;
+  const img = (
+    <img src={src} alt={caption} loading="lazy" onClick={() => openZoom(src, caption)}
+         className="pdf-shot" style={{ aspectRatio: ratio }} />
+  );
+  if (!withCaption) return img;
   return (
-    <div
-      className="w-full rounded-2xl border border-dashed border-[var(--brd)] bg-[var(--bg2)] flex flex-col items-center justify-center text-center p-6"
-      style={{ aspectRatio: ratio }}
-    >
-      <FileText className="w-10 h-10 text-[var(--txd)] mb-3" />
-      <span className="text-sm text-[var(--tx2)]">{caption}</span>
-      <span className="text-xs text-[var(--txd)] mt-1">เร็วๆ นี้</span>
-    </div>
+    <figure>
+      {img}
+      <figcaption>{caption}</figcaption>
+    </figure>
   );
 }
 
 // ── Lightbox: ดูภาพเต็มจอ (คลิกพื้นหลัง/ปุ่ม X/Esc เพื่อปิด) ────────────────────
 function Lightbox({ src, caption, onClose }: { src: string; caption: string; onClose: () => void }) {
   return (
-    <div
-      onClick={onClose}
-      role="dialog" aria-modal="true" aria-label={caption}
-      className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-8"
-    >
-      <button
-        onClick={onClose} aria-label="ปิด"
-        className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
-      >
-        <X className="w-5 h-5" />
-      </button>
-      <img
-        src={src} alt={caption}
-        onClick={(e) => e.stopPropagation()}
-        className="max-w-full max-h-[85vh] rounded-xl shadow-2xl object-contain cursor-default"
-      />
-      <p className="mt-4 text-sm text-white/80 text-center max-w-2xl">{caption}</p>
+    <div onClick={onClose} role="dialog" aria-modal="true" aria-label={caption} className="pdf-lightbox">
+      <button onClick={onClose} aria-label="ปิด"><X className="w-5 h-5" /></button>
+      <img src={src} alt={caption} onClick={(e) => e.stopPropagation()} />
+      <p>{caption}</p>
     </div>
   );
 }
@@ -210,36 +287,30 @@ function Lightbox({ src, caption, onClose }: { src: string; caption: string; onC
 // ── Features ────────────────────────────────────────────────────────────────
 function Features() {
   return (
-    <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg2)]">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">เครื่องมือครบสำหรับงานเอกสาร</h2>
-          <p className="text-[var(--tx2)] max-w-2xl mx-auto">
-            ออกแบบมาเพื่อคนทำงานเอกสาร เอกสารสำคัญ และเอกสารราชการ — ทำงานบนเครื่องคุณ ข้อมูลไม่รั่ว
-          </p>
+    <section id="features" className="section" aria-labelledby="features-title">
+      <div className="wrap">
+        <div className="section-heading">
+          <div>
+            <div className="eyebrow">ฟีเจอร์</div>
+            <h2 id="features-title">เครื่องมือครบสำหรับงานเอกสาร</h2>
+          </div>
+          <p>ออกแบบมาเพื่อคนทำงานเอกสาร เอกสารสำคัญ และเอกสารราชการ — ทำงานบนเครื่องคุณ ข้อมูลไม่รั่ว</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {FEATURES.map((f, i) => (
-            <div key={i} className="p-5 bg-[var(--bg)] rounded-2xl border border-[var(--brd)] hover:border-[var(--acc)]/40 transition-colors">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: f.color + '1a' }}>
-                <f.icon className="w-5 h-5" style={{ color: f.color }} />
-              </div>
-              <h3 className="text-base font-semibold mb-2">{f.title}</h3>
-              <p className="text-sm text-[var(--tx2)] leading-relaxed">{f.desc}</p>
+        <div className="pdf-features">
+          {FEATURES.map((f) => (
+            <div key={f.title} className="pdf-card">
+              <div className="pdf-card-icon"><f.icon className="w-5 h-5" /></div>
+              <h3>{f.title}{'isNew' in f && f.isNew && <span className="new">ใหม่</span>}</h3>
+              <p>{f.desc}</p>
             </div>
           ))}
         </div>
 
-        {/* แกลเลอรีภาพตัวอย่างการใช้งาน (จาก GALLERY_SHOTS) */}
-        <div className="mt-14">
-          <h3 className="text-center text-xl font-semibold mb-2">ตัวอย่างการใช้งานจริง</h3>
-          <p className="text-center text-sm text-[var(--tx2)] mb-8">คลิกที่ภาพเพื่อดูขนาดเต็ม</p>
-          <div className="grid sm:grid-cols-2 gap-x-6 gap-y-8 max-w-5xl mx-auto">
-            {GALLERY_SHOTS.map((s, i) => (
-              <Shot key={i} file={s.file} caption={s.caption} ratio="16 / 10" withCaption />
-            ))}
-          </div>
+        <div className="pdf-gallery">
+          {GALLERY_SHOTS.map((s) => (
+            <Shot key={s.file} file={s.file} caption={s.caption} ratio="16 / 10" withCaption />
+          ))}
         </div>
       </div>
     </section>
@@ -249,30 +320,29 @@ function Features() {
 // ── วิธีใช้งาน (วิดีโอ) ───────────────────────────────────────────────────────
 function HowToVideo() {
   return (
-    <section id="how-to" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-3">วิธีใช้งาน</h2>
-          <p className="text-[var(--tx2)]">ดูคลิปสั้นๆ แล้วเริ่มใช้ได้เลย — ตั้งแต่เปิดไฟล์จนส่งออก</p>
+    <section id="how-to" className="section" style={{ paddingTop: 0 }} aria-labelledby="howto-title">
+      <div className="wrap" style={{ maxWidth: 960 }}>
+        <div className="section-heading">
+          <div>
+            <div className="eyebrow">วิธีใช้งาน</div>
+            <h2 id="howto-title">ดูคลิปสั้นๆ แล้วเริ่มใช้ได้เลย</h2>
+          </div>
+          <p>ตั้งแต่เปิดไฟล์ แก้ไข จนส่งออก</p>
         </div>
         {VIDEO_ID ? (
-          <div className="relative rounded-2xl overflow-hidden border border-[var(--brd)] shadow-lg" style={{ aspectRatio: '16 / 9' }}>
+          <div className="pdf-video">
             <iframe
-              className="absolute inset-0 w-full h-full"
               src={`https://www.youtube.com/embed/${VIDEO_ID}`}
-              title="วิธีใช้งาน TNR PDF Studio"
+              title="วิธีใช้งาน Bailan"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             />
           </div>
         ) : (
-          <div
-            className="w-full rounded-2xl border border-dashed border-[var(--brd)] bg-[var(--bg2)] flex flex-col items-center justify-center text-center p-6"
-            style={{ aspectRatio: '16 / 9' }}
-          >
-            <PlayCircle className="w-12 h-12 text-[var(--txd)] mb-3" />
-            <span className="text-sm text-[var(--tx2)]">วิดีโอวิธีใช้งาน</span>
-            <span className="text-xs text-[var(--txd)] mt-1">เร็วๆ นี้</span>
+          <div className="pdf-shot-empty" style={{ aspectRatio: '16 / 9' }}>
+            <PlayCircle className="w-12 h-12" />
+            <span>วิดีโอวิธีใช้งาน</span>
+            <small>เร็วๆ นี้</small>
           </div>
         )}
       </div>
@@ -281,7 +351,7 @@ function HowToVideo() {
 }
 
 // ── Download (ดาวน์โหลดตรง ไม่ต้องล็อกอิน) ───────────────────────────────────
-function DownloadSection() {
+function DownloadSection({ version }: { version: string | null }) {
   const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
@@ -302,76 +372,68 @@ function DownloadSection() {
   }, []);
 
   return (
-    <section id="download" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-3">ดาวน์โหลดฟรี</h2>
-          <p className="text-[var(--tx2)]">
-            กดดาวน์โหลดได้เลย ไม่ต้องสมัครสมาชิก — โปรแกรมทำงานบนเครื่องคุณ ข้อมูลไม่อัปโหลดขึ้นเว็บ
-          </p>
-        </div>
-
-        <div className="bg-[var(--bg2)] border border-[var(--brd)] rounded-2xl p-6 sm:p-8 text-center">
-          <a
-            href={DOWNLOAD_URL}
-            className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-[var(--acc)] text-[var(--bg)] rounded-xl text-lg font-semibold hover:bg-[var(--acc2)] transition-all"
-          >
-            <Download className="w-5 h-5" />
-            ดาวน์โหลด TNR PDF Studio (.exe)
+    <section id="download" className="section" style={{ paddingTop: 0 }} aria-labelledby="download-title">
+      <div className="wrap">
+        <div className="pdf-download">
+          <img src={ICON_SRC} alt="" width={72} height={72} />
+          <h2 id="download-title">ดาวน์โหลด Bailan ฟรี</h2>
+          <p>กดดาวน์โหลดได้เลย ไม่ต้องสมัครสมาชิก — โปรแกรมทำงานบนเครื่องคุณ ข้อมูลไม่อัปโหลดขึ้นเว็บ</p>
+          <a className="btn btn-primary" href={DOWNLOAD_URL}>
+            <Download className="w-5 h-5" /> ดาวน์โหลด Bailan{version ? ` ${version}` : ''} (.exe)
           </a>
           {count != null && (
-            <p className="text-sm text-[var(--tx2)] mt-4 flex items-center justify-center gap-1.5">
-              <Download className="w-4 h-4 text-[var(--acc)]" />
-              ดาวน์โหลดไปแล้ว <span className="font-semibold text-[var(--tx)]">{count.toLocaleString('th-TH')}</span> ครั้ง
-            </p>
+            <div className="pdf-download-count">
+              <Download className="w-4 h-4" />
+              ดาวน์โหลดไปแล้ว <b>{count.toLocaleString('th-TH')}</b> ครั้ง
+            </div>
           )}
-          <p className="text-xs text-[var(--txd)] mt-3">Windows 10/11 · ขนาดประมาณ 120 MB · ฟรีไม่มีค่าใช้จ่าย</p>
+          <small>Windows 10/11 · ขนาดประมาณ 190 MB · ฟรีไม่มีค่าใช้จ่าย</small>
         </div>
       </div>
     </section>
   );
 }
 
-// ── CTA back to marketplace ─────────────────────────────────────────────────
+// ── CTA back to marketplace (สไตล์ final-cta ของหน้าแรก) ─────────────────────
 function MarketplaceCTA() {
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-[var(--bg2)]">
-      <div className="max-w-4xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--land)]/10 border border-[var(--land)]/30 mb-4">
-          <Map className="w-4 h-4 text-[var(--land)]" />
-          <span className="text-sm text-[var(--land)]">TNR MapHub Marketplace</span>
-        </div>
-        <h2 className="text-2xl sm:text-3xl font-bold mb-4">มีที่ดินอยากขาย? ลงประกาศฟรีบน TNR MapHub</h2>
-        <p className="text-[var(--tx2)] mb-8 max-w-2xl mx-auto">
-          แพลตฟอร์มซื้อขายที่ดินพร้อมระบบแผนที่ GIS — ลงประกาศขายที่ดินฟรี ไม่จำกัด เจ้าของขายเอง
-          ค้นหาทำเลดี ดูพิกัด ผังเมือง โฉนด และเปรียบเทียบราคาในที่เดียว
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href={MAP_URL} target="_blank" rel="noopener noreferrer"
-             className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-[var(--acc)] text-[var(--bg)] rounded-xl text-base font-semibold hover:bg-[var(--acc2)] transition-all">
-            <Tag className="w-5 h-5" /> ลงประกาศขายที่ดินฟรี <ArrowRight className="w-4 h-4" />
-          </a>
-          <a href={MAP_URL} target="_blank" rel="noopener noreferrer"
-             className="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-[var(--brd)] text-[var(--tx)] rounded-xl text-base font-medium hover:bg-[var(--bg)] transition-colors">
-            <Map className="w-5 h-5" /> เปิดแผนที่ค้นหาที่ดิน
-          </a>
+    <section className="final-section" aria-labelledby="final-title">
+      <div className="wrap">
+        <div className="final-cta">
+          <div>
+            <div className="eyebrow">TNR MAPHUB MARKETPLACE</div>
+            <h2 id="final-title">มีที่ดินอยากขาย? ลงประกาศฟรีบน TNR MapHub</h2>
+            <p>แพลตฟอร์มซื้อขายที่ดินพร้อมระบบแผนที่ GIS — เจ้าของขายเอง ดูพิกัด ผังเมือง โฉนด และเปรียบเทียบราคาในที่เดียว</p>
+          </div>
+          <a className="btn" href={MAP_URL}>เปิดแผนที่ TNR MapHub <Icon name="i-arrow" /></a>
         </div>
       </div>
     </section>
   );
 }
 
-// ── Footer ──────────────────────────────────────────────────────────────────
+// ── Footer (เหมือนหน้าแรก) ──────────────────────────────────────────────────
 function Footer() {
   return (
-    <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t border-[var(--brd)]">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-        <Link to="/" className="flex items-center gap-2">
-          <Map className="w-5 h-5 text-[var(--acc)]" />
-          <span className="font-semibold">TNR MapHub</span>
-          <span className="text-xs text-[var(--tx2)] hidden sm:inline">— PDF Studio</span>
-        </Link>
-        <p className="text-sm text-[var(--tx2)]">© {new Date().getFullYear()} TNR Geoservice. สงวนลิขสิทธิ์</p>
+    <footer className="footer">
+      <div className="wrap">
+        <div className="footer-main">
+          <Link className="brand" to="/" aria-label="TNR MapHub หน้าแรก">
+            <MapHubWordmark className="brand-logo" />
+          </Link>
+          <nav className="footer-links" aria-label="ลิงก์ท้ายหน้า">
+            <Link to="/articles">บทความ</Link>
+            <Link to="/subdivisionplan">ทำผังแบ่งแปลง</Link>
+            <Link to="/tnrpdfstudio">Bailan</Link>
+            <a href={LINE_URL} target="_blank" rel="noopener noreferrer" aria-label="ติดต่อ TNR Geoservice ทาง LINE">LINE <Icon name="i-external" /></a>
+            <a href={FB_URL} target="_blank" rel="noopener noreferrer" aria-label="TNR Geoservice บน Facebook">Facebook <Icon name="i-external" /></a>
+            <a href={MAP_URL}>เปิดแผนที่ <Icon name="i-arrow" /></a>
+          </nav>
+        </div>
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} TNR Geoservice</span>
+          <span><Icon name="i-target" />DESIGNED AROUND LAND. BUILT AROUND YOU.</span>
+        </div>
       </div>
     </footer>
   );
