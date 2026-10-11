@@ -8,7 +8,7 @@ import HeroMap from './HeroMap'
 import Featured5 from './Featured5'
 import Tools from './Tools'
 import LatestArticles from './LatestArticles'
-import { FEATURE_DISCOVER, GEO_SYMBOL } from './svgArt'
+import { FEATURE_DISCOVER } from './svgArt'
 import './home.base.css'
 import './home.extra.css'
 import './home.dark.css'
@@ -408,7 +408,7 @@ export default function HomeV5() {
         <section className="about-section" id="about" aria-labelledby="about-title">
           <div className="wrap about-grid reveal">
             <div className="about-identity">
-              <div className="geo-symbol" aria-hidden="true" dangerouslySetInnerHTML={{ __html: GEO_SYMBOL }} />
+              <div className="geo-symbol has-logo"><img src="/brand/tnr-geoservice-icon.svg" alt="โลโก้ TNR Geoservice" width={100} height={100} /></div>
               <div>
                 <div className="eyebrow">BUILT ON SPATIAL EXPERTISE</div>
                 <h2 id="about-title">เกี่ยวกับ<br /><span className="latin">TNR Geoservice</span></h2>

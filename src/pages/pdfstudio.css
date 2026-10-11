@@ -1,5 +1,4 @@
 /* pdfstudio.css — หน้า /tnrpdfstudio (Bailan) ใช้ token/คลาสของหน้าแรก (.v5) เพิ่มเฉพาะส่วนที่หน้าแรกไม่มี */
-.v5 .desktop-nav a.active{color:var(--green);font-weight:600}
 
 /* hero */
 .v5 .pdf-hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}

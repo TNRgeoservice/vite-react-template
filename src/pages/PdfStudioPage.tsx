@@ -5,16 +5,12 @@
 // flow: intro → ที่มาชื่อ → ฟีเจอร์ → วิดีโอ → ปุ่มดาวน์โหลดตรง (ไม่ต้องล็อกอิน) → CTA marketplace
 // ════════════════════════════════════════
 import { useEffect, useState, createContext, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import {
   FileText, Download, ShieldCheck, ScanLine, Eraser, Camera,
   Layers, Combine, Languages, X, PlayCircle,
 } from 'lucide-react';
 import { Icon, Sprite } from '../home/Icon';
-import { MapHubWordmark } from '../components/ui/MapHubWordmark';
-import '../home/home.base.css';
-import '../home/home.extra.css';
-import '../home/home.dark.css';
+import { SiteHeader, SiteFooter, LineFab, useSiteTheme, MAP_URL } from '../components/SiteChrome';
 import './pdfstudio.css';
 
 // ── ตั้งค่า ────────────────────────────────────────────────────────────────
@@ -25,32 +21,7 @@ const GH_REPO = 'TNRgeoservice/vite-react-template';   // ใช้ดึงย�
 // ยอดสะสมจาก release ที่ถูกลบไปแล้ว (GitHub ลบ asset = ยอดหายจาก API ถาวร) — บวกฐานนี้กับยอดจริง
 // ⚠️ รอบหน้าอัปเวอร์ชัน: สร้าง release ใหม่โดย "ไม่ลบอันเก่า" ยอดจะสะสมเองไม่ต้องมาบวกเพิ่มตรงนี้
 const DOWNLOAD_BASELINE = 16;
-const MAP_URL = 'https://map.tnrmaphub.com';
-const FB_URL = 'https://www.facebook.com/TNRGEOSERVICE';
-const LINE_URL = 'https://line.me/ti/p/jkBzxcJVV0';
-const FONTS_HREF =
-  'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Inter:wght@400;500;600;650;700;800&family=Mitr:wght@400;500&display=swap';
 const ICON_SRC = '/pdfstudio/bailan-icon.png';
-
-// ธีมใช้ key เดียวกับหน้าแรก (HomeV5) ให้สลับที่ไหนก็ตามกัน
-type Theme = 'light' | 'dark';
-const THEME_KEY = 'tnr-home-theme';
-const THEME_BG: Record<Theme, string> = { light: '#f6f8fb', dark: '#0d1520' };
-function initialTheme(): Theme {
-  try {
-    const saved = localStorage.getItem(THEME_KEY);
-    if (saved === 'light' || saved === 'dark') return saved;
-  } catch { /* ใช้ค่าอุปกรณ์แทน */ }
-  return typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
-const NAV = [
-  { to: '/articles', label: 'บทความ' },
-  { to: '/subdivisionplan', label: 'ทำผังแบ่งแปลง' },
-  { to: '/tnrpdfstudio', label: 'Bailan', badge: 'ฟรี' },
-  { href: '/#tools', label: 'เครื่องมือคำนวณ' },
-  { href: '/#sellers', label: 'ลงประกาศฟรี' },
-] as const;
 
 const FEATURES = [
   { icon: Eraser,      title: 'ลบ/แก้ข้อความบนสแกน',  desc: 'ครอบเนียน (smart whiteout) แล้วพิมพ์ทับ — กลมกลืนกับงานเอกสารสแกน เอกสารราชการ' },
@@ -82,37 +53,17 @@ const ZoomCtx = createContext<(src: string, caption: string) => void>(() => {});
 
 export function PdfStudioPage() {
   const [zoom, setZoom] = useState<{ src: string; caption: string } | null>(null);
-  const [theme, setTheme] = useState<Theme>(initialTheme);
+  const { theme, toggleTheme } = useSiteTheme();
   const [version, setVersion] = useState<string | null>(null);
 
   useEffect(() => {
     document.title = 'Bailan — โปรแกรมแก้ PDF และเอกสาร ฟรี | TNR MapHub';
-    // ฟอนต์ชุดเดียวกับหน้าแรก
-    if (!document.querySelector('link[data-home-fonts]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = FONTS_HREF;
-      link.dataset.homeFonts = '';
-      document.head.appendChild(link);
-    }
     // เลขเวอร์ชันล่าสุด (ไฟล์เดียวกับที่โปรแกรมใช้เช็กอัพเดท)
     fetch('/tnrpdfstudio/version.json')
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((v) => setVersion(v.version))
       .catch(() => {});
   }, []);
-
-  // สีพื้นหลังหน้า + theme-color ตามธีม (คืนค่าเมื่อออกจากหน้า)
-  useEffect(() => {
-    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-    const prev = { bg: document.body.style.background, tc: meta?.content };
-    document.body.style.background = THEME_BG[theme];
-    if (meta) meta.content = THEME_BG[theme];
-    return () => {
-      document.body.style.background = prev.bg;
-      if (meta && prev.tc !== undefined) meta.content = prev.tc;
-    };
-  }, [theme]);
 
   // ตอนเปิดภาพเต็มจอ: ล็อกสกรอลล์พื้นหลัง + ปิดด้วย Esc
   useEffect(() => {
@@ -126,18 +77,13 @@ export function PdfStudioPage() {
     };
   }, [zoom]);
 
-  const toggleTheme = () => {
-    const next: Theme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
-    try { localStorage.setItem(THEME_KEY, next); } catch { /* ignore */ }
-  };
-
   return (
     <ZoomCtx.Provider value={(src, caption) => setZoom({ src, caption })}>
       <div className="v5" data-theme={theme}>
         <Sprite />
         <a className="skip" href="#main">ข้ามไปยังเนื้อหา</a>
-        <Header theme={theme} onToggleTheme={toggleTheme} />
+        <SiteHeader theme={theme} onToggleTheme={toggleTheme} active="/tnrpdfstudio"
+                    cta={<a className="btn btn-primary" href="#download"><Download className="w-4 h-4" /> ดาวน์โหลด</a>} />
         <main id="main">
           <Hero version={version} />
           <NameStory />
@@ -146,52 +92,11 @@ export function PdfStudioPage() {
           <DownloadSection version={version} />
           <MarketplaceCTA />
         </main>
-        <Footer />
-        <a className="line-fab" href={LINE_URL} target="_blank" rel="noopener noreferrer" aria-label="ติดต่อ TNR Geoservice ทาง LINE">
-          <Icon name="i-chat" /><span>LINE</span>
-        </a>
+        <SiteFooter />
+        <LineFab />
       </div>
       {zoom && <Lightbox src={zoom.src} caption={zoom.caption} onClose={() => setZoom(null)} />}
     </ZoomCtx.Provider>
-  );
-}
-
-// ── Header (เหมือนหน้าแรก) ──────────────────────────────────────────────────
-function Header({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: () => void }) {
-  const navLink = (n: (typeof NAV)[number]) => {
-    const inner = (
-      <>
-        {n.label === 'Bailan' ? <span className="latin">Bailan</span> : n.label}
-        {'badge' in n && <span className="new">{n.badge}</span>}
-      </>
-    );
-    return 'to' in n
-      ? <Link key={n.label} to={n.to} className={n.to === '/tnrpdfstudio' ? 'active' : undefined}>{inner}</Link>
-      : <a key={n.label} href={n.href}>{inner}</a>;
-  };
-  return (
-    <header className="site-header">
-      <div className="wrap header-inner">
-        <Link className="brand" to="/" aria-label="TNR MapHub หน้าแรก">
-          <MapHubWordmark className="brand-logo" />
-        </Link>
-        <nav className="desktop-nav" aria-label="เมนูหลัก">{NAV.map(navLink)}</nav>
-        <div className="header-actions">
-          <button type="button" className="theme-toggle" onClick={onToggleTheme} aria-pressed={theme === 'dark'}
-                  aria-label={theme === 'dark' ? 'เปลี่ยนเป็นโหมดสว่าง' : 'เปลี่ยนเป็นโหมดมืด'} title={theme === 'dark' ? 'โหมดสว่าง' : 'โหมดมืด'}>
-            <Icon name={theme === 'dark' ? 'i-sun' : 'i-moon'} />
-          </button>
-          <a className="btn btn-primary" href="#download"><Download className="w-4 h-4" /> ดาวน์โหลด</a>
-        </div>
-        <details className="mobile-menu">
-          <summary aria-label="เปิดเมนูหลัก"><Icon name="i-menu" /></summary>
-          <nav aria-label="เมนูมือถือ">
-            {NAV.map(navLink)}
-            <a href={MAP_URL}>เปิดแผนที่</a>
-          </nav>
-        </details>
-      </div>
-    </header>
   );
 }
 
@@ -409,32 +314,5 @@ function MarketplaceCTA() {
         </div>
       </div>
     </section>
-  );
-}
-
-// ── Footer (เหมือนหน้าแรก) ──────────────────────────────────────────────────
-function Footer() {
-  return (
-    <footer className="footer">
-      <div className="wrap">
-        <div className="footer-main">
-          <Link className="brand" to="/" aria-label="TNR MapHub หน้าแรก">
-            <MapHubWordmark className="brand-logo" />
-          </Link>
-          <nav className="footer-links" aria-label="ลิงก์ท้ายหน้า">
-            <Link to="/articles">บทความ</Link>
-            <Link to="/subdivisionplan">ทำผังแบ่งแปลง</Link>
-            <Link to="/tnrpdfstudio">Bailan</Link>
-            <a href={LINE_URL} target="_blank" rel="noopener noreferrer" aria-label="ติดต่อ TNR Geoservice ทาง LINE">LINE <Icon name="i-external" /></a>
-            <a href={FB_URL} target="_blank" rel="noopener noreferrer" aria-label="TNR Geoservice บน Facebook">Facebook <Icon name="i-external" /></a>
-            <a href={MAP_URL}>เปิดแผนที่ <Icon name="i-arrow" /></a>
-          </nav>
-        </div>
-        <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} TNR Geoservice</span>
-          <span><Icon name="i-target" />DESIGNED AROUND LAND. BUILT AROUND YOU.</span>
-        </div>
-      </div>
-    </footer>
   );
 }

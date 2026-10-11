@@ -1,10 +1,16 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
-  Map, MapPin, Layers, ArrowRight, ScanLine, Hash, Maximize2,
-  FileImage, FileText, PenTool, ClipboardList, SendHorizontal, Plus, Minus, X,
+  MapPin, Layers, ArrowRight, ScanLine, Hash, Maximize2,
+  FileImage, FileText, PenTool, SendHorizontal, Plus, Minus, X,
 } from 'lucide-react'
+import { Sprite } from '../home/Icon'
+import { SiteHeader, SiteFooter, LineFab, useSiteTheme, FB_URL } from '../components/SiteChrome'
+import './subdivision.css'
+
+// โลโก้ TNR Geoservice (เจ้าของบริการนี้)
+const GEO_LOGO = '/brand/tnr-geoservice-icon.svg'
 
 // ── shared motion variants (match App.tsx) ──
 const fadeInUp = {
@@ -28,8 +34,6 @@ function FacebookIcon({ className }: { className?: string }) {
     </svg>
   )
 }
-
-const FB_URL = 'https://www.facebook.com/TNRGEOSERVICE'
 
 // ── accuracy bar — domain 0–100%, fills from left so higher = fuller ──
 // solid layer = guaranteed floor (min) · faded layer = up to best case (max)
@@ -179,8 +183,7 @@ function hideOnError(e: React.SyntheticEvent<HTMLImageElement>) {
 
 export function SubdivisionPlanPage() {
   const reduce = useReducedMotion()
-  const { scrollYProgress } = useScroll()
-  const headerBg = useTransform(scrollYProgress, [0, 0.08], ['rgba(13, 21, 32, 0)', 'rgba(13, 21, 32, 0.95)'])
+  const { theme, toggleTheme } = useSiteTheme()
   const [activeStep, setActiveStep] = useState(0)
   const [activeFmt, setActiveFmt] = useState(0)
   const [openFaq, setOpenFaq] = useState<number | null>(0)
@@ -207,42 +210,22 @@ export function SubdivisionPlanPage() {
   }, [lightbox])
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--tx)]">
-      {/* ── Header ── */}
-      <motion.header
-        style={{ backgroundColor: headerBg }}
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-[var(--brd)]/50"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-2">
-              <span className="w-9 h-9 rounded-lg bg-[var(--acc)]/10 flex items-center justify-center">
-                <Map className="w-5 h-5 text-[var(--acc)]" />
-              </span>
-              <span className="text-lg font-semibold tracking-tight">TNR MapHub</span>
-            </Link>
-            <nav className="flex items-center gap-4 sm:gap-7">
-              <Link to="/" className="text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">หน้าหลัก</Link>
-              <Link to="/articles" className="hidden sm:inline text-sm text-[var(--tx2)] hover:text-[var(--tx)] transition-colors">บทความ</Link>
-              <a
-                href={FB_URL} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--acc)] text-[var(--bg)] rounded-lg text-sm font-semibold hover:bg-[var(--acc2)] transition-colors"
-              >
-                <FacebookIcon className="w-4 h-4" />
-                ปรึกษาโปรเจกต์
-              </a>
-            </nav>
-          </div>
-        </div>
-        {/* scroll progress */}
-        <motion.div
-          style={{ scaleX: scrollYProgress }}
-          className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--acc)] origin-left"
+    <div className="sub-page min-h-screen bg-[var(--bg)] text-[var(--tx)]" data-theme={theme}>
+      {/* ── Header (ชุดเดียวกับหน้าแรก) ── */}
+      <div className="v5 v5-chrome v5-top" data-theme={theme}>
+        <Sprite />
+        <SiteHeader
+          theme={theme} onToggleTheme={toggleTheme} active="/subdivisionplan"
+          cta={
+            <a className="btn btn-primary" href={FB_URL} target="_blank" rel="noopener noreferrer">
+              <FacebookIcon className="w-4 h-4" /> ปรึกษาโปรเจกต์
+            </a>
+          }
         />
-      </motion.header>
+      </div>
 
       {/* ── Hero ── */}
-      <section className="relative pt-28 pb-16 sm:pt-32 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="sub-hero relative pt-12 pb-16 sm:pt-16 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <motion.div
           animate={reduce ? undefined : { opacity: [0.25, 0.4, 0.25] }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
@@ -254,7 +237,7 @@ export function SubdivisionPlanPage() {
               variants={fadeInUp}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--bg2)] border border-[var(--brd)] mb-6"
             >
-              <Layers className="w-4 h-4 text-[var(--acc)]" />
+              <img src={GEO_LOGO} alt="" width={22} height={22} className="w-[22px] h-[22px] rounded-md" />
               <span className="text-sm text-[var(--tx2)]">บริการโดย TNR GEOSERVICE</span>
             </motion.div>
             <motion.h1
@@ -704,12 +687,11 @@ export function SubdivisionPlanPage() {
           variants={staggerContainer}
           className="max-w-3xl mx-auto text-center rounded-3xl border border-[var(--brd)] bg-[var(--bg2)] px-6 py-12 sm:px-10 sm:py-14"
         >
-          <motion.div
+          <motion.img
             variants={scaleIn}
-            className="inline-flex w-14 h-14 rounded-2xl bg-[var(--acc)]/12 items-center justify-center mb-5"
-          >
-            <ClipboardList className="w-7 h-7 text-[var(--acc)]" />
-          </motion.div>
+            src={GEO_LOGO} alt="โลโก้ TNR Geoservice" width={72} height={72}
+            className="inline-block w-[72px] h-[72px] rounded-2xl mb-5"
+          />
           <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl font-bold mb-3">
             พร้อมทำผังแบ่งแปลงของคุณแล้วหรือยัง
           </motion.h2>
@@ -728,22 +710,11 @@ export function SubdivisionPlanPage() {
         </motion.div>
       </section>
 
-      {/* ── Footer ── */}
-      <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t border-[var(--brd)]">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Map className="w-5 h-5 text-[var(--acc)]" />
-            <span className="font-semibold">TNR MapHub</span>
-            <span className="text-xs text-[var(--tx2)] hidden sm:inline">— รับทำผังแบ่งแปลงที่ดิน</span>
-          </div>
-          <div className="flex items-center gap-4 text-sm text-[var(--tx2)]">
-            <Link to="/" className="hover:text-[var(--acc)] transition-colors">หน้าหลัก</Link>
-            <Link to="/articles" className="hover:text-[var(--acc)] transition-colors">บทความ</Link>
-            <a href={FB_URL} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--acc)] transition-colors">Facebook</a>
-            <span>© {new Date().getFullYear()} TNR Geoservice</span>
-          </div>
-        </div>
-      </footer>
+      {/* ── Footer (ชุดเดียวกับหน้าแรก) ── */}
+      <div className="v5 v5-chrome" data-theme={theme}>
+        <SiteFooter />
+        <LineFab />
+      </div>
 
       {/* ── Lightbox ── */}
       {lightbox !== null && (

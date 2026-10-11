@@ -1,0 +1,29 @@
+/* subdivision.css — หน้า /subdivisionplan: เปลี่ยน token สีเดิม (ธีมมืด GIS ใน index.css) เป็นพาเลตต์ของหน้าแรก (.v5)
+   เนื้อหายังใช้ Tailwind + var(--bg/--tx/--acc...) เดิม — แค่ map ค่าใหม่ให้ตรงหน้าแรก ทั้งโหมดสว่าง/มืด */
+.sub-page{
+  --bg:#f6f8fb; --bg2:#ffffff; --bg3:#eef5f1;
+  --tx:#0b1220; --tx2:#536273; --txd:#94a3b8;
+  --brd:#e3e8ef;
+  --acc:#047857; --acc2:#065f46;
+  --land:#2563eb; --road:#d97706; --poly:#7c3aed;
+  font-family:'IBM Plex Sans Thai','Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.sub-page[data-theme=dark]{
+  color-scheme:dark;
+  --bg:#0d1520; --bg2:#111c2b; --bg3:#18263a;
+  --tx:#e1e7f5; --tx2:#9caec4; --txd:#5d7088;
+  --brd:#222b38;
+  --acc:#61d1b1; --acc2:#4fbf9f;
+  --land:#6b9cf0; --road:#f0b45a; --poly:#b79cf5;
+}
+/* หัวข้อใช้ Mitr น้ำหนักปกติแบบหน้าแรก */
+.sub-page :is(h1,h2){font-family:'Mitr',sans-serif;font-weight:400}
+
+/* hero: พื้นจุดตาราง + แสงเขียวมุมขวาแบบหน้าแรก */
+.sub-page .sub-hero{background:radial-gradient(ellipse at 84% 20%,#e6f0e9 0,transparent 47%),radial-gradient(#b4c4be6b .7px,transparent .7px);background-size:auto,20px 20px}
+.sub-page[data-theme=dark] .sub-hero{background:radial-gradient(ellipse at 84% 20%,#213527 0,transparent 47%),radial-gradient(#3e58786b .7px,transparent .7px);background-size:auto,20px 20px}
+
+/* header/footer ของ .v5 ถูกห่อแยก — ปิด min-height/พื้นหลังเต็มจอของ .v5 และให้ header ติดบน */
+.sub-page .v5-chrome{min-height:0;background:transparent}
+.sub-page .v5-top{position:sticky;top:0;z-index:50}

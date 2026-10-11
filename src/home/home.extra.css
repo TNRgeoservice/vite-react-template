@@ -168,3 +168,7 @@
 .v5 .footer-links a{white-space:nowrap}
 @media(max-width:760px){.v5 .footer{padding-bottom:78px}}
 .v5 .brand-logo{height:30px;width:auto}.v5 .footer .brand-logo{height:24px}@media(max-width:560px){.v5 .brand-logo{height:24px}}
+
+/* โลโก้ TNR Geoservice ในส่วนเกี่ยวกับ (แทนสัญลักษณ์ GEO_SYMBOL เดิม) */
+.v5 .geo-symbol.has-logo{background:none;border:0;overflow:hidden}
+.v5 .geo-symbol.has-logo img{width:100%;height:100%;display:block}
