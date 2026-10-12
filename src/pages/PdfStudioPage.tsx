@@ -45,7 +45,9 @@ const GALLERY_SHOTS = [
   { file: 'ocr-word.png', caption: 'OCR ไทย + ส่งออกเป็น Word' },
 ];
 
-// วิดีโอวิธีใช้งาน — YouTube playlist id (ส่วนหลัง list= ในลิงก์) คลิปเป็น Shorts แนวตั้ง. ว่าง = โชว์ placeholder "เร็วๆ นี้"
+// วิดีโอวิธีใช้งาน — คลิปแรก + playlist id (Shorts แนวตั้ง). embed/videoseries เล่น Shorts ไม่ได้ ("Video unavailable") ต้องระบุคลิปแรกด้วย
+// ว่าง = โชว์ placeholder "เร็วๆ นี้"
+const VIDEO_FIRST_ID = 'RovW8sp8QNw';
 const VIDEO_PLAYLIST_ID = 'PLe-0y5veh5K8';
 
 // กดภาพ → เปิดดูเต็มจอ (lightbox) ; ส่ง opener ผ่าน context เลี่ยง prop drilling
@@ -234,10 +236,10 @@ function HowToVideo() {
           </div>
           <p>ตั้งแต่เปิดไฟล์ แก้ไข จนส่งออก</p>
         </div>
-        {VIDEO_PLAYLIST_ID ? (
+        {VIDEO_FIRST_ID ? (
           <div className="pdf-video" style={{ aspectRatio: '9 / 16', width: '100%', maxWidth: 360, marginInline: 'auto' }}>
             <iframe
-              src={`https://www.youtube.com/embed/videoseries?list=${VIDEO_PLAYLIST_ID}`}
+              src={`https://www.youtube.com/embed/${VIDEO_FIRST_ID}?list=${VIDEO_PLAYLIST_ID}`}
               title="วิธีใช้งาน Bailan"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
