@@ -4,7 +4,7 @@
 // ธีม/คลาสใช้ชุดเดียวกับหน้าแรก (.v5 "Daylight Precision") + ธีมสว่าง/มืดจำค่าร่วมกับหน้าแรก
 // flow: intro → ที่มาชื่อ → ฟีเจอร์ → วิดีโอ → ปุ่มดาวน์โหลดตรง (ไม่ต้องล็อกอิน) → CTA marketplace
 // ════════════════════════════════════════
-import { useEffect, useState, createContext, useContext } from 'react';
+import { useEffect, useRef, useState, createContext, useContext } from 'react';
 import {
   FileText, Download, ShieldCheck, ScanLine, Eraser, Camera,
   Layers, Combine, Languages, X, PlayCircle,
@@ -45,10 +45,13 @@ const GALLERY_SHOTS = [
   { file: 'ocr-word.png', caption: 'OCR ไทย + ส่งออกเป็น Word' },
 ];
 
-// วิดีโอวิธีใช้งาน — คลิปแรก + playlist id (Shorts แนวตั้ง). embed/videoseries เล่น Shorts ไม่ได้ ("Video unavailable") ต้องระบุคลิปแรกด้วย
-// ว่าง = โชว์ placeholder "เร็วๆ นี้"
-const VIDEO_FIRST_ID = 'RovW8sp8QNw';
-const VIDEO_PLAYLIST_ID = 'PLe-0y5veh5K8';
+// วิดีโอวิธีใช้งาน — คลิป Shorts แนวตั้ง (playlist PLe-0y5veh5K8 ช่อง TNR GEOSERVICE). ว่าง = โชว์ placeholder "เร็วๆ นี้"
+// embed Shorts ไม่เล่นต่อคลิปถัดไปเอง (videoseries ก็เล่นไม่ได้) → ทำปุ่มเลือก EP + ฟัง postMessage ตอนจบแล้วสลับเอง
+const HOWTO_EPISODES = [
+  { id: 'RovW8sp8QNw', title: 'EP01 เริ่มต้นใช้งาน' },
+  { id: 'I6ewGPobCK0', title: 'EP02 วาด พิมพ์ ไฮไลต์' },
+  { id: '9_TS6c-owIo', title: 'EP03 ปกปิด & ลบข้อมูล' },
+];
 
 // กดภาพ → เปิดดูเต็มจอ (lightbox) ; ส่ง opener ผ่าน context เลี่ยง prop drilling
 const ZoomCtx = createContext<(src: string, caption: string) => void>(() => {});
@@ -226,6 +229,45 @@ function Features() {
 
 // ── วิธีใช้งาน (วิดีโอ) ───────────────────────────────────────────────────────
 function HowToVideo() {
+  const [ep, setEp] = useState(0);
+  const [autoplay, setAutoplay] = useState(false);
+  const frameRef = useRef<HTMLIFrameElement>(null);
+  const lastTime = useRef(0);
+  const duration = useRef(0);
+
+  // YouTube iframe ส่งสถานะผ่าน postMessage เมื่อเราสั่ง listening (enablejsapi=1)
+  // จบคลิป = playerState 0 หรือ (player Shorts วนซ้ำเอง) currentTime กระโดดจากท้ายคลิปกลับไปต้นคลิป
+  useEffect(() => {
+    const onMsg = (e: MessageEvent) => {
+      if (e.origin !== 'https://www.youtube.com' || e.source !== frameRef.current?.contentWindow) return;
+      let d: any;
+      try { d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data; } catch { return; }
+      let ended = (d?.event === 'onStateChange' && d.info === 0) || (d?.event === 'infoDelivery' && d.info?.playerState === 0);
+      const t = d?.event === 'infoDelivery' ? d.info?.currentTime : undefined;
+      if (d?.event === 'infoDelivery' && d.info?.duration) duration.current = d.info.duration;
+      if (typeof t === 'number') {
+        if (duration.current && lastTime.current > duration.current - 2 && t < 2) ended = true;
+        lastTime.current = t;
+      }
+      if (ended) {
+        lastTime.current = 0;
+        duration.current = 0;
+        setEp((i) => { if (i < HOWTO_EPISODES.length - 1) { setAutoplay(true); return i + 1; } return i; });
+      }
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const listen = () => {
+    const w = frameRef.current?.contentWindow;
+    if (!w) return;
+    w.postMessage(JSON.stringify({ event: 'listening', id: 'howto' }), 'https://www.youtube.com');
+    w.postMessage(JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'] }), 'https://www.youtube.com');
+  };
+
+  const pick = (i: number) => { lastTime.current = 0; duration.current = 0; setAutoplay(true); setEp(i); };
+
   return (
     <section id="how-to" className="section" style={{ paddingTop: 0 }} aria-labelledby="howto-title">
       <div className="wrap" style={{ maxWidth: 960 }}>
@@ -236,15 +278,33 @@ function HowToVideo() {
           </div>
           <p>ตั้งแต่เปิดไฟล์ แก้ไข จนส่งออก</p>
         </div>
-        {VIDEO_FIRST_ID ? (
-          <div className="pdf-video" style={{ aspectRatio: '9 / 16', width: '100%', maxWidth: 360, marginInline: 'auto' }}>
-            <iframe
-              src={`https://www.youtube.com/embed/${VIDEO_FIRST_ID}?list=${VIDEO_PLAYLIST_ID}`}
-              title="วิธีใช้งาน Bailan"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-          </div>
+        {HOWTO_EPISODES.length ? (
+          <>
+            <div className="pdf-video" style={{ aspectRatio: '9 / 16', width: '100%', maxWidth: 360, marginInline: 'auto' }}>
+              <iframe
+                key={ep}
+                ref={frameRef}
+                onLoad={listen}
+                src={`https://www.youtube.com/embed/${HOWTO_EPISODES[ep].id}?enablejsapi=1&playsinline=1&rel=0${autoplay ? '&autoplay=1' : ''}`}
+                title={`วิธีใช้งาน Bailan — ${HOWTO_EPISODES[ep].title}`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8, marginTop: 16 }}>
+              {HOWTO_EPISODES.map((v, i) => (
+                <button
+                  key={v.id}
+                  type="button"
+                  className={`btn ${i === ep ? 'btn-primary' : 'btn-secondary'}`}
+                  aria-pressed={i === ep}
+                  onClick={() => pick(i)}
+                >
+                  {v.title}
+                </button>
+              ))}
+            </div>
+          </>
         ) : (
           <div className="pdf-shot-empty" style={{ aspectRatio: '16 / 9' }}>
             <PlayCircle className="w-12 h-12" />
