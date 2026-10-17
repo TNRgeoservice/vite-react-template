@@ -5,6 +5,13 @@
 // เพิ่มบทความใหม่ = สร้างไฟล์ component + เพิ่ม 1 entry ใน array นี้
 // ════════════════════════════════════════
 import type { ComponentType } from 'react';
+import { LandSurveyCostTimeline, meta as surveyCostTimelineMeta, FAQ as surveyCostTimelineFaq } from './land-survey-cost-timeline';
+import { TitleDeedOverlapStateLand, meta as stateLandOverlapMeta, FAQ as stateLandOverlapFaq } from './title-deed-overlap-state-land';
+import { CheckLandFloodHistory, meta as floodHistoryMeta, FAQ as floodHistoryFaq } from './check-land-flood-history';
+import { HistoricalSatelliteImageryLand, meta as satelliteHistoryMeta, FAQ as satelliteHistoryFaq } from './historical-satellite-imagery-land';
+import { FindLandParcelFromGps, meta as parcelGpsMeta, FAQ as parcelGpsFaq } from './find-land-parcel-from-gps';
+import { LandDevelopmentFeasibility, meta as devFeasibilityMeta, FAQ as devFeasibilityFaq } from './land-development-feasibility';
+import { NeighborBoundaryDispute, meta as boundaryDisputeMeta, FAQ as boundaryDisputeFaq } from './neighbor-boundary-dispute';
 import { MissingLandBoundaryMarkers, meta as missingMarkersMeta, FAQ as missingMarkersFaq } from './missing-land-boundary-markers';
 import { LandTitleDeedTypes, meta as titleDeedTypesMeta, FAQ as titleDeedTypesFaq } from './land-title-deed-types';
 import { VacantLandTax, meta as vacantLandTaxMeta, FAQ as vacantLandTaxFaq } from './vacant-land-tax';
@@ -44,6 +51,13 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: stateLandOverlapMeta, Body: TitleDeedOverlapStateLand, faq: stateLandOverlapFaq },
+  { meta: floodHistoryMeta, Body: CheckLandFloodHistory, faq: floodHistoryFaq },
+  { meta: satelliteHistoryMeta, Body: HistoricalSatelliteImageryLand, faq: satelliteHistoryFaq },
+  { meta: parcelGpsMeta, Body: FindLandParcelFromGps, faq: parcelGpsFaq },
+  { meta: surveyCostTimelineMeta, Body: LandSurveyCostTimeline, faq: surveyCostTimelineFaq },
+  { meta: devFeasibilityMeta, Body: LandDevelopmentFeasibility, faq: devFeasibilityFaq },
+  { meta: boundaryDisputeMeta, Body: NeighborBoundaryDispute, faq: boundaryDisputeFaq },
   { meta: missingMarkersMeta, Body: MissingLandBoundaryMarkers, faq: missingMarkersFaq },
   { meta: expropriationMeta, Body: LandExpropriationCompensation, faq: expropriationFaq },
   { meta: nomineeMeta, Body: NomineeLandHolding, faq: nomineeFaq },
