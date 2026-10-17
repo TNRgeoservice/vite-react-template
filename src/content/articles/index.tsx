@@ -5,6 +5,7 @@
 // เพิ่มบทความใหม่ = สร้างไฟล์ component + เพิ่ม 1 entry ใน array นี้
 // ════════════════════════════════════════
 import type { ComponentType } from 'react';
+import { CheckIllegalBuildingBeforeBuying, meta as illegalBuildingMeta, FAQ as illegalBuildingFaq } from './check-illegal-building-before-buying';
 import { LandSurveyCostTimeline, meta as surveyCostTimelineMeta, FAQ as surveyCostTimelineFaq } from './land-survey-cost-timeline';
 import { TitleDeedOverlapStateLand, meta as stateLandOverlapMeta, FAQ as stateLandOverlapFaq } from './title-deed-overlap-state-land';
 import { CheckLandFloodHistory, meta as floodHistoryMeta, FAQ as floodHistoryFaq } from './check-land-flood-history';
@@ -51,6 +52,7 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: illegalBuildingMeta, Body: CheckIllegalBuildingBeforeBuying, faq: illegalBuildingFaq },
   { meta: stateLandOverlapMeta, Body: TitleDeedOverlapStateLand, faq: stateLandOverlapFaq },
   { meta: floodHistoryMeta, Body: CheckLandFloodHistory, faq: floodHistoryFaq },
   { meta: satelliteHistoryMeta, Body: HistoricalSatelliteImageryLand, faq: satelliteHistoryFaq },
