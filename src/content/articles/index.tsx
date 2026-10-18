@@ -5,6 +5,9 @@
 // เพิ่มบทความใหม่ = สร้างไฟล์ component + เพิ่ม 1 entry ใน array นี้
 // ════════════════════════════════════════
 import type { ComponentType } from 'react';
+import { LandSaleWithRedemptionVsMortgage, meta as khaiFakMeta, FAQ as khaiFakFaq } from './land-sale-with-redemption-vs-mortgage';
+import { BuildingSetbackFromBoundary, meta as setbackMeta, FAQ as setbackFaq } from './building-setback-from-boundary';
+import { AdversePossessionLand, meta as adversePossessionMeta, FAQ as adversePossessionFaq } from './adverse-possession-land';
 import { CheckIllegalBuildingBeforeBuying, meta as illegalBuildingMeta, FAQ as illegalBuildingFaq } from './check-illegal-building-before-buying';
 import { LandSurveyCostTimeline, meta as surveyCostTimelineMeta, FAQ as surveyCostTimelineFaq } from './land-survey-cost-timeline';
 import { TitleDeedOverlapStateLand, meta as stateLandOverlapMeta, FAQ as stateLandOverlapFaq } from './title-deed-overlap-state-land';
@@ -52,6 +55,9 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: khaiFakMeta, Body: LandSaleWithRedemptionVsMortgage, faq: khaiFakFaq },
+  { meta: setbackMeta, Body: BuildingSetbackFromBoundary, faq: setbackFaq },
+  { meta: adversePossessionMeta, Body: AdversePossessionLand, faq: adversePossessionFaq },
   { meta: illegalBuildingMeta, Body: CheckIllegalBuildingBeforeBuying, faq: illegalBuildingFaq },
   { meta: stateLandOverlapMeta, Body: TitleDeedOverlapStateLand, faq: stateLandOverlapFaq },
   { meta: floodHistoryMeta, Body: CheckLandFloodHistory, faq: floodHistoryFaq },
