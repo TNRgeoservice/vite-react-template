@@ -5,6 +5,16 @@
 // เพิ่มบทความใหม่ = สร้างไฟล์ component + เพิ่ม 1 entry ใน array นี้
 // ════════════════════════════════════════
 import type { ComponentType } from 'react';
+import { AppraisalPriceNewRound, meta as appraisalNewRoundMeta, FAQ as appraisalNewRoundFaq } from './appraisal-price-new-round';
+import { TreasuryLandRatchaphatsadu, meta as treasuryLandMeta, FAQ as treasuryLandFaq } from './treasury-land-ratchaphatsadu';
+import { UrbanExpansionSignals, meta as urbanExpansionMeta, FAQ as urbanExpansionFaq } from './urban-expansion-signals';
+import { CityPlanDraftPetition, meta as cityPlanDraftMeta, FAQ as cityPlanDraftFaq } from './city-plan-draft-petition';
+import { HighwayAccessConnectionPermit, meta as highwayAccessMeta, FAQ as highwayAccessFaq } from './highway-access-connection-permit';
+import { LostTitleDeedReplacement, meta as lostDeedMeta, FAQ as lostDeedFaq } from './lost-title-deed-replacement';
+import { ReadTitleDeedRegistrationPage, meta as deedRegistrationMeta, FAQ as deedRegistrationFaq } from './read-title-deed-registration-page';
+import { AccretionLandRiverbank, meta as accretionMeta, FAQ as accretionFaq } from './accretion-land-riverbank';
+import { UsufructHabitationSuperficies, meta as usufructMeta, FAQ as usufructFaq } from './usufruct-habitation-superficies';
+import { LongTermLandLease, meta as longLeaseMeta, FAQ as longLeaseFaq } from './long-term-land-lease';
 import { LandSaleWithRedemptionVsMortgage, meta as khaiFakMeta, FAQ as khaiFakFaq } from './land-sale-with-redemption-vs-mortgage';
 import { BuildingSetbackFromBoundary, meta as setbackMeta, FAQ as setbackFaq } from './building-setback-from-boundary';
 import { AdversePossessionLand, meta as adversePossessionMeta, FAQ as adversePossessionFaq } from './adverse-possession-land';
@@ -55,6 +65,16 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: appraisalNewRoundMeta, Body: AppraisalPriceNewRound, faq: appraisalNewRoundFaq },
+  { meta: treasuryLandMeta, Body: TreasuryLandRatchaphatsadu, faq: treasuryLandFaq },
+  { meta: urbanExpansionMeta, Body: UrbanExpansionSignals, faq: urbanExpansionFaq },
+  { meta: cityPlanDraftMeta, Body: CityPlanDraftPetition, faq: cityPlanDraftFaq },
+  { meta: highwayAccessMeta, Body: HighwayAccessConnectionPermit, faq: highwayAccessFaq },
+  { meta: lostDeedMeta, Body: LostTitleDeedReplacement, faq: lostDeedFaq },
+  { meta: deedRegistrationMeta, Body: ReadTitleDeedRegistrationPage, faq: deedRegistrationFaq },
+  { meta: accretionMeta, Body: AccretionLandRiverbank, faq: accretionFaq },
+  { meta: usufructMeta, Body: UsufructHabitationSuperficies, faq: usufructFaq },
+  { meta: longLeaseMeta, Body: LongTermLandLease, faq: longLeaseFaq },
   { meta: khaiFakMeta, Body: LandSaleWithRedemptionVsMortgage, faq: khaiFakFaq },
   { meta: setbackMeta, Body: BuildingSetbackFromBoundary, faq: setbackFaq },
   { meta: adversePossessionMeta, Body: AdversePossessionLand, faq: adversePossessionFaq },
