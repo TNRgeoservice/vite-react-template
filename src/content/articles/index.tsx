@@ -5,6 +5,13 @@
 // เพิ่มบทความใหม่ = สร้างไฟล์ component + เพิ่ม 1 entry ใน array นี้
 // ════════════════════════════════════════
 import type { ComponentType } from 'react';
+import { LandAreaShortfallAfterSurvey, meta as areaShortfallMeta, FAQ as areaShortfallFaq } from './land-area-shortfall-after-survey';
+import { NeighborLandFillingFlooding, meta as fillingFloodMeta, FAQ as fillingFloodFaq } from './neighbor-land-filling-flooding';
+import { LandSaleScamCheck, meta as scamCheckMeta, FAQ as scamCheckFaq } from './land-sale-scam-check';
+import { NeighborTreeBranchesRoots, meta as treeBranchesMeta, FAQ as treeBranchesFaq } from './neighbor-tree-branches-roots';
+import { BuildingEncroachmentNeighborLand, meta as encroachmentMeta, FAQ as encroachmentFaq } from './building-encroachment-neighbor-land';
+import { HighVoltagePowerLineLand, meta as powerLineMeta, FAQ as powerLineFaq } from './high-voltage-power-line-land';
+import { PublicCanalThroughLand, meta as publicCanalMeta, FAQ as publicCanalFaq } from './public-canal-through-land';
 import { LandAreaUnitsRaiNganWah, meta as landUnitsMeta, FAQ as landUnitsFaq } from './land-area-units-rai-ngan-wah';
 import { CheckLandRoadFrontage, meta as roadFrontageMeta, FAQ as roadFrontageFaq } from './check-land-road-frontage';
 import { BuyLandToSubdivideSell, meta as subdivideSellMeta, FAQ as subdivideSellFaq } from './buy-land-to-subdivide-sell';
@@ -70,6 +77,13 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: areaShortfallMeta, Body: LandAreaShortfallAfterSurvey, faq: areaShortfallFaq },
+  { meta: fillingFloodMeta, Body: NeighborLandFillingFlooding, faq: fillingFloodFaq },
+  { meta: scamCheckMeta, Body: LandSaleScamCheck, faq: scamCheckFaq },
+  { meta: treeBranchesMeta, Body: NeighborTreeBranchesRoots, faq: treeBranchesFaq },
+  { meta: encroachmentMeta, Body: BuildingEncroachmentNeighborLand, faq: encroachmentFaq },
+  { meta: powerLineMeta, Body: HighVoltagePowerLineLand, faq: powerLineFaq },
+  { meta: publicCanalMeta, Body: PublicCanalThroughLand, faq: publicCanalFaq },
   { meta: roadSetbackMeta, Body: BuildingSetbackFromRoad, faq: roadSetbackFaq },
   { meta: buildingPermitMeta, Body: HouseBuildingPermit, faq: buildingPermitFaq },
   { meta: subdivideSellMeta, Body: BuyLandToSubdivideSell, faq: subdivideSellFaq },
