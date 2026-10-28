@@ -5,6 +5,11 @@
 // เพิ่มบทความใหม่ = สร้างไฟล์ component + เพิ่ม 1 entry ใน array นี้
 // ════════════════════════════════════════
 import type { ComponentType } from 'react';
+import { LandAreaUnitsRaiNganWah, meta as landUnitsMeta, FAQ as landUnitsFaq } from './land-area-units-rai-ngan-wah';
+import { CheckLandRoadFrontage, meta as roadFrontageMeta, FAQ as roadFrontageFaq } from './check-land-road-frontage';
+import { BuyLandToSubdivideSell, meta as subdivideSellMeta, FAQ as subdivideSellFaq } from './buy-land-to-subdivide-sell';
+import { HouseBuildingPermit, meta as buildingPermitMeta, FAQ as buildingPermitFaq } from './house-building-permit';
+import { BuildingSetbackFromRoad, meta as roadSetbackMeta, FAQ as roadSetbackFaq } from './building-setback-from-road';
 import { AppraisalPriceNewRound, meta as appraisalNewRoundMeta, FAQ as appraisalNewRoundFaq } from './appraisal-price-new-round';
 import { TreasuryLandRatchaphatsadu, meta as treasuryLandMeta, FAQ as treasuryLandFaq } from './treasury-land-ratchaphatsadu';
 import { UrbanExpansionSignals, meta as urbanExpansionMeta, FAQ as urbanExpansionFaq } from './urban-expansion-signals';
@@ -65,6 +70,11 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  { meta: roadSetbackMeta, Body: BuildingSetbackFromRoad, faq: roadSetbackFaq },
+  { meta: buildingPermitMeta, Body: HouseBuildingPermit, faq: buildingPermitFaq },
+  { meta: subdivideSellMeta, Body: BuyLandToSubdivideSell, faq: subdivideSellFaq },
+  { meta: roadFrontageMeta, Body: CheckLandRoadFrontage, faq: roadFrontageFaq },
+  { meta: landUnitsMeta, Body: LandAreaUnitsRaiNganWah, faq: landUnitsFaq },
   { meta: appraisalNewRoundMeta, Body: AppraisalPriceNewRound, faq: appraisalNewRoundFaq },
   { meta: treasuryLandMeta, Body: TreasuryLandRatchaphatsadu, faq: treasuryLandFaq },
   { meta: urbanExpansionMeta, Body: UrbanExpansionSignals, faq: urbanExpansionFaq },
