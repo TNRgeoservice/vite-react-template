@@ -4,7 +4,7 @@
 // Body = inline style + plain <a> เท่านั้น (ไม่มี hook/browser API) → renderToStaticMarkup ได้
 // ════════════════════════════════════════
 import type { ArticleMeta } from './index';
-import { C, p, note, Header, Section, Steps, Cards, Checks, Warn, Tip, FaqList, Sources, Disclaimer, Cta, L } from './_ui';
+import { C, p, note, Header, Section, Figure, Steps, Cards, Checks, Warn, Tip, FaqList, Sources, Disclaimer, Cta, L } from './_ui';
 
 export const meta: ArticleMeta = {
   slug:        'public-canal-through-land',
@@ -14,6 +14,7 @@ export const meta: ArticleMeta = {
   date:        '2026-10-28',
   tags:        ['ลำรางสาธารณะ', 'ที่สาธารณประโยชน์', 'ถมดิน', 'ซื้อที่ดิน'],
   readMin:     5,
+  cover:       'https://tnrmaphub.com/article-images/public-canal-through-land.webp',
 };
 
 const WHY = [
@@ -60,6 +61,9 @@ export function PublicCanalThroughLand() {
         <p style={p}>
           เหตุผลง่ายมาก: <strong>ลำรางนั้นไม่เคยเป็นของลุงสม</strong> แม้จะอยู่ระหว่างที่ดินของเขามาตลอด
         </p>
+        <Figure slug="public-canal-through-land" n={2}
+          alt="รถแบ็คโฮเหลืองจอดนิ่งริมลำราง บุ้งกี๋มีดินค้างเหนือร่องน้ำที่ถูกถมไปครึ่งหนึ่ง ฟ้าครึ้ม"
+          caption="ถมลำรางสาธารณะโดยไม่ได้รับอนุญาต — ผิดประมวลกฎหมายที่ดิน และอาจถูกสั่งให้คืนสภาพ" />
       </Section>
 
       <Section title="ทำไมลำรางถึงแตะไม่ได้?">
@@ -72,6 +76,9 @@ export function PublicCanalThroughLand() {
       </Section>
 
       <Section title="รู้ได้อย่างไรว่ามีลำรางสาธารณะ?">
+        <Figure slug="public-canal-through-land" n={1}
+          alt="ลำรางน้ำใสไหลผ่านท่อลอดใต้ถนนลูกรังเล็ก ๆ มีต้นมะพร้าวและต้นตาลสองฝั่ง หมอกเช้าบาง ๆ"
+          caption="ทางข้ามลำรางที่ถูกต้อง — วางท่อลอดหรือทำสะพานโดยขออนุญาต ให้น้ำยังไหลได้ตามเดิม" />
         <Steps items={STEPS} />
         <Tip>
           💡 ย้อนดูว่าแปลงที่จะซื้อเคยมีทางน้ำแล้วถูกถมหรือไม่ ด้วย{' '}

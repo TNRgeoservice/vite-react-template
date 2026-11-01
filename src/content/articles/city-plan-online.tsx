@@ -5,6 +5,7 @@
 // Body = inline style + plain <a> เท่านั้น (ไม่มี hook/browser API) → renderToStaticMarkup ได้
 // ════════════════════════════════════════
 import type { ArticleMeta } from './index';
+import { Figure } from './_ui';
 
 const MAP_URL = 'https://map.tnrmaphub.com';
 
@@ -16,6 +17,7 @@ export const meta: ArticleMeta = {
   date:        '2026-06-02',
   tags:        ['ผังเมือง', 'zoning', 'ซื้อที่ดิน', 'การใช้ประโยชน์ที่ดิน'],
   readMin:     6,
+  cover:       'https://tnrmaphub.com/article-images/city-plan-online.webp',
 };
 
 const C = {
@@ -142,6 +144,9 @@ export function CityPlanOnline() {
             </li>
           ))}
         </ol>
+        <Figure slug="city-plan-online" n={1}
+          alt="มือถือสมาร์ตโฟนเปิดแผนที่ผังเมืองหลากสี ยืนอยู่ริมที่ดินเปล่า"
+          caption="เปิดผังเมืองบนมือถือขณะยืนอยู่ที่แปลง — เช็กโซนก่อนตัดสินใจซื้อ" />
       </Section>
 
       <Section title="ความหมายของสีผังเมือง (โดยสรุป)">
@@ -172,6 +177,9 @@ export function CityPlanOnline() {
           หมายเหตุ: บางโซนอาจมีลวดลายหรือสัญลักษณ์เพิ่มเติม (เช่น เขียวลาย ม่วงลาย) ซึ่งมีข้อกำหนดเฉพาะ
           ควรตรวจสอบรายละเอียดในพื้นที่นั้น ๆ และข้อกำหนดอาจแตกต่างกันในแต่ละจังหวัด
         </p>
+        <Figure slug="city-plan-online" n={2}
+          alt="ถนนสายหลักแบ่งโรงงานโกดังฝั่งหนึ่ง กับทุ่งนาและหมู่บ้านอีกฝั่ง มุมสูง"
+          caption="ถนนเส้นเดียวกัน คนละโซนสี — ฝั่งหนึ่งสร้างโรงงานได้ อีกฝั่งอาจได้แค่เกษตรกรรมและที่อยู่อาศัย" />
       </Section>
 
       <Section title="คำถามที่พบบ่อย (FAQ)">
