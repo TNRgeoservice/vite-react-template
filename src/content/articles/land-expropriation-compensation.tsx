@@ -4,6 +4,7 @@
 // Body = inline style + plain <a> เท่านั้น (ไม่มี hook/browser API) → renderToStaticMarkup ได้
 // ════════════════════════════════════════
 import type { ArticleMeta } from './index';
+import { Figure } from './_ui';
 
 const MAP_URL = 'https://map.tnrmaphub.com';
 
@@ -143,6 +144,9 @@ export function LandExpropriationCompensation() {
             </li>
           ))}
         </ol>
+        <Figure slug="land-expropriation-compensation" n={1}
+          alt="หลักไม้สำรวจหัวทาสีแดงขาวปักเป็นแนวตรงผ่านสวนผลไม้และรั้วบ้าน"
+          caption="แนวสำรวจของโครงการ — เห็นหลักไม้ในพื้นที่ ให้เช็กกับประกาศและแผนที่แนวเขตทางการก่อนเชื่อข่าวลือ" />
       </Section>
 
       <Section title="ลำดับขั้นของการเวนคืน ตั้งแต่ประกาศจนถึงจ่ายเงิน">
@@ -199,6 +203,9 @@ export function LandExpropriationCompensation() {
             ราคาประเมินกับราคาตลาด
           </a>
         </p>
+        <Figure slug="land-expropriation-compensation" n={2}
+          alt="บ้านไม้ใต้ถุนสูงที่ย้ายของออกหมดแล้ว ด้านหลังเป็นแนวถนนใหม่กำลังก่อสร้าง"
+          caption="ค่าทดแทนไม่ได้มีแค่ราคาที่ดิน — สิ่งปลูกสร้าง ต้นไม้ยืนต้น และความเสียหายของผู้ถูกเวนคืนก็นำมาพิจารณาด้วย" />
       </Section>
 
       <Section title="ไม่พอใจค่าทดแทน ทำอะไรได้บ้าง">

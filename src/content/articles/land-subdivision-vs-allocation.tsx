@@ -5,6 +5,7 @@
 // Body = inline style + plain <a> เท่านั้น (ไม่มี hook/browser API) → renderToStaticMarkup ได้
 // ════════════════════════════════════════
 import type { ArticleMeta } from './index';
+import { Figure } from './_ui';
 
 const MAP_URL = 'https://map.tnrmaphub.com';
 
@@ -142,6 +143,9 @@ export function LandSubdivisionVsAllocation() {
             ดูขั้นตอนแบ่งแยกที่ดินที่สำนักงานที่ดิน
           </a>
         </p>
+        <Figure slug="land-subdivision-vs-allocation" n={1}
+          alt="ที่ดินชนบทแบ่งเป็น 3 แปลงด้วยรั้วลวดหนาม แต่ละแปลงมีบ้านหนึ่งหลัง ใช้ทางดินร่วมกัน"
+          caption="แบ่งแปลงให้ลูกหลานไม่กี่แปลง — ยังไม่เข้าข่ายจัดสรร ยื่นรังวัดแบ่งแยกที่สำนักงานที่ดินได้เลย" />
       </Section>
 
       <Section title="ถ้าเข้าข่ายจัดสรร ต้องทำอะไรบ้าง">
@@ -158,6 +162,9 @@ export function LandSubdivisionVsAllocation() {
             </li>
           ))}
         </ul>
+        <Figure slug="land-subdivision-vs-allocation" n={2}
+          alt="หมู่บ้านจัดสรรบ้านเดี่ยว ถนนคอนกรีตภายใน สวนส่วนกลาง และซุ้มประตูทางเข้า มุมสูง"
+          caption="โครงการจัดสรรต้องมีถนน ระบบสาธารณูปโภค และพื้นที่ส่วนกลางตามมาตรฐาน พร้อมใบอนุญาตก่อนขาย" />
       </Section>
 
       <Section title="คำถามที่พบบ่อย (FAQ)">

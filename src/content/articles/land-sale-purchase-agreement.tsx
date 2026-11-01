@@ -5,6 +5,7 @@
 // Body = inline style + plain <a> เท่านั้น (ไม่มี hook/browser API) → renderToStaticMarkup ได้
 // ════════════════════════════════════════
 import type { ArticleMeta } from './index';
+import { Figure } from './_ui';
 
 const MAP_URL = 'https://map.tnrmaphub.com';
 
@@ -213,6 +214,9 @@ export function LandSalePurchaseAgreement() {
           </a>{' '}
           ทั้งโฉนด ภาระผูกพัน และทางเข้าออก จะได้ไม่เซ็นสัญญาผูกมัดกับที่ดินที่มีปัญหา
         </p>
+        <Figure slug="land-sale-purchase-agreement" n={2}
+          alt="คนสองคนยืนหันหลังบนถนนลูกรังหน้าที่ดินเปล่า คนหนึ่งชี้ไปที่แปลง"
+          caption="ดูที่ดินจริงก่อนเซ็น — ระบุเลขโฉนด เนื้อที่ และแนวเขตในสัญญาให้ตรงกับแปลงที่เห็น" />
       </Section>
 
       <Section title="มัดจำกับเบี้ยปรับ ต่างกันอย่างไร?">
@@ -231,6 +235,9 @@ export function LandSalePurchaseAgreement() {
           </a>{' '}
           เพื่อให้รู้ว่าราคาที่ตกลงสมเหตุสมผลแค่ไหน
         </p>
+        <Figure slug="land-sale-purchase-agreement" n={1}
+          alt="มือยื่นซองเงินมัดจำข้ามโต๊ะ ข้างแฟ้มสัญญาและปากกา"
+          caption="วางมัดจำเมื่อไร ต้องเขียนในสัญญาให้ชัดว่าใครผิดสัญญาแล้วมัดจำเป็นของใคร" />
       </Section>
 
       <Section title="คำถามที่พบบ่อย (FAQ)">
