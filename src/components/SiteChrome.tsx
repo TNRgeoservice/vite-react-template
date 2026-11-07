@@ -62,6 +62,7 @@ export function useSiteTheme() {
 const NAV = [
   { to: '/articles', label: 'บทความ' },
   { to: '/subdivisionplan', label: 'ทำผังแบ่งแปลง' },
+  { href: '/sitemap/', label: 'SiteMap' },
   { to: '/tnrpdfstudio', label: 'Bailan', badge: 'ฟรี' },
   { href: '/#tools', label: 'เครื่องมือคำนวณ' },
   { href: '/#sellers', label: 'ลงประกาศฟรี' },
@@ -73,7 +74,7 @@ export function SiteHeader({ theme, onToggleTheme, active, cta }: {
   const navLink = (n: (typeof NAV)[number]) => {
     const inner = (
       <>
-        {n.label === 'Bailan' ? <span className="latin">Bailan</span> : n.label}
+        {n.label === 'Bailan' || n.label === 'SiteMap' ? <span className="latin">{n.label}</span> : n.label}
         {'badge' in n && <span className="new">{n.badge}</span>}
       </>
     )
