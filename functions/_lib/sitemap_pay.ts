@@ -1,5 +1,5 @@
 // ระบบจ่ายเงินรายงาน (Stripe Checkout) — ไม่มีฐานข้อมูล: Stripe เป็นที่เก็บว่าใครจ่ายแล้ว · ทีละ 1 แปลง
-// checkout: สร้างหน้าชำระเงิน PRICE_THB บาท (ค่าเริ่ม 299) · ผูกพิกัดแปลงไว้ใน metadata
+// checkout: สร้างหน้าชำระเงิน PRICE_THB บาท (ค่าเริ่ม 149) · ผูกพิกัดแปลงไว้ใน metadata
 // redeem:   ถาม Stripe ว่า session นี้จ่ายแล้ว + เป็นแปลงเดิม (ห่าง ≤ 200 ม. — เผื่อเลื่อนรูปแปลง) + ไม่เกิน 24 ชม. → ออกรายงานได้
 // key: STRIPE_SECRET_KEY (ฝั่ง server เท่านั้น ห้ามขึ้นต้น VITE_)
 // เรียก Stripe REST ด้วย fetch (ไม่ใช้ SDK) → ไฟล์เดียวใช้ได้ทั้ง dev (vite.config) และ Cloudflare Pages Functions
@@ -43,7 +43,7 @@ export async function checkout(req: Request, env: PayEnv): Promise<Response> {
     const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
     const fp = parseFp(body.fp);
     if (!fp) return json({ error: "ข้อมูลแปลงไม่ถูกต้อง (ทีละ 1 แปลง พิกัดในประเทศไทย)" }, 400);
-    const price = Number(env.PRICE_THB ?? 299);
+    const price = Number(env.PRICE_THB ?? 149);
     const u = new URL(req.url), base = u.origin + u.pathname.replace(/api\/checkout\/?$/, ""); // หน้าแอป: …/sitemap/ (เว็บจริง) หรือ / (dev)
     const s = await stripe(env, "checkout/sessions", {
       mode: "payment",
