@@ -61,7 +61,7 @@ export function useSiteTheme() {
 
 const NAV = [
   { to: '/articles', label: 'บทความ' },
-  { to: '/subdivisionplan', label: 'ทำผังแบ่งแปลง' },
+  { href: 'https://jobs.tnrmaphub.com/', label: 'บริการของเรา' },
   { href: '/sitemap/', label: 'SiteMap' },
   { to: '/tnrpdfstudio', label: 'Bailan', badge: 'ฟรี' },
   { href: '/#tools', label: 'เครื่องมือคำนวณ' },
