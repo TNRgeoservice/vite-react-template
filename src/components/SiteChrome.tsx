@@ -118,7 +118,7 @@ export function SiteFooter() {
           </Link>
           <nav className="footer-links" aria-label="ลิงก์ท้ายหน้า">
             <Link to="/articles">บทความ</Link>
-            <Link to="/subdivisionplan">ทำผังแบ่งแปลง</Link>
+            <a href="https://jobs.tnrmaphub.com/">บริการของเรา</a>
             <Link to="/tnrpdfstudio">Bailan</Link>
             <a href={LINE_URL} target="_blank" rel="noopener noreferrer" aria-label="ติดต่อ TNR Geoservice ทาง LINE">LINE <Icon name="i-external" /></a>
             <a href={FB_URL} target="_blank" rel="noopener noreferrer" aria-label="TNR Geoservice บน Facebook">Facebook <Icon name="i-external" /></a>
