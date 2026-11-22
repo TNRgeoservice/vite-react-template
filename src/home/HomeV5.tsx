@@ -23,7 +23,6 @@ const FONTS_HREF =
 const NAV = [
   { to: '/articles', label: 'บทความ' },
   { href: 'https://jobs.tnrmaphub.com/', label: 'บริการของเรา' },
-  { href: '/sitemap/', label: 'SiteMap' },
   { to: '/tnrpdfstudio', label: 'Bailan', badge: 'ฟรี' },
   { href: '#tools', label: 'เครื่องมือคำนวณ' },
   { href: '#sellers', label: 'ลงประกาศฟรี' },
@@ -190,7 +189,7 @@ export default function HomeV5() {
   const navLink = (n: (typeof NAV)[number], mobile = false) => {
     const inner = (
       <>
-        {n.label === 'Bailan' || n.label === 'SiteMap' ? <span className="latin">{n.label}</span> : n.label}
+        {n.label === 'Bailan' ? <span className="latin">{n.label}</span> : n.label}
         {'badge' in n && <span className="new">{n.badge}</span>}
       </>
     )
